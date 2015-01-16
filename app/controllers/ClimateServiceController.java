@@ -1,0 +1,69 @@
+package controllers;
+
+import models.ClimateService;
+import models.ClimateServiceRepository;
+import models.User;
+import models.UserRepository;
+import play.mvc.*;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.persistence.PersistenceException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+/**
+ * The main set of web services.
+ */
+@Named
+@Singleton
+public class ClimateServiceController extends Controller {
+
+    private final ClimateServiceRepository climateServiceRepository;
+    private final UserRepository userRepository;
+
+    // We are using constructor injection to receive a repository to support our desire for immutability.
+    @Inject
+    public ClimateServiceController(final ClimateServiceRepository climateServiceRepository, 
+    		UserRepository userRepository) {
+        this.climateServiceRepository = climateServiceRepository;
+        this.userRepository = userRepository;
+    }
+    
+    public Result addClimateService() {
+    	JsonNode json = request().body().asJson();
+    	if (json == null) {
+    		System.out.println("Climate service not saved, expecting Json data");
+			return badRequest("Climate service not saved, expecting Json data");
+    	}
+
+    	//Parse JSON file
+    	long rootServiceId = json.findPath("rootServiceId").asLong();
+    	long creatorId = json.findPath("creatorId").asLong();
+		String name = json.findPath("name").asText();
+		String purpose = json.findPath("purpose").asText();
+		String url = json.findPath("url").asText();
+		String scenario = json.findPath("scenario").asText();
+		String createTime = json.findPath("createTime").asText();
+		String versionNo = json.findPath("versionNo").asText();
+		
+		try {
+			User user = userRepository.findOne(creatorId);
+			ClimateService climateService = new ClimateService(rootServiceId, user, name, 
+	        		purpose, url, scenario, createTime,
+	        		versionNo);
+			ClimateService savedClimateService = climateServiceRepository.save(climateService);
+			
+			System.out.println("Climate Service saved: " + savedClimateService.getName());
+			return created("Climate Service saved: " + savedClimateService.getName());
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+			System.out.println("Climate Service not saved: " + name);
+			return badRequest("Climate Service not saved: " + name);
+		}			
+    }
+
+}
+
+
