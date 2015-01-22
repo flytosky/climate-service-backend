@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.Gson;
 
 /**
  * The main set of web services.
@@ -63,7 +64,85 @@ public class ClimateServiceController extends Controller {
 			return badRequest("Climate Service not saved: " + name);
 		}			
     }
+    
+    public Result deleteClimateService(String name) {
+    	ClimateService climateService = climateServiceRepository.findByName(name);
+    	if (climateService == null) {
+    		System.out.println("Climate service not found with name: " + name);
+			return notFound("Climate service not found with name: " + name);
+    	}
+    	
+    	climateServiceRepository.delete(climateService);
+    	System.out.println("Climate service is deleted: " + name);
+		return ok("Climate service is deleted: " + name);
+    }
+    
+    public Result updateClimateService() {
+    	JsonNode json = request().body().asJson();
+    	if (json == null) {
+    		System.out.println("Climate service not saved, expecting Json data");
+			return badRequest("Climate service not saved, expecting Json data");
+    	}
 
+    	//Parse JSON file
+    	long rootServiceId = json.findPath("rootServiceId").asLong();
+    	long creatorId = json.findPath("creatorId").asLong();
+		String name = json.findPath("name").asText();
+		String purpose = json.findPath("purpose").asText();
+		String url = json.findPath("url").asText();
+		String scenario = json.findPath("scenario").asText();
+		String createTime = json.findPath("createTime").asText();
+		String versionNo = json.findPath("versionNo").asText();
+		
+		if (name == null || name.length() == 0) {
+    		System.out.println("Climate Service Name is null!");
+			return badRequest("Climate Service Name is null!");
+    	}
+		
+		try {
+			ClimateService climateService = climateServiceRepository.findByName(name);
+			
+			climateService.setCreateTime(createTime);
+			climateService.setName(name);
+			climateService.setPurpose(purpose);
+			climateService.setRootServiceId(rootServiceId);
+			climateService.setScenario(scenario);
+			climateService.setUrl(url);
+			User user = userRepository.findOne(creatorId);
+			climateService.setUser(user);
+			climateService.setVersionNo(versionNo);
+			
+			ClimateService savedClimateService = climateServiceRepository.save(climateService);
+			
+			System.out.println("Climate Service updated: " + savedClimateService.getName());
+			return created("Climate Service updated: " + savedClimateService.getName());
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+			System.out.println("Climate Service not updated: " + name);
+			return badRequest("Climate Service not updated: " + name);
+		}			
+    }
+    
+    public Result getClimateService(String name, String format) {
+    	if (name == null || name.length() == 0) {
+    		System.out.println("Climate Service Name is null!");
+			return badRequest("Climate Service Name is null!");
+    	}
+    	
+    	ClimateService climateService = climateServiceRepository.findByName(name);
+    	if (climateService == null) {
+    		System.out.println("Climate service not found with name: " + name);
+			return notFound("Climate service not found with name: " + name);
+    	}
+    	
+    	String result = new String();
+    	if (format.equals("json")) {
+    		result = new Gson().toJson(climateService);
+    	}
+    	
+    	return ok(result);
+    }
+    
 }
 
 

@@ -8,5 +8,5 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface ClimateServiceRepository extends CrudRepository<ClimateService, Long> {
-	
+	ClimateService findByName(String name);
 }
