@@ -95,8 +95,8 @@ public class ClimateServiceController extends Controller {
 		String versionNo = json.findPath("versionNo").asText();
 		
 		if (name == null || name.length() == 0) {
-    		System.out.println("Climate Service Name is null!");
-			return badRequest("Climate Service Name is null!");
+    		System.out.println("Climate Service Name is null or empty!");
+			return badRequest("Climate Service Name is null or empty!");
     	}
 		
 		try {
@@ -125,8 +125,8 @@ public class ClimateServiceController extends Controller {
     
     public Result getClimateService(String name, String format) {
     	if (name == null || name.length() == 0) {
-    		System.out.println("Climate Service Name is null!");
-			return badRequest("Climate Service Name is null!");
+    		System.out.println("Climate Service Name is null or empty!");
+			return badRequest("Climate Service Name is null or empty!");
     	}
     	
     	ClimateService climateService = climateServiceRepository.findByName(name);
