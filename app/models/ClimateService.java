@@ -41,7 +41,6 @@ public class ClimateService {
 		this.versionNo = versionNo;
 	}
 
-
 	public long getId() {
 		return id;
 	}
