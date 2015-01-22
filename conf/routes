@@ -12,5 +12,12 @@ POST	/climate/addClimateService				@controllers.ClimateServiceController.addClim
 POST	/climate/updateClimateService			@controllers.ClimateServiceController.updateClimateService
 DELETE	/climate/deleteClimateService/:name		@controllers.ClimateServiceController.deleteClimateService(name: String)
 
+# Service Configuration
+GET		/climate/getServiceConfiguration/:id/json @controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
+POST	/climate/addServiceConfiguration		@controllers.ServiceConfigurationController.addServiceConfiguration
+POST	/climate/updateServiceConfiguration			@controllers.ServiceConfigurationController.updateServiceConfiguration
+DELETE	/climate/deleteServiceConfiguration/:id	@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
