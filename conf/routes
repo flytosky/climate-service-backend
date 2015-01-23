@@ -9,7 +9,7 @@
 # Climate Service
 GET		/climate/getClimateService/:name/json	@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
 POST	/climate/addClimateService				@controllers.ClimateServiceController.addClimateService
-POST	/climate/updateClimateService			@controllers.ClimateServiceController.updateClimateService
+PUT		/climate/updateClimateService/:oldName	@controllers.ClimateServiceController.updateClimateService(oldName: String)
 DELETE	/climate/deleteClimateService/:name		@controllers.ClimateServiceController.deleteClimateService(name: String)
 
 # Map static resources from the /public folder to the /assets URL path

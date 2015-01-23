@@ -77,7 +77,7 @@ public class ClimateServiceController extends Controller {
 		return ok("Climate service is deleted: " + name);
     }
     
-    public Result updateClimateService() {
+    public Result updateClimateService(String oldName) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Climate service not saved, expecting Json data");
@@ -94,13 +94,13 @@ public class ClimateServiceController extends Controller {
 		String createTime = json.findPath("createTime").asText();
 		String versionNo = json.findPath("versionNo").asText();
 		
-		if (name == null || name.length() == 0) {
-    		System.out.println("Climate Service Name is null or empty!");
-			return badRequest("Climate Service Name is null or empty!");
+		if (oldName == null || oldName.length() == 0) {
+    		System.out.println("Old climate Service Name is null or empty!");
+			return badRequest("Old climate Service Name is null or empty!");
     	}
 		
 		try {
-			ClimateService climateService = climateServiceRepository.findByName(name);
+			ClimateService climateService = climateServiceRepository.findByName(oldName);
 			
 			climateService.setCreateTime(createTime);
 			climateService.setName(name);
