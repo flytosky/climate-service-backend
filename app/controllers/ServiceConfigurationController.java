@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import play.mvc.*;
 
 import javax.inject.Named;
@@ -59,19 +62,18 @@ public class ServiceConfigurationController extends Controller {
     	
 	}
 	
-    public Result updateServiceConfiguration(long oldId) {
+    public Result updateServiceConfigurationById(long id) {
 	JsonNode json = request().body().asJson();
 	if (json == null) {
 		System.out.println("Service Configuration not saved, expecting Json data");
 		return badRequest("Service Configuration not saved, expecting Json data");
 	}
-	long id = json.findPath("id").asLong();
 	long serviceId = json.findPath("serviceId").asLong();
 	long userId = json.findPath("userId").asLong();
 	String runTime = json.findPath("runTime").asText();
 
 	try {
-		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(oldId);
+		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
 		serviceConfiguration.setId(id);
 		serviceConfiguration.setRunTime(runTime);
 		ClimateService climateService = climateServiceRepository.findOne(serviceId);
@@ -114,6 +116,25 @@ public class ServiceConfigurationController extends Controller {
     	}
     	
     	return ok(result);
+    }
+    
+    public Result getAllServiceConfigurationByUserId(long userId, String format) {
+    	try {
+			User user = userRepository.findOne(userId);
+			if (user == null) {
+				System.out.println("Cannot find User by id: "+userId);
+				return notFound("Cannot find User by id: "+userId);
+			}
+			List<ServiceConfiguration>serviceConfigurations = serviceConfigurationRepository.findAllByUserId(user);
+			String result = new String();
+	    	if (format.equals("json")) {
+	    		result = new Gson().toJson(serviceConfigurations);
+	    	}
+	    	return ok(result);
+		} catch (PersistenceException pe) {
+			System.out.println("Service Configuration not found by userId: "+userId);
+			return notFound("Service Configuration not found by userId: "+userId);
+		}
     }
 	
 }
