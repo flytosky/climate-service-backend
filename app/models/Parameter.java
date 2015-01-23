@@ -1,7 +1,5 @@
 package models;
 
-import java.util.Enumeration;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,39 +26,22 @@ public class Parameter {
 	public Parameter() {
 	}
 
-//	public Parameter(ClimateService climateService, long indexInService,
-//			String name, String dataType, String dataRange, String enumeration,
-//			String rule, String purpose) {
-//		super();
-//		this.climateService = climateService;
-//		this.indexInService = indexInService;
-//		this.name = name;
-//		this.dataType = dataType;
-//		this.dataRange = dataRange;
-//		this.enumeration = enumeration;
-//		this.rule = rule;
-//		this.purpose = purpose;
-//	}
-	
-	
-
-	public long getId() {
-		return id;
-	}
-
-	
-
 	public Parameter(ClimateService climateService, long indexInService,
-		String name, String dataRange, String enumeration, String rule,
-		String purpose) {
+			String name, String dataType, String dataRange, String enumeration,
+			String rule, String purpose) {
 		super();
 		this.climateService = climateService;
 		this.indexInService = indexInService;
 		this.name = name;
+		this.dataType = dataType;
 		this.dataRange = dataRange;
 		this.enumeration = enumeration;
 		this.rule = rule;
 		this.purpose = purpose;
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public ClimateService getClimateService() {

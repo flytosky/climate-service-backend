@@ -47,9 +47,12 @@ public class ParameterController extends Controller {
     	long indexInService = json.findPath("indexInService").asLong();
 		String name = json.findPath("name").asText();
 		Iterator<JsonNode> elements = json.findPath("dataType").elements();
+		StringBuffer dataType = new StringBuffer();
 		while (elements.hasNext()) {
-			System.out.println(elements.next().asText());
+			dataType.append(elements.next().asText());
+			dataType.append(",");
 		}
+		dataType.deleteCharAt(dataType.length() - 1);
 		String dataRange = json.findPath("dataRange").asText();
 		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
@@ -57,7 +60,7 @@ public class ParameterController extends Controller {
 		
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
-			Parameter parameter = new Parameter(climateService, indexInService, name, 
+			Parameter parameter = new Parameter(climateService, indexInService, name, dataType.toString(),
 					dataRange, enumeration, rule, purpose);
 			Parameter savedParameter = parameterRepositiry.save(parameter);
 			
@@ -95,6 +98,13 @@ public class ParameterController extends Controller {
     	long serviceId = json.findPath("serviceId").asLong();
     	long indexInService = json.findPath("indexInService").asLong();
 		String name = json.findPath("name").asText();
+		Iterator<JsonNode> elements = json.findPath("dataType").elements();
+		StringBuffer dataType = new StringBuffer();
+		while (elements.hasNext()) {
+			dataType.append(elements.next().asText());
+			dataType.append(",");
+		}
+		dataType.deleteCharAt(dataType.length() - 1);
 		String dataRange = json.findPath("dataRange").asText();
 		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
@@ -112,6 +122,7 @@ public class ParameterController extends Controller {
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
+			parameter.setDataType(dataType.toString());
 			parameter.setDataRange(dataRange);
 			parameter.setEnumeration(enumeration);
 			parameter.setRule(rule);
@@ -139,6 +150,13 @@ public class ParameterController extends Controller {
     	long serviceId = json.findPath("serviceId").asLong();
     	long indexInService = json.findPath("indexInService").asLong();
 		String name = json.findPath("name").asText();
+		Iterator<JsonNode> elements = json.findPath("dataType").elements();
+		StringBuffer dataType = new StringBuffer();
+		while (elements.hasNext()) {
+			dataType.append(elements.next().asText());
+			dataType.append(",");
+		}
+		dataType.deleteCharAt(dataType.length() - 1);
 		String dataRange = json.findPath("dataRange").asText();
 		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
@@ -151,6 +169,7 @@ public class ParameterController extends Controller {
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
+			parameter.setDataType(dataType.toString());
 			parameter.setDataRange(dataRange);
 			parameter.setEnumeration(enumeration);
 			parameter.setRule(rule);
