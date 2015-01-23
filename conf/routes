@@ -16,7 +16,7 @@ DELETE	/climate/deleteClimateService/:name			@controllers.ClimateServiceControll
 # Service Configuration
 GET		/climate/getServiceConfiguration/:id/json 		@controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
 POST	/climate/addServiceConfiguration				@controllers.ServiceConfigurationController.addServiceConfiguration
-PUT	/climate/updateServiceConfiguration/oldId/:oldId	@controllers.ServiceConfigurationController.updateServiceConfiguration(oldId: Long)
+PUT		/climate/updateServiceConfiguration/id/:id		@controllers.ServiceConfigurationController.updateServiceConfiguration(id: Long)
 DELETE	/climate/deleteServiceConfiguration/:id			@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
 
 
