@@ -77,7 +77,7 @@ public class ClimateServiceController extends Controller {
 		return ok("Climate service is deleted: " + name);
     }
     
-    public Result updateClimateService(long id) {
+    public Result updateClimateServiceById(long id) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Climate service not saved, expecting Json data");
@@ -118,7 +118,7 @@ public class ClimateServiceController extends Controller {
 		}			
     }
     
-    public Result updateClimateService(String oldName) {
+    public Result updateClimateServiceByName(String oldName) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Climate service not saved, expecting Json data");
