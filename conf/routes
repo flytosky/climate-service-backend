@@ -14,10 +14,18 @@ PUT		/climate/updateClimateService/name/:oldName	@controllers.ClimateServiceCont
 DELETE	/climate/deleteClimateService/:name			@controllers.ClimateServiceController.deleteClimateService(name: String)
 
 # Service Configuration
-GET		/climate/getServiceConfiguration/:id/json @controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
-POST	/climate/addServiceConfiguration		@controllers.ServiceConfigurationController.addServiceConfiguration
-POST	/climate/updateServiceConfiguration			@controllers.ServiceConfigurationController.updateServiceConfiguration
-DELETE	/climate/deleteServiceConfiguration/:id	@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
+GET		/climate/getServiceConfiguration/:id/json 		@controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
+POST	/climate/addServiceConfiguration				@controllers.ServiceConfigurationController.addServiceConfiguration
+PUT	/climate/updateServiceConfiguration/oldId/:oldId	@controllers.ServiceConfigurationController.updateServiceConfiguration(oldId: Long)
+DELETE	/climate/deleteServiceConfiguration/:id			@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
+
+
+#Parameter
+GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameter(name: String, format: String="json")
+POST	/parameter/addParameter						@controllers.ParameterController.addParameter
+PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameter(id: long)
+PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameter(oldName: String)
+DELETE  /parameter/deleteParameter/:name			@controllers.ParameterController.deleteParameter(name: String)
 
 
 # Map static resources from the /public folder to the /assets URL path
