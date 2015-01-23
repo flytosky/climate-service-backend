@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Iterator;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -44,6 +46,10 @@ public class ParameterController extends Controller {
     	long serviceId = json.findPath("serviceId").asLong();
     	long indexInService = json.findPath("indexInService").asLong();
 		String name = json.findPath("name").asText();
+		Iterator<JsonNode> elements = json.findPath("dataType").elements();
+		while (elements.hasNext()) {
+			System.out.println(elements.next().asText());
+		}
 		String dataRange = json.findPath("dataRange").asText();
 		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
@@ -78,7 +84,7 @@ public class ParameterController extends Controller {
 		return ok("Parameter is deleted: " + name);
     }
     
-    public Result updateParameter(String oldName) {
+    public Result updateParameterByName(String oldName) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Parameter not updated, expecting Json data");
@@ -122,7 +128,7 @@ public class ParameterController extends Controller {
 		}			
     }
     
-    public Result updateParameter(long id) {
+    public Result updateParameterById(long id) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Parameter not updated, expecting Json data");

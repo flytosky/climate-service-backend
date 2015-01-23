@@ -19,7 +19,7 @@ public class Parameter {
 	private ClimateService climateService;
 	private long indexInService;
 	private String name;
-//	private Enumeration<String> dataType;
+	private String dataType;
 	private String dataRange;
 	private String enumeration;
 	private String rule;
@@ -28,24 +28,40 @@ public class Parameter {
 	public Parameter() {
 	}
 
-	public Parameter(ClimateService climateService, long indexInService,
-			String name, String dataRange, String enumeration, String rule,
-			String purpose) {
-		super();
-		this.climateService = climateService;
-		this.setIndexInService(indexInService);
-		this.name = name;
-		this.dataRange = dataRange;
-		this.enumeration = enumeration;
-		this.rule = rule;
-		this.purpose = purpose;
-	}
+//	public Parameter(ClimateService climateService, long indexInService,
+//			String name, String dataType, String dataRange, String enumeration,
+//			String rule, String purpose) {
+//		super();
+//		this.climateService = climateService;
+//		this.indexInService = indexInService;
+//		this.name = name;
+//		this.dataType = dataType;
+//		this.dataRange = dataRange;
+//		this.enumeration = enumeration;
+//		this.rule = rule;
+//		this.purpose = purpose;
+//	}
+	
+	
 
 	public long getId() {
 		return id;
 	}
 
 	
+
+	public Parameter(ClimateService climateService, long indexInService,
+		String name, String dataRange, String enumeration, String rule,
+		String purpose) {
+		super();
+		this.climateService = climateService;
+		this.indexInService = indexInService;
+		this.name = name;
+		this.dataRange = dataRange;
+		this.enumeration = enumeration;
+		this.rule = rule;
+		this.purpose = purpose;
+	}
 
 	public ClimateService getClimateService() {
 		return climateService;
@@ -69,6 +85,14 @@ public class Parameter {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 
 	public String getDataRange() {

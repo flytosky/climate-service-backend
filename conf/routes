@@ -9,7 +9,7 @@
 # Climate Service
 GET		/climate/getClimateService/:name/json		@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
 POST	/climate/addClimateService					@controllers.ClimateServiceController.addClimateService
-PUT		/climate/updateClimateService/id/:id		@controllers.ClimateServiceController.updateClimateService(id: long)
+PUT		/climate/updateClimateService/id/:id		@controllers.ClimateServiceController.updateClimateService(id: Long)
 PUT		/climate/updateClimateService/name/:oldName	@controllers.ClimateServiceController.updateClimateService(oldName: String)
 DELETE	/climate/deleteClimateService/:name			@controllers.ClimateServiceController.deleteClimateService(name: String)
 
@@ -23,8 +23,8 @@ DELETE	/climate/deleteServiceConfiguration/:id			@controllers.ServiceConfigurati
 #Parameter
 GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameter(name: String, format: String="json")
 POST	/parameter/addParameter						@controllers.ParameterController.addParameter
-PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameter(id: long)
-PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameter(oldName: String)
+PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameterById(id: Long)
+PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameterByName(oldName: String)
 DELETE  /parameter/deleteParameter/:name			@controllers.ParameterController.deleteParameter(name: String)
 
 
