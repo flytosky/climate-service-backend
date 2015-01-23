@@ -59,7 +59,7 @@ public class ServiceConfigurationController extends Controller {
     	
 	}
 	
-    public Result updateServiceConfiguration() {
+    public Result updateServiceConfiguration(long oldid) {
 	JsonNode json = request().body().asJson();
 	if (json == null) {
 		System.out.println("Service Configuration not saved, expecting Json data");
@@ -71,7 +71,7 @@ public class ServiceConfigurationController extends Controller {
 	String runTime = json.findPath("runTime").asText();
 
 	try {
-		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
+		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(oldid);
 		serviceConfiguration.setId(id);
 		serviceConfiguration.setRunTime(runTime);
 		ClimateService climateService = climateServiceRepository.findOne(serviceId);
