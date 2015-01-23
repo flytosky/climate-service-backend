@@ -1,11 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -18,7 +12,6 @@ import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.Parameter;
 import models.ParameterRepositiry;
-import models.User;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -85,7 +78,7 @@ public class ParameterController extends Controller {
 		return ok("Parameter is deleted: " + name);
     }
     
-    public Result updateParameter() {
+    public Result updateParameter(String oldName) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Parameter not updated, expecting Json data");
@@ -101,7 +94,7 @@ public class ParameterController extends Controller {
 		String rule = json.findPath("rule").asText();
 		String purpose = json.findPath("purpose").asText();
 		
-		if (name == null || name.length() == 0) {
+		if (oldName == null || oldName.length() == 0) {
     		System.out.println("Parameter Name is null or empty!");
 			return badRequest("Parameter Name is null or empty!");
     	}
@@ -109,7 +102,46 @@ public class ParameterController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
 			
-			Parameter parameter = parameterRepositiry.findByName(name);
+			Parameter parameter = parameterRepositiry.findByName(oldName);
+			parameter.setClimateService(climateService);
+			parameter.setIndexInService(indexInService);
+			parameter.setName(name);
+			parameter.setDataRange(dataRange);
+			parameter.setEnumeration(enumeration);
+			parameter.setRule(rule);
+			parameter.setPurpose(purpose);
+			
+			Parameter savedParameter = parameterRepositiry.save(parameter);
+			
+			System.out.println("Parameter updated: " + savedParameter.getName());
+			return created("Parameter updated: " + savedParameter.getName());
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+			System.out.println("Parameter not updated: " + name);
+			return badRequest("Parameter not updated: " + name);
+		}			
+    }
+    
+    public Result updateParameter(long id) {
+    	JsonNode json = request().body().asJson();
+    	if (json == null) {
+    		System.out.println("Parameter not updated, expecting Json data");
+			return badRequest("Parameter not updated, expecting Json data");
+    	}
+
+    	//Parse JSON file
+    	long serviceId = json.findPath("serviceId").asLong();
+    	long indexInService = json.findPath("indexInService").asLong();
+		String name = json.findPath("name").asText();
+		String dataRange = json.findPath("dataRange").asText();
+		String enumeration = json.findPath("enumeration").asText();
+		String rule = json.findPath("rule").asText();
+		String purpose = json.findPath("purpose").asText();
+		
+		try {
+			ClimateService climateService = climateServiceRepository.findOne(serviceId);
+			
+			Parameter parameter = parameterRepositiry.findOne(id);
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
