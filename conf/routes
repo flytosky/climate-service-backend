@@ -7,10 +7,11 @@
 # GET     /                           @controllers.Application.index
 
 # Climate Service
-GET		/climate/getClimateService/:name/json	@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
-POST	/climate/addClimateService				@controllers.ClimateServiceController.addClimateService
-PUT		/climate/updateClimateService/:oldName	@controllers.ClimateServiceController.updateClimateService(oldName: String)
-DELETE	/climate/deleteClimateService/:name		@controllers.ClimateServiceController.deleteClimateService(name: String)
+GET		/climate/getClimateService/:name/json		@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
+POST	/climate/addClimateService					@controllers.ClimateServiceController.addClimateService
+PUT		/climate/updateClimateService/id/:id		@controllers.ClimateServiceController.updateClimateService(id: long)
+PUT		/climate/updateClimateService/name/:oldName	@controllers.ClimateServiceController.updateClimateService(oldName: String)
+DELETE	/climate/deleteClimateService/:name			@controllers.ClimateServiceController.deleteClimateService(name: String)
 
 # Service Configuration
 GET		/climate/getServiceConfiguration/:id/json @controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
