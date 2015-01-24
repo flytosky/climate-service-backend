@@ -24,10 +24,9 @@ public class ServiceConfiguration {
 	public ServiceConfiguration() {
 	}
 	
-	public ServiceConfiguration(long id,ClimateService climateservice,
+	public ServiceConfiguration(ClimateService climateservice,
 			User user,String runtime){
 		super();
-		this.id = id;
 		this.climateservice = climateservice;
 		this.user = user;
 		this.runTime = runtime;

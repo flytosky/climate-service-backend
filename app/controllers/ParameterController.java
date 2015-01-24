@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.Parameter;
-import models.ParameterRepositiry;
+import models.ParameterRepository;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -23,12 +23,12 @@ import play.mvc.Result;
 @Named
 @Singleton
 public class ParameterController extends Controller {
-	private final ParameterRepositiry parameterRepositiry;
+	private final ParameterRepository parameterRepositiry;
     private final ClimateServiceRepository climateServiceRepository;
 	
 	// We are using constructor injection to receive a repository to support our desire for immutability.
     @Inject
-    public ParameterController(final ParameterRepositiry parameterRepositiry,
+    public ParameterController(final ParameterRepository parameterRepositiry,
     		final ClimateServiceRepository climateServiceRepository) {
         this.parameterRepositiry = parameterRepositiry;
         this.climateServiceRepository = climateServiceRepository;

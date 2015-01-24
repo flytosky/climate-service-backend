@@ -57,7 +57,7 @@ public class ClimateServiceController extends Controller {
 			ClimateService savedClimateService = climateServiceRepository.save(climateService);
 			
 			System.out.println("Climate Service saved: " + savedClimateService.getName());
-			return created("Climate Service saved: " + savedClimateService.getName());
+			return created(new Gson().toJson(savedClimateService.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println("Climate Service not saved: " + name);
