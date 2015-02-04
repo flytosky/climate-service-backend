@@ -20,22 +20,22 @@ PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigu
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
 GET		/climate/getAllServiceConfigurationByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationByUserId(userId: Long, format: String="json")
 
-#Parameter
+# Parameter
 GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameter(name: String, format: String="json")
 POST	/parameter/addParameter						@controllers.ParameterController.addParameter
 PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameterById(id: Long)
 PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameterByName(oldName: String)
 DELETE  /parameter/deleteParameter/:name			@controllers.ParameterController.deleteParameter(name: String)
 
-#Service Configuration Item
-GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigItemController.getServiceConfigItemById(id: Long)
-GET		/climate/serviceConfigItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigItemController.getServiceConfigItemsInServiceConfig(serviceConfigId: Long)
-GET		/climate/serviceConfigItemByParamName/:param				@controllers.ServiceConfigItemController.getServiceConfigItemByParamName(param : String)
-POST	/climate/addServiceConfigItem								@controllers.ServiceConfigItemController.addServiceConfigItem
-PUT		/climate/updateServiceConfigItem/id/:id						@controllers.ServiceConfigItemController.updateServiceConfigItem(id:Long)
-DELETE	/climate/deleteServiceConfigItem/:id						@controllers.ServiceConfigItemController.deleteClimateService(id: Long)
+# Service Configuration Item
+GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigItemById(id: Long)
+GET		/climate/serviceConfigItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigItemsInServiceConfig(serviceConfigId: Long)
+GET		/climate/serviceConfigItemByParamName/:param				@controllers.ServiceConfigurationItemController.getServiceConfigItemByParamName(param : String)
+POST	/climate/addServiceConfigItem								@controllers.ServiceConfigurationItemController.addServiceConfigItem
+PUT		/climate/updateServiceConfigItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigItem(id:Long)
+DELETE	/climate/deleteServiceConfigItem/:id						@controllers.ServiceConfigurationItemController.deleteClimateService(id: Long)
 
-#Users
+# Users
 GET		/users/:id			@controllers.UserController.getUser(id: Long, format: String="json")
 POST	/users/add			@controllers.UserController.addUser
 PUT		/users/update/:id	@controllers.UserController.updateUser(id: Long)

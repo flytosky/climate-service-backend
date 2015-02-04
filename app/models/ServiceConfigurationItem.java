@@ -36,7 +36,6 @@ public class ServiceConfigurationItem {
 	public ServiceConfigurationItem(ServiceConfiguration serviceConfiguration, Parameter parameter,
 			String value) {
 		super();
-		this.id = id;
 		this.serviceConfiguration = serviceConfiguration;
 		this.parameter = parameter;
 		this.value = value;

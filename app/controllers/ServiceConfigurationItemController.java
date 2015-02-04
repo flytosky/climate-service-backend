@@ -2,14 +2,12 @@ package controllers;
 
 import java.util.List;
 
-import models.ClimateServiceRepository;
 import models.Parameter;
 import models.ParameterRepository;
 import models.ServiceConfiguration;
 import models.ServiceConfigurationItem;
 import models.ServiceConfigurationItemRepository;
 import models.ServiceConfigurationRepository;
-import models.UserRepository;
 import play.mvc.*;
 
 import javax.inject.Inject;
@@ -25,25 +23,18 @@ import com.google.gson.Gson;
  */
 @Named
 @Singleton
-public class ServiceConfigItemController extends Controller {
+public class ServiceConfigurationItemController extends Controller {
 
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 	private final ParameterRepository parameterRepository;
-	private final ClimateServiceRepository climateServiceRepository;
-	private final UserRepository userRepository;
-
 	// We are using constructor injection to receive a repository to support our
 	// desire for immutability.
 	@Inject
-	public ServiceConfigItemController(
-			final ClimateServiceRepository climateServiceRepository,
-			final UserRepository userRepository,
+	public ServiceConfigurationItemController(
 			final ServiceConfigurationRepository serviceConfigurationRepository,
 			final ParameterRepository parameterRepository,
 			final ServiceConfigurationItemRepository serviceConfigurationItemRepository) {
-		this.climateServiceRepository = climateServiceRepository;
-		this.userRepository = userRepository;
 		this.parameterRepository = parameterRepository;
 		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
