@@ -7,6 +7,5 @@ import javax.inject.Singleton;
 
 @Named
 @Singleton
-public interface ParameterRepositiry extends CrudRepository<Parameter, Long> {
-	Parameter findByName(String name);
+public interface ParameterOptionRepository extends CrudRepository<ParameterOption, Long> {
 }

@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.Parameter;
-import models.ParameterRepositiry;
+import models.ParameterRepository;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -23,12 +23,12 @@ import play.mvc.Result;
 @Named
 @Singleton
 public class ParameterController extends Controller {
-	private final ParameterRepositiry parameterRepositiry;
+	private final ParameterRepository parameterRepositiry;
     private final ClimateServiceRepository climateServiceRepository;
 	
 	// We are using constructor injection to receive a repository to support our desire for immutability.
     @Inject
-    public ParameterController(final ParameterRepositiry parameterRepositiry,
+    public ParameterController(final ParameterRepository parameterRepositiry,
     		final ClimateServiceRepository climateServiceRepository) {
         this.parameterRepositiry = parameterRepositiry;
         this.climateServiceRepository = climateServiceRepository;
@@ -46,13 +46,6 @@ public class ParameterController extends Controller {
     	long serviceId = json.findPath("serviceId").asLong();
     	long indexInService = json.findPath("indexInService").asLong();
 		String name = json.findPath("name").asText();
-		Iterator<JsonNode> elements = json.findPath("dataType").elements();
-		StringBuffer dataType = new StringBuffer();
-		while (elements.hasNext()) {
-			dataType.append(elements.next().asText());
-			dataType.append(",");
-		}
-		dataType.deleteCharAt(dataType.length() - 1);
 		String dataRange = json.findPath("dataRange").asText();
 		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
@@ -60,12 +53,12 @@ public class ParameterController extends Controller {
 		
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
-			Parameter parameter = new Parameter(climateService, indexInService, name, dataType.toString(),
+			Parameter parameter = new Parameter(climateService, indexInService, name,
 					dataRange, enumeration, rule, purpose);
 			Parameter savedParameter = parameterRepositiry.save(parameter);
 			
 			System.out.println("Parameter saved: " + savedParameter.getName());
-			return created("Parameter saved: " + savedParameter.getName());
+			return created(new Gson().toJson(savedParameter.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println(serviceId);
@@ -75,7 +68,7 @@ public class ParameterController extends Controller {
 		}			
     }
     
-    public Result deleteParameter(String name) {
+    public Result deleteParameterByName(String name) {
     	Parameter parameter = parameterRepositiry.findByName(name);
     	if (parameter == null) {
     		System.out.println("Parameter not found with name: " + name);
@@ -122,7 +115,6 @@ public class ParameterController extends Controller {
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
-			parameter.setDataType(dataType.toString());
 			parameter.setDataRange(dataRange);
 			parameter.setEnumeration(enumeration);
 			parameter.setRule(rule);
@@ -169,7 +161,6 @@ public class ParameterController extends Controller {
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
-			parameter.setDataType(dataType.toString());
 			parameter.setDataRange(dataRange);
 			parameter.setEnumeration(enumeration);
 			parameter.setRule(rule);
@@ -186,7 +177,7 @@ public class ParameterController extends Controller {
 		}			
     }
     
-    public Result getParameter(String name, String format) {
+    public Result getParameterByName(String name, String format) {
     	if (name == null || name.length() == 0) {
     		System.out.println("Parameter Name is null or empty!");
 			return badRequest("Parameter Name is null or empty!");

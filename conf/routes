@@ -20,13 +20,18 @@ PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigu
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
 GET		/climate/getAllServiceConfigurationByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationByUserId(userId: Long, format: String="json")
 
-#Parameter
-GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameter(name: String, format: String="json")
+# Parameter
+GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameterByName(name: String, format: String="json")
 POST	/parameter/addParameter						@controllers.ParameterController.addParameter
 PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameterById(id: Long)
 PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameterByName(oldName: String)
-DELETE  /parameter/deleteParameter/:name			@controllers.ParameterController.deleteParameter(name: String)
+DELETE  /parameter/deleteParameter/name/:name		@controllers.ParameterController.deleteParameterByName(name: String)
 
+# ParameterOption
+GET		/parameterOption/getAllParameters/json				@controllers.ParameterOptionController.getAll
+POST	/parameterOption/addParameterOption					@controllers.ParameterOptionController.addParameterOption
+PUT		/parameterOption/updateParameterOption/id/:id		@controllers.ParameterOptionController.updateParameterOptionById(id: Long)
+DELETE	/parameterOption/deleteParameterOption/id/:id		@controllers.ParameterOptionController.deleteParameterOptionById(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
