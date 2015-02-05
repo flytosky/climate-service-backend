@@ -189,7 +189,6 @@ public class ClimateServiceController extends Controller {
     	Iterable<ClimateService> climateServices = climateServiceRepository.findAll();
     	if (climateServices == null) {
     		System.out.println("No climate service found");
-			return notFound("No climate service found");
     	}
     	
     	String result = new String();
