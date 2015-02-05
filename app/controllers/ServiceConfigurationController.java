@@ -45,6 +45,7 @@ public class ServiceConfigurationController extends Controller {
     	long serviceId = json.findPath("serviceId").asLong();
     	long userId = json.findPath("userId").asLong();
     	String runTime = json.findPath("runTime").asText();
+    	Date runTimeDate = 
     	try {
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
