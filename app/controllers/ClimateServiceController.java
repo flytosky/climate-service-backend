@@ -1,9 +1,14 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.User;
 import models.UserRepository;
+import util.Common;
 import play.mvc.*;
 
 import javax.inject.Inject;
@@ -21,7 +26,8 @@ import com.google.gson.Gson;
 @Singleton
 public class ClimateServiceController extends Controller {
 
-    private final ClimateServiceRepository climateServiceRepository;
+   // static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssz";
+	private final ClimateServiceRepository climateServiceRepository;
     private final UserRepository userRepository;
 
     // We are using constructor injection to receive a repository to support our desire for immutability.
@@ -46,7 +52,14 @@ public class ClimateServiceController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String url = json.findPath("url").asText();
 		String scenario = json.findPath("scenario").asText();
-		String createTime = json.findPath("createTime").asText();
+		SimpleDateFormat format = new SimpleDateFormat(Common.DATE_PATTERN);
+		Date createTime = new Date();
+		try {
+			createTime = format.parse(json.findPath("createTime").asText());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String versionNo = json.findPath("versionNo").asText();
 		
 		try {
@@ -91,13 +104,12 @@ public class ClimateServiceController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String url = json.findPath("url").asText();
 		String scenario = json.findPath("scenario").asText();
-		String createTime = json.findPath("createTime").asText();
 		String versionNo = json.findPath("versionNo").asText();
-
+		//Creation time should be immutable and not updated. 
+		
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(id);
 			
-			climateService.setCreateTime(createTime);
 			climateService.setName(name);
 			climateService.setPurpose(purpose);
 			climateService.setRootServiceId(rootServiceId);
@@ -132,8 +144,9 @@ public class ClimateServiceController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String url = json.findPath("url").asText();
 		String scenario = json.findPath("scenario").asText();
-		String createTime = json.findPath("createTime").asText();
 		String versionNo = json.findPath("versionNo").asText();
+		//Creation time is immutable and should not be updated 
+		
 		
 		if (oldName == null || oldName.length() == 0) {
     		System.out.println("Old climate Service Name is null or empty!");
@@ -143,7 +156,6 @@ public class ClimateServiceController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository.findByName(oldName);
 			
-			climateService.setCreateTime(createTime);
 			climateService.setName(name);
 			climateService.setPurpose(purpose);
 			climateService.setRootServiceId(rootServiceId);

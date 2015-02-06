@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate3.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
+
 import play.Application;
 import play.GlobalSettings;
 
@@ -21,7 +22,7 @@ public class Global extends GlobalSettings {
      * The name of the persistence unit we will be using.
      */
     static final String DEFAULT_PERSISTENCE_UNIT = "default";
-
+    
     /**
      * Declare the application context to be used - a Java annotation based application context requiring no XML.
      */
