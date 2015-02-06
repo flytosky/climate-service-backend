@@ -1,6 +1,9 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import play.mvc.*;
@@ -44,8 +47,15 @@ public class ServiceConfigurationController extends Controller {
     	}
     	long serviceId = json.findPath("serviceId").asLong();
     	long userId = json.findPath("userId").asLong();
-    	String runTime = json.findPath("runTime").asText();
-    	Date runTimeDate = 
+    	String runTimeString = json.findPath("runTime").asText();
+    	Date runTime = new Date();
+    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    	try {
+    		runTime = simpleDateFormat.parse(runTimeString);
+    	} catch (ParseException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
     	try {
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
@@ -70,7 +80,15 @@ public class ServiceConfigurationController extends Controller {
 	}
 	long serviceId = json.findPath("serviceId").asLong();
 	long userId = json.findPath("userId").asLong();
-	String runTime = json.findPath("runTime").asText();
+	String runTimeString = json.findPath("runTime").asText();
+	Date runTime = new Date();
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+	try {
+		runTime = simpleDateFormat.parse(runTimeString);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
 	try {
 		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
@@ -118,7 +136,7 @@ public class ServiceConfigurationController extends Controller {
     	return ok(result);
     }
     
-    public Result getAllServiceConfigurationByUserId(long userId, String format) {
+    public Result getAllServiceConfigurationsByUserId(long userId, String format) {
     	try {
 			User user = userRepository.findOne(userId);
 			if (user == null) {
@@ -135,6 +153,17 @@ public class ServiceConfigurationController extends Controller {
 			System.out.println("Service Configuration not found by userId: "+userId);
 			return notFound("Service Configuration not found by userId: "+userId);
 		}
+    }
+    
+    public Result getAllServiceConfigurations() {
+    	try {
+    		Iterable<ServiceConfiguration>serviceConfigurations =  serviceConfigurationRepository.findAll();
+    		String result = new String();
+    		result = new Gson().toJson(serviceConfigurations);
+    		return ok(result);
+    	} catch (Exception e) {
+    		return badRequest("Service Configurations not found");
+    	}
     }
 	
 }
