@@ -26,19 +26,12 @@ public class ClimateService {
 	private String scenario;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
 
 	private String versionNo;
 
 	public ClimateService() {
 	}
-	
+
 	public ClimateService(long rootServiceId, User user, String name,
 			String purpose, String url, String scenario, Date createTime,
 			String versionNo) {
@@ -49,7 +42,7 @@ public class ClimateService {
 		this.purpose = purpose;
 		this.url = url;
 		this.scenario = scenario;
-		//For creation time, can just use current time like this
+		// For creation time, can just use current time like this
 		if (createTime == null)
 			createTime = new Date();
 		this.createTime = createTime;
@@ -108,6 +101,13 @@ public class ClimateService {
 		this.scenario = scenario;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	public String getVersionNo() {
 		return versionNo;
