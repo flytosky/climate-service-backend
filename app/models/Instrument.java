@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Instrument {
@@ -15,7 +17,6 @@ public class Instrument {
 	private String name;
 	private String description;
 	private Date launchDate;
-
 	public Instrument (String name, String description, Date launchDate) {
 		super();
 		this.name = name;
