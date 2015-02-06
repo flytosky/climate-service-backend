@@ -1,12 +1,15 @@
 package models;
 
-import javax.persistence.Basic;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class ClimateService {
@@ -21,14 +24,23 @@ public class ClimateService {
 	private String purpose;
 	private String url;
 	private String scenario;
-	private String createTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
 	private String versionNo;
 
 	public ClimateService() {
 	}
 	
 	public ClimateService(long rootServiceId, User user, String name,
-			String purpose, String url, String scenario, String createTime,
+			String purpose, String url, String scenario, Date createTime,
 			String versionNo) {
 		super();
 		this.rootServiceId = rootServiceId;
@@ -37,6 +49,9 @@ public class ClimateService {
 		this.purpose = purpose;
 		this.url = url;
 		this.scenario = scenario;
+		//For creation time, can just use current time like this
+		if (createTime == null)
+			createTime = new Date();
 		this.createTime = createTime;
 		this.versionNo = versionNo;
 	}
@@ -93,13 +108,6 @@ public class ClimateService {
 		this.scenario = scenario;
 	}
 
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
 
 	public String getVersionNo() {
 		return versionNo;
