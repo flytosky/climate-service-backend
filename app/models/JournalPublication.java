@@ -16,7 +16,7 @@ public class JournalPublication extends Publication {
 	public JournalPublication(String paperTitle, User author,
 			String publicationChannel, int year, String journalName, int volume,
 			int column, String page) {
-		//super(paperTitle, author, publicationChannel, year);
+		super(paperTitle, author, publicationChannel, year);
 		this.journalName = journalName;
 		this.volume = volume;
 		this.qcolumn = column;

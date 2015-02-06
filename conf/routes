@@ -19,7 +19,7 @@ GET		/climate/getServiceConfiguration/:id/json 						@controllers.ServiceConfigu
 POST	/climate/addServiceConfiguration								@controllers.ServiceConfigurationController.addServiceConfiguration
 PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigurationController.updateServiceConfigurationById(id: Long)
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
-GET		/climate/getAllServiceConfigurationByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationByUserId(userId: Long, format: String="json")
+GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationsByUserId(userId: Long, format: String="json")
 
 # Parameter
 GET		/parameter/getAllParameters/json			@controllers.ParameterController.getAllParameters(format: String="json")
@@ -43,6 +43,13 @@ GET		/journalPublication/getJournalPublication/id/:id/json	@controllers.JournalP
 POST	/journalPublication/addJournalPublication				@controllers.JournalPublicationController.addJournalPublication
 PUT		/journalPublication/updateJournalPublication/id/:id		@controllers.JournalPublicationController.updateJournalPublicationById(id: Long)
 DELETE	/journalPublication/deleteJournalPublication/id/:id		@controllers.JournalPublicationController.deleteJournalPublicationById(id: Long)
+
+# BookPublication
+GET		/BookPublication/getAllBookPublications/json		@controllers.BookPublicationController.getAllBookPublications(format: String="json")
+GET		/BookPublication/getBookPublication/id/:id/json		@controllers.BookPublicationController.getBookPublication(id: Long, format: String="json")
+POST	/BookPublication/addBookPublication					@controllers.BookPublicationController.addBookPublication
+PUT		/BookPublication/updateBookPublication/id/:id		@controllers.BookPublicationController.updateBookPublication(id: Long)
+DELETE	/BookPublication/deleteBookPublication/id/:id		@controllers.BookPublicationController.deleteBookPublication(id: Long)
 
 # Service Configuration Item
 GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigItemById(id: Long)
