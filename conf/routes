@@ -8,10 +8,11 @@
 
 # Climate Service
 GET		/climate/getClimateService/:name/json		@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
+GET		/climate/getAllClimateServices/json			@controllers.ClimateServiceController.getAllClimateServices(format: String="json")
 POST	/climate/addClimateService					@controllers.ClimateServiceController.addClimateService
 PUT		/climate/updateClimateService/id/:id		@controllers.ClimateServiceController.updateClimateServiceById(id: Long)
 PUT		/climate/updateClimateService/name/:oldName	@controllers.ClimateServiceController.updateClimateServiceByName(oldName: String)
-DELETE	/climate/deleteClimateService/:name			@controllers.ClimateServiceController.deleteClimateService(name: String)
+DELETE	/climate/deleteClimateService/:id			@controllers.ClimateServiceController.deleteClimateService(id: Long)
 
 # Service Configuration
 GET		/climate/getServiceConfiguration/:id/json 						@controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
@@ -21,14 +22,19 @@ DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigu
 GET		/climate/getAllServiceConfigurationByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationByUserId(userId: Long, format: String="json")
 
 # Parameter
+<<<<<<< HEAD
 GET		/parameter/getAllParameters/json			@controllers.ParameterController.getAllParameters(format: String="json")
 GET		/parameter/getParameter/name/:name/json		@controllers.ParameterController.getParameterByName(name: String, format: String="json")
 GET		/parameter/getParameter/id/:id/json			@controllers.ParameterController.getParameterById(id: Long, format: String="json")
+=======
+GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameter(name: String, format: String="json")
+>>>>>>> 7b0c05d6047251b1d33225ab4b1b1a5bc34e3458
 POST	/parameter/addParameter						@controllers.ParameterController.addParameter
 PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameterById(id: Long)
 PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameterByName(oldName: String)
 DELETE  /parameter/deleteParameter/name/:name		@controllers.ParameterController.deleteParameterByName(name: String)
 
+<<<<<<< HEAD
 # ParameterOption
 GET		/parameterOption/getAllParameterOptions/json		@controllers.ParameterOptionController.getAllParameterOptions(format: String="json")
 GET		/parameterOption/getParameterOption/id/:id/json		@controllers.ParameterOptionController.getParameterOptionById(id: Long, format: String="json")
@@ -42,6 +48,21 @@ GET		/journalPublication/getJournalPublication/id/:id/json	@controllers.JournalP
 POST	/journalPublication/addJournalPublication				@controllers.JournalPublicationController.addJournalPublication
 PUT		/journalPublication/updateJournalPublication/id/:id		@controllers.JournalPublicationController.updateJournalPublicationById(id: Long)
 DELETE	/journalPublication/deleteJournalPublication/id/:id		@controllers.JournalPublicationController.deleteJournalPublicationById(id: Long)
+=======
+# Service Configuration Item
+GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigItemById(id: Long)
+GET		/climate/serviceConfigItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigItemsInServiceConfig(serviceConfigId: Long)
+GET		/climate/serviceConfigItemByParamName/:param				@controllers.ServiceConfigurationItemController.getServiceConfigItemByParamName(param : String)
+POST	/climate/addServiceConfigItem								@controllers.ServiceConfigurationItemController.addServiceConfigItem
+PUT		/climate/updateServiceConfigItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigItem(id:Long)
+DELETE	/climate/deleteServiceConfigItem/:id						@controllers.ServiceConfigurationItemController.deleteClimateService(id: Long)
+
+# Users
+GET		/users/:id			@controllers.UserController.getUser(id: Long, format: String="json")
+POST	/users/add			@controllers.UserController.addUser
+PUT		/users/update/:id	@controllers.UserController.updateUser(id: Long)
+DELETE	/users/delete/:id	@controllers.UserController.deleteUser(id: Long)
+>>>>>>> 7b0c05d6047251b1d33225ab4b1b1a5bc34e3458
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

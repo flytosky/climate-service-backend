@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,15 +21,14 @@ public class ServiceConfiguration {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
-	private String runTime;
+	private Date runTime;
 	
 	public ServiceConfiguration() {
 	}
 	
-	public ServiceConfiguration(long id,ClimateService climateservice,
-			User user,String runtime){
+	public ServiceConfiguration(ClimateService climateservice,
+			User user,Date runtime){
 		super();
-		this.id = id;
 		this.climateservice = climateservice;
 		this.user = user;
 		this.runTime = runtime;
@@ -45,7 +46,7 @@ public class ServiceConfiguration {
 		return user;
 	}
 
-	public String getRunTime() {
+	public Date getRunTime() {
 		return runTime;
 	}
 
@@ -61,7 +62,7 @@ public class ServiceConfiguration {
 		this.user = user;
 	}
 
-	public void setRunTime(String runTime) {
+	public void setRunTime(Date runTime) {
 		this.runTime = runTime;
 	}
 

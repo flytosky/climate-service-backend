@@ -14,3 +14,9 @@ dist
 /RUNNING_PID
 /.settings
 /bin/
+
+conf/META-INF/persistence.xml
+
+conf/META-INF/persistence.xml
+
+conf/META-INF/persistence.xml

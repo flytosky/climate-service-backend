@@ -42,22 +42,22 @@ public class ServiceConfigurationController extends Controller {
     		System.out.println("Service Configuration not saved, expecting Json data");
 			return badRequest("Service Configuration not saved, expecting Json data");
     	}
-    	long id = json.findPath("id").asLong();
     	long serviceId = json.findPath("serviceId").asLong();
     	long userId = json.findPath("userId").asLong();
     	String runTime = json.findPath("runTime").asText();
+    	Date runTimeDate = 
     	try {
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
-			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(id, climateService,
+			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(climateService,
 					user, runTime);
 			ServiceConfiguration savedServiceConfiguration = serviceConfigurationRepository.save(serviceConfiguration);
 			System.out.println("Service Configuration saved: "+ savedServiceConfiguration.getId());
-			return created("Service Configuration saved: "+ savedServiceConfiguration.getId());
+			return created(new Gson().toJson(savedServiceConfiguration.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
-			System.out.println("Service Configuration not saved: "+id);
-			return badRequest("Service Configuration not saved: "+id);
+			System.out.println("Service Configuration not created");
+			return badRequest("Service Configuration not created");
 		}
     	
 	}

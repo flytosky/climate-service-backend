@@ -57,7 +57,7 @@ public class ClimateServiceController extends Controller {
 			ClimateService savedClimateService = climateServiceRepository.save(climateService);
 			
 			System.out.println("Climate Service saved: " + savedClimateService.getName());
-			return created("Climate Service saved: " + savedClimateService.getName());
+			return created(new Gson().toJson(savedClimateService.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println("Climate Service not saved: " + name);
@@ -65,16 +65,16 @@ public class ClimateServiceController extends Controller {
 		}			
     }
     
-    public Result deleteClimateService(String name) {
-    	ClimateService climateService = climateServiceRepository.findByName(name);
+    public Result deleteClimateService(long id) {
+    	ClimateService climateService = climateServiceRepository.findOne(id);
     	if (climateService == null) {
-    		System.out.println("Climate service not found with name: " + name);
-			return notFound("Climate service not found with name: " + name);
+    		System.out.println("Climate service not found with id: " + id);
+			return notFound("Climate service not found with id: " + id);
     	}
     	
     	climateServiceRepository.delete(climateService);
-    	System.out.println("Climate service is deleted: " + name);
-		return ok("Climate service is deleted: " + name);
+    	System.out.println("Climate service is deleted: " + id);
+		return ok("Climate service is deleted: " + id);
     }
     
     public Result updateClimateServiceById(long id) {
@@ -184,6 +184,21 @@ public class ClimateServiceController extends Controller {
     	return ok(result);
     }
     
+    
+    public Result getAllClimateServices(String format) {
+    	Iterable<ClimateService> climateServices = climateServiceRepository.findAll();
+    	if (climateServices == null) {
+    		System.out.println("No climate service found");
+    	}
+    	
+    	String result = new String();
+    	if (format.equals("json")) {
+    		result = new Gson().toJson(climateServices);
+    	}
+    	
+    	return ok(result);
+    	
+    }
 }
 
 
