@@ -19,7 +19,7 @@ GET		/climate/getServiceConfiguration/:id/json 						@controllers.ServiceConfigu
 POST	/climate/addServiceConfiguration								@controllers.ServiceConfigurationController.addServiceConfiguration
 PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigurationController.updateServiceConfigurationById(id: Long)
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
-GET		/climate/getAllServiceConfigurationByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationByUserId(userId: Long, format: String="json")
+GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationsByUserId(userId: Long, format: String="json")
 
 # Parameter
 GET		/parameter/getAllParameters/json			@controllers.ParameterController.getAllParameters(format: String="json")
