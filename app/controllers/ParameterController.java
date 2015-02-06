@@ -23,19 +23,18 @@ import play.mvc.Result;
 @Named
 @Singleton
 public class ParameterController extends Controller {
-	private final ParameterRepository parameterRepositiry;
+	private final ParameterRepository parameterRepository;
     private final ClimateServiceRepository climateServiceRepository;
 	
 	// We are using constructor injection to receive a repository to support our desire for immutability.
     @Inject
-    public ParameterController(final ParameterRepository parameterRepositiry,
+    public ParameterController(final ParameterRepository parameterRepository,
     		final ClimateServiceRepository climateServiceRepository) {
-        this.parameterRepositiry = parameterRepositiry;
+        this.parameterRepository = parameterRepository;
         this.climateServiceRepository = climateServiceRepository;
     }
     
     public Result addParameter() {
-    	System.out.println("here");
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("Parameter not saved, expecting Json data");
@@ -55,7 +54,7 @@ public class ParameterController extends Controller {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
 			Parameter parameter = new Parameter(climateService, indexInService, name,
 					dataRange, enumeration, rule, purpose);
-			Parameter savedParameter = parameterRepositiry.save(parameter);
+			Parameter savedParameter = parameterRepository.save(parameter);
 			
 			System.out.println("Parameter saved: " + savedParameter.getName());
 			return created(new Gson().toJson(savedParameter.getId()));
@@ -69,13 +68,13 @@ public class ParameterController extends Controller {
     }
     
     public Result deleteParameterByName(String name) {
-    	Parameter parameter = parameterRepositiry.findByName(name);
+    	Parameter parameter = parameterRepository.findByName(name);
     	if (parameter == null) {
     		System.out.println("Parameter not found with name: " + name);
 			return notFound("Parameter not found with name: " + name);
     	}
     	
-    	parameterRepositiry.delete(parameter);
+    	parameterRepository.delete(parameter);
     	System.out.println("Parameter is deleted: " + name);
 		return ok("Parameter is deleted: " + name);
     }
@@ -111,7 +110,7 @@ public class ParameterController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
 			
-			Parameter parameter = parameterRepositiry.findByName(oldName);
+			Parameter parameter = parameterRepository.findByName(oldName);
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
@@ -120,7 +119,7 @@ public class ParameterController extends Controller {
 			parameter.setRule(rule);
 			parameter.setPurpose(purpose);
 			
-			Parameter savedParameter = parameterRepositiry.save(parameter);
+			Parameter savedParameter = parameterRepository.save(parameter);
 			
 			System.out.println("Parameter updated: " + savedParameter.getName());
 			return created("Parameter updated: " + savedParameter.getName());
@@ -157,7 +156,7 @@ public class ParameterController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
 			
-			Parameter parameter = parameterRepositiry.findOne(id);
+			Parameter parameter = parameterRepository.findOne(id);
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
@@ -166,7 +165,7 @@ public class ParameterController extends Controller {
 			parameter.setRule(rule);
 			parameter.setPurpose(purpose);
 			
-			Parameter savedParameter = parameterRepositiry.save(parameter);
+			Parameter savedParameter = parameterRepository.save(parameter);
 			
 			System.out.println("Parameter updated: " + savedParameter.getName());
 			return created("Parameter updated: " + savedParameter.getName());
@@ -183,7 +182,7 @@ public class ParameterController extends Controller {
 			return badRequest("Parameter Name is null or empty!");
     	}
     	
-    	Parameter parameter = parameterRepositiry.findByName(name);
+    	Parameter parameter = parameterRepository.findByName(name);
     	if (parameter == null) {
     		System.out.println("Parameter not found with name: " + name);
 			return notFound("Parameter not found with name: " + name);
@@ -194,6 +193,37 @@ public class ParameterController extends Controller {
     		result = new Gson().toJson(parameter);
     	}
     	
+    	return ok(result);
+    }
+    
+    public Result getParameterById(Long id, String format) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
+    	
+    	Parameter parameter = parameterRepository.findOne(id);
+    	if (parameter == null) {
+    		System.out.println("Parameter not found with id: " + id);
+			return notFound("Parameter not found with id: " + id);
+    	}
+    	
+    	String result = new String();
+    	if (format.equals("json")) {
+    		result = new Gson().toJson(parameter);
+    	}
+    	
+    	return ok(result);
+    }
+    
+    public Result getAllParameters(String format) {
+    	
+    	String result = new String();
+    	
+    	if (format.equals("json")) {
+    		result = new Gson().toJson(parameterRepository.findAll());
+    	}
+    			
     	return ok(result);
     }
 }

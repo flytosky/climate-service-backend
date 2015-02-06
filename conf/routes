@@ -21,17 +21,27 @@ DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigu
 GET		/climate/getAllServiceConfigurationByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationByUserId(userId: Long, format: String="json")
 
 # Parameter
-GET		/climate/getParameter/:name/json			@controllers.ParameterController.getParameterByName(name: String, format: String="json")
+GET		/parameter/getAllParameters/json			@controllers.ParameterController.getAllParameters(format: String="json")
+GET		/parameter/getParameter/name/:name/json		@controllers.ParameterController.getParameterByName(name: String, format: String="json")
+GET		/parameter/getParameter/id/:id/json			@controllers.ParameterController.getParameterById(id: Long, format: String="json")
 POST	/parameter/addParameter						@controllers.ParameterController.addParameter
 PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameterById(id: Long)
 PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameterByName(oldName: String)
 DELETE  /parameter/deleteParameter/name/:name		@controllers.ParameterController.deleteParameterByName(name: String)
 
 # ParameterOption
-GET		/parameterOption/getAllParameters/json				@controllers.ParameterOptionController.getAll
+GET		/parameterOption/getAllParameterOptions/json		@controllers.ParameterOptionController.getAllParameterOptions(format: String="json")
+GET		/parameterOption/getParameterOption/id/:id/json		@controllers.ParameterOptionController.getParameterOptionById(id: Long, format: String="json")
 POST	/parameterOption/addParameterOption					@controllers.ParameterOptionController.addParameterOption
 PUT		/parameterOption/updateParameterOption/id/:id		@controllers.ParameterOptionController.updateParameterOptionById(id: Long)
 DELETE	/parameterOption/deleteParameterOption/id/:id		@controllers.ParameterOptionController.deleteParameterOptionById(id: Long)
+
+# JournalPublication
+GET		/journalPublication/getAllJournalPublications/json		@controllers.JournalPublicationController.getAllJournalPublications(format: String="json")
+GET		/journalPublication/getJournalPublication/id/:id/json	@controllers.JournalPublicationController.getJournalPublicationById(id: Long, format: String="json")
+POST	/journalPublication/addJournalPublication				@controllers.JournalPublicationController.addJournalPublication
+PUT		/journalPublication/updateJournalPublication/id/:id		@controllers.JournalPublicationController.updateJournalPublicationById(id: Long)
+DELETE	/journalPublication/deleteJournalPublication/id/:id		@controllers.JournalPublicationController.deleteJournalPublicationById(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

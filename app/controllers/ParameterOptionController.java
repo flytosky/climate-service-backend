@@ -120,8 +120,14 @@ public class ParameterOptionController extends Controller {
     	return ok(result);
     }
     
-    public Result getAll() {
-    	Iterable<ParameterOption> list = parameterOptionRepository.findAll();
-    	return ok(new Gson().toJson(list));
+    public Result getAllParameterOptions(String format) {
+    	
+    	String result = new String();
+    	
+    	if (format.equals("json")) {
+    		result = new Gson().toJson(parameterOptionRepository.findAll());
+    	}
+    			
+    	return ok(result);
     }
 }
