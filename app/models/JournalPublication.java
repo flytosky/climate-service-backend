@@ -1,24 +1,25 @@
 package models;
 
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-public class JournalPublication extends Publication{
+@PrimaryKeyJoinColumn(name = "journalPublicationId", referencedColumnName = "id")//referencedColumnName
+public class JournalPublication extends Publication {
 	private String journalName;
 	private int volume;
-	private int column;
+	private int qcolumn;//naming problem
 	private String page;
 	
 	public JournalPublication() {
-		super();
 	}
 	public JournalPublication(String paperTitle, User author,
 			String publicationChannel, int year, String journalName, int volume,
 			int column, String page) {
-		super(paperTitle, author, publicationChannel, year);
+		//super(paperTitle, author, publicationChannel, year);
 		this.journalName = journalName;
 		this.volume = volume;
-		this.column = column;
+		this.qcolumn = column;
 		this.page = page;
 	}
 	
@@ -35,10 +36,10 @@ public class JournalPublication extends Publication{
 		this.volume = volume;
 	}
 	public int getColumn() {
-		return column;
+		return qcolumn;
 	}
 	public void setColumn(int column) {
-		this.column = column;
+		this.qcolumn = column;
 	}
 	public String getPage() {
 		return page;
@@ -50,7 +51,7 @@ public class JournalPublication extends Publication{
 	@Override
 	public String toString() {
 		return "JournalPublication [journalName=" + journalName + ", volume="
-				+ volume + ", column=" + column + ", page=" + page
+				+ volume + ", column=" + qcolumn + ", page=" + page
 				+ ", toString()=" + super.toString() + "]";
 	}
 }

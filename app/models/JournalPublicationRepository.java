@@ -8,5 +8,4 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface JournalPublicationRepository extends CrudRepository<JournalPublication, Long> {
-	JournalPublication findByName(String name);
 }

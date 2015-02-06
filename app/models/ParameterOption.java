@@ -18,7 +18,6 @@ public class ParameterOption {
 	private String parameterValue;
 	 
 	public ParameterOption() {
-		super();
 	}
 
 	public ParameterOption(Parameter parameter, String parameterValue) {

@@ -1,11 +1,16 @@
 package models;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Publication {
 
     @Id
@@ -13,7 +18,7 @@ public class Publication {
     private long id;
     private String paperTitle;
     @ManyToOne(optional = false)
-	@JoinColumn(name = "authorId", referencedColumnName = "id")
+	@JoinColumn(name = "authorId", referencedColumnName = "id")//using another table is better
     private User author;
     private String publicationChannel;
     private int year;
