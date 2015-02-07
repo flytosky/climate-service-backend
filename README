@@ -1,4 +1,104 @@
-This is your new Play application
-=================================
+API README v1
 
-This file will be packaged with your application, when using `activator dist`.
+Controllers expect all non-id fields found in the entities (found in /models)
+Unless otherwise noted, POST = Create, PUT = Update, DELETE = Delete
+
+# User 
+Get user object by ID
+GET		/users/:id
+
+POST	/users/add			
+PUT		/users/update/:id	
+DELETE	/users/delete/:id	
+
+
+# ClimateService
+Get by Name
+GET		/climate/getClimateService/:name/json		
+
+Get All Climate service 
+GET		/climate/getAllClimateServices/json			
+
+POST	/climate/addClimateService					
+PUT		/climate/updateClimateService/id/:id		
+PUT		/climate/updateClimateService/name/:oldName	
+DELETE	/climate/deleteClimateService/:id			
+
+# Service Configuration
+Get by ID
+GET		/climate/getServiceConfiguration/:id/json 						
+Get all service configurations created by a certain user
+GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		
+
+POST	/climate/addServiceConfiguration								
+PUT		/climate/updateServiceConfiguration/id/:id						
+DELETE	/climate/deleteServiceConfiguration/:id							
+
+# Parameter
+Get All parameters
+GET		/parameter/getAllParameters/json			
+Get single Parameter by Name
+GET		/parameter/getParameter/name/:name/json		
+Get by ID
+GET		/parameter/getParameter/id/:id/json			
+POST	/parameter/addParameter						
+PUT		/parameter/updateParameter/id/:id			
+PUT		/parameter/updateParameter/name/:oldName	
+DELETE  /parameter/deleteParameter/name/:name		
+
+# ParameterOption
+Get all parameter options
+GET		/parameterOption/getAllParameterOptions/json		
+Get single parameter option by id
+GET		/parameterOption/getParameterOption/id/:id/json		
+POST	/parameterOption/addParameterOption					
+PUT		/parameterOption/updateParameterOption/id/:id		
+DELETE	/parameterOption/deleteParameterOption/id/:id		
+
+# JournalPublication
+Get All
+GET		/journalPublication/getAllJournalPublications/json		
+Get By ID
+GET		/journalPublication/getJournalPublication/id/:id/json	
+POST	/journalPublication/addJournalPublication				
+PUT		/journalPublication/updateJournalPublication/id/:id		
+DELETE	/journalPublication/deleteJournalPublication/id/:id		
+
+# BookPublication
+Get All
+GET		/BookPublication/getAllBookPublications/json		
+Get By ID
+GET		/BookPublication/getBookPublication/id/:id/json		
+
+POST	/BookPublication/addBookPublication					
+PUT		/BookPublication/updateBookPublication/id/:id		
+DELETE	/BookPublication/deleteBookPublication/id/:id		
+
+# BookChapterPublication
+Get All:
+GET		/BookChapterPublication/getAllBookPublications/json			
+Get by ID:
+GET		/BookChapterPublication/getBookPublication/id/:id/json		
+
+POST	/BookChapterPublication/addBookPublication					
+PUT		/BookChapterPublication/updateBookPublication/id/:id		
+DELETE	/BookChapterPublication/deleteBookPublication/id/:id		
+
+# ConferencePublication
+Get All
+GET		/ConferencePublication/getAllBookPublications/json			
+Get ID
+GET		/ConferencePublication/getBookPublication/id/:id/json		
+
+POST	/ConferencePublication/addBookPublication					
+PUT		/ConferencePublication/updateBookPublication/id/:id			
+DELETE	/ConferencePublication/deleteBookPublication/id/:id			
+
+# Service Configuration Item
+GET		/climate/serviceConfigItemById/:id							
+GET		/climate/serviceConfigItemByServiceConfig/:serviceConfigId	
+GET		/climate/serviceConfigItemByParamName/:param				
+POST	/climate/addServiceConfigItem								
+PUT		/climate/updateServiceConfigItem/id/:id						
+DELETE	/climate/deleteServiceConfigItem/:id						
+
