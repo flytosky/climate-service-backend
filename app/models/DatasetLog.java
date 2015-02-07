@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class DatasetLog {
@@ -25,11 +24,9 @@ public class DatasetLog {
 	@JoinColumn(name = "outputDataSetId", referencedColumnName = "id")
 	private Dataset outputDataSet;
 	
-	public DatasetLog(long id, Dataset originalDataSet, Dataset outputDataSet,
-			String plotUrl, String serviceExecutionLog, Instrument instrument,
-			Dataset dataset) {
-		super();
-		this.id = id;
+	public DatasetLog(Dataset originalDataSet, Dataset outputDataSet,
+			String plotUrl, String serviceExecutionLog, Instrument instrument) {		
+		super();	
 		this.originalDataSet = originalDataSet;
 		this.outputDataSet = outputDataSet;
 		this.plotUrl = plotUrl;
