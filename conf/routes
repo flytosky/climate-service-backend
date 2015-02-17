@@ -51,6 +51,20 @@ POST	/BookPublication/addBookPublication					@controllers.BookPublicationControl
 PUT		/BookPublication/updateBookPublication/id/:id		@controllers.BookPublicationController.updateBookPublicationById(id: Long)
 DELETE	/BookPublication/deleteBookPublication/id/:id		@controllers.BookPublicationController.deleteBookPublicationById(id: Long)
 
+# BookChapterPublication
+GET		/BookChapterPublication/getAllBookPublications/json			@controllers.BookChapterPublicationController.getAllBookChapterPublications(format: String="json")
+GET		/BookChapterPublication/getBookPublication/id/:id/json		@controllers.BookChapterPublicationController.getBookChapterPublication(id: Long, format: String="json")
+POST	/BookChapterPublication/addBookPublication					@controllers.BookChapterPublicationController.addBookChapterPublication
+PUT		/BookChapterPublication/updateBookPublication/id/:id		@controllers.BookChapterPublicationController.updateBookChapterPublication(id: Long)
+DELETE	/BookChapterPublication/deleteBookPublication/id/:id		@controllers.BookChapterPublicationController.deleteBookChapterPublication(id: Long)
+
+# ConferencePublication
+GET		/ConferencePublication/getAllBookPublications/json			@controllers.ConferenceController.getAllConferencePublications(format: String="json")
+GET		/ConferencePublication/getBookPublication/id/:id/json		@controllers.ConferenceController.getConferencePublication(id: Long, format: String="json")
+POST	/ConferencePublication/addBookPublication					@controllers.ConferenceController.addConferencePublication
+PUT		/ConferencePublication/updateBookPublication/id/:id			@controllers.ConferenceController.updateConferencePublication(id: Long)
+DELETE	/ConferencePublication/deleteBookPublication/id/:id			@controllers.ConferenceController.deleteConferencePublication(id: Long)
+
 # Service Configuration Item
 GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigItemById(id: Long)
 GET		/climate/serviceConfigItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigItemsInServiceConfig(serviceConfigId: Long)
