@@ -64,7 +64,7 @@ public class BookChapterPublicationController extends Controller {
 		}			
     }
     
-    public Result deleteBookChapterPublicationById(Long id) {
+    public Result deleteBookChapterPublication(Long id) {
     	BookChapterPublication BookChapterPublication = bookChapterPublicationRepository.findOne(id);
     	if (BookChapterPublication == null) {
     		System.out.println("BookChapterPublication not found with id: " + id);
@@ -76,7 +76,7 @@ public class BookChapterPublicationController extends Controller {
 		return ok("BookChapterPublication is deleted: " + id);
     }
     
-    public Result updateBookChapterPublicationById(long id) {
+    public Result updateBookChapterPublication(long id) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("BookChapterPublication not updated, expecting Json data");
@@ -115,7 +115,7 @@ public class BookChapterPublicationController extends Controller {
 		}			
     }
     
-    public Result getBookChapterPublicationById(Long id, String format) {
+    public Result getBookChapterPublication(Long id, String format) {
     	if (id < 0) {
     		System.out.println("id is negative!");
 			return badRequest("id is negative!");
