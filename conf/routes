@@ -59,11 +59,11 @@ PUT		/BookChapterPublication/updateBookPublication/id/:id		@controllers.BookChap
 DELETE	/BookChapterPublication/deleteBookPublication/id/:id		@controllers.BookChapterPublicationController.deleteBookChapterPublication(id: Long)
 
 # ConferencePublication
-GET		/ConferencePublication/getAllBookPublications/json			@controllers.ConferenceController.getAllConferencePublications(format: String="json")
-GET		/ConferencePublication/getBookPublication/id/:id/json		@controllers.ConferenceController.getConferencePublication(id: Long, format: String="json")
-POST	/ConferencePublication/addBookPublication					@controllers.ConferenceController.addConferencePublication
-PUT		/ConferencePublication/updateBookPublication/id/:id			@controllers.ConferenceController.updateConferencePublication(id: Long)
-DELETE	/ConferencePublication/deleteBookPublication/id/:id			@controllers.ConferenceController.deleteConferencePublication(id: Long)
+GET		/ConferencePublication/getAllBookPublications/json			@controllers.ConferencePublicationController.getAllConferencePublications(format: String="json")
+GET		/ConferencePublication/getBookPublication/id/:id/json		@controllers.ConferencePublicationController.getConferencePublication(id: Long, format: String="json")
+POST	/ConferencePublication/addBookPublication					@controllers.ConferencePublicationController.addConferencePublication
+PUT		/ConferencePublication/updateBookPublication/id/:id			@controllers.ConferencePublicationController.updateConferencePublication(id: Long)
+DELETE	/ConferencePublication/deleteBookPublication/id/:id			@controllers.ConferencePublicationController.deleteConferencePublication(id: Long)
 
 # Service Configuration Item
 GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigItemById(id: Long)
@@ -81,3 +81,6 @@ DELETE	/users/delete/:id	@controllers.UserController.deleteUser(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Swagger API documentation
+#GET     /api-docs               controllers.ApiHelpController.getResources

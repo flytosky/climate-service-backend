@@ -65,7 +65,7 @@ public class ConferencePublicationController extends Controller {
 		}			
     }
     
-    public Result deleteConferencePublicationById(Long id) {
+    public Result deleteConferencePublication(Long id) {
     	ConferencePublication ConferencePublication = ConferencePublicationRepository.findOne(id);
     	if (ConferencePublication == null) {
     		System.out.println("ConferencePublication not found with id: " + id);
@@ -77,7 +77,7 @@ public class ConferencePublicationController extends Controller {
 		return ok("ConferencePublication is deleted: " + id);
     }
     
-    public Result updateConferencePublicationById(long id) {
+    public Result updateConferencePublication(long id) {
     	JsonNode json = request().body().asJson();
     	if (json == null) {
     		System.out.println("ConferencePublication not updated, expecting Json data");
@@ -118,7 +118,7 @@ public class ConferencePublicationController extends Controller {
 		}			
     }
     
-    public Result getConferencePublicationById(Long id, String format) {
+    public Result getConferencePublication(Long id, String format) {
     	if (id < 0) {
     		System.out.println("id is negative!");
 			return badRequest("id is negative!");
