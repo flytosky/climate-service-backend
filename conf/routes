@@ -45,11 +45,11 @@ PUT		/journalPublication/updateJournalPublication/id/:id		@controllers.JournalPu
 DELETE	/journalPublication/deleteJournalPublication/id/:id		@controllers.JournalPublicationController.deleteJournalPublicationById(id: Long)
 
 # BookPublication
-GET		/BookPublication/getAllBookPublications/json		@controllers.BookPublicationController.getAllBookPublications(format: String="json")
-GET		/BookPublication/getBookPublication/id/:id/json		@controllers.BookPublicationController.getBookPublicationById(id: Long, format: String="json")
-POST	/BookPublication/addBookPublication					@controllers.BookPublicationController.addBookPublication
-PUT		/BookPublication/updateBookPublication/id/:id		@controllers.BookPublicationController.updateBookPublicationById(id: Long)
-DELETE	/BookPublication/deleteBookPublication/id/:id		@controllers.BookPublicationController.deleteBookPublicationById(id: Long)
+GET		/BookPublication/getAllBookPublications/json			@controllers.BookPublicationController.getAllBookPublications(format: String="json")
+GET		/BookPublication/getBookPublication/id/:id/json			@controllers.BookPublicationController.getBookPublicationById(id: Long, format: String="json")
+POST	/BookPublication/addBookPublication						@controllers.BookPublicationController.addBookPublication
+PUT		/BookPublication/updateBookPublication/id/:id			@controllers.BookPublicationController.updateBookPublicationById(id: Long)
+DELETE	/BookPublication/deleteBookPublication/id/:id			@controllers.BookPublicationController.deleteBookPublicationById(id: Long)
 
 # BookChapterPublication
 GET		/BookChapterPublication/getAllBookPublications/json			@controllers.BookChapterPublicationController.getAllBookChapterPublications(format: String="json")
