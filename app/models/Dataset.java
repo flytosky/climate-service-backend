@@ -85,5 +85,13 @@ public class Dataset {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("Dataset[id=%d, description=%s, instrument=%s,"
+				+ " climateServiceSet=%s, publishTimeStamp=%s, url=%s]", id, 
+				description, instrument, climateServiceSet, publishTimeStamp, url);
+	}
+	
 	
 }

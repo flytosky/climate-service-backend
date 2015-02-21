@@ -157,7 +157,7 @@ public class DatasetController extends Controller {
     }
 
     
-    public Result getAllDataset() {
+    public Result getAllDatasets(String format) {
     	try {
     		Iterable<Dataset>datasets =  datasetRepository.findAll();
     		String result = new String();

@@ -126,7 +126,7 @@ public class InstrumentController extends Controller {
     }
 
     
-    public Result getAllInstrument() {
+    public Result getAllInstruments(String format) {
     	try {
     		Iterable<Instrument>instuments =  instumentRepository.findAll();
     		String result = new String();

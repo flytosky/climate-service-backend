@@ -72,6 +72,12 @@ public class DatasetLog {
 	public void setInstrument(Instrument instrument) {
 		this.instrument = instrument;
 	}
+	@Override
+	public String toString() {
+		return String.format("DatasetLog[id=%d, plotUrl=%s, serviceExecutionLog=%s, instrument=%s, "
+				+ "originalDataset=%s, outputDataSet=%s]", id, plotUrl, serviceExecutionLog, instrument, 
+				originalDataSet, outputDataSet);
+	}
 
 	
 	
