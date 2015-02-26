@@ -74,10 +74,12 @@ public class DatasetLog {
 	}
 	@Override
 	public String toString() {
-		return String.format("DatasetLog[id=%d, plotUrl=%s, serviceExecutionLog=%s, instrument=%s, "
-				+ "originalDataset=%s, outputDataSet=%s]", id, plotUrl, serviceExecutionLog, instrument, 
-				originalDataSet, outputDataSet);
+		return "DatasetLog [id=" + id + ", plotUrl=" + plotUrl
+				+ ", serviceExecutionLog=" + serviceExecutionLog
+				+ ", instrument=" + instrument + ", originalDataSet="
+				+ originalDataSet + ", outputDataSet=" + outputDataSet + "]";
 	}
+	
 
 	
 	

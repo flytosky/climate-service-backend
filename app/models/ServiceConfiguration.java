@@ -68,9 +68,10 @@ public class ServiceConfiguration {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return String.format("ServiceConfiguration [id=%d, serviceid=%d, user=%s, runtime=%s]"
-				, id, climateservice.getId(), user.getId(), runTime);
+		return "ServiceConfiguration [id=" + id + ", climateservice="
+				+ climateservice + ", user=" + user + ", runTime=" + runTime
+				+ "]";
 	}
+
 	
 }

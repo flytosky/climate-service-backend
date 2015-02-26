@@ -57,10 +57,10 @@ public class Instrument {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return String.format("Instrument[id=%d, name=%s, description=%s, launchDate=%s]", id, name, 
-				description, launchDate);
+		return "Instrument [id=" + id + ", name=" + name + ", description="
+				+ description + ", launchDate=" + launchDate + "]";
 	}
+
 	
 
 }

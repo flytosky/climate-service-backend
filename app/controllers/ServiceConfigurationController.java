@@ -22,6 +22,9 @@ import models.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 
+/**
+ * The main set of web services.
+ */
 @Named
 @Singleton
 public class ServiceConfigurationController extends Controller {
