@@ -81,6 +81,10 @@ public class DatasetController extends Controller {
 	}
 	
     public Result updateDatasetById(long id) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
 		JsonNode json = request().body().asJson();
 		if (json == null) {
 			System.out.println("Dataset not saved, expecting Json data");
@@ -107,7 +111,6 @@ public class DatasetController extends Controller {
 	
 		try {
 			Dataset dataset = datasetRepository.findOne(id);
-			dataset.setId(id);
 			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			dataset.setInstrument(instrument);
 			dataset.setDescription(description);
@@ -131,6 +134,10 @@ public class DatasetController extends Controller {
 
 	
     public Result deleteDataset(long id) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
     	Dataset dataset = datasetRepository.findOne(id);
     	if (dataset == null) {
     		System.out.println("Dataset not found with id: " + id);
@@ -142,6 +149,10 @@ public class DatasetController extends Controller {
 		return ok("Dataset is deleted: " + id);
     }
     public Result getDataset(long id, String format) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
     	Dataset dataset = datasetRepository.findOne(id);
     	if (dataset == null) {
     		System.out.println("Dataset not found with name: " + id);
@@ -157,7 +168,7 @@ public class DatasetController extends Controller {
     }
 
     
-    public Result getAllDataset() {
+    public Result getAllDatasets(String format) {
     	try {
     		Iterable<Dataset>datasets =  datasetRepository.findAll();
     		String result = new String();

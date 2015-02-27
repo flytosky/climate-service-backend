@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -22,6 +24,9 @@ public class ServiceConfiguration {
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
 	private Date runTime;
+	
+	@OneToMany(mappedBy="serviceConfiguration")
+	private List<ServiceConfigurationItem> serviceConfigurationItems;
 	
 	public ServiceConfiguration() {
 	}
@@ -66,11 +71,21 @@ public class ServiceConfiguration {
 		this.runTime = runTime;
 	}
 
+	public List<ServiceConfigurationItem> getServiceConfigurationItems() {
+		return serviceConfigurationItems;
+	}
+
+	public void setServiceConfigurationItems(
+			List<ServiceConfigurationItem> serviceConfigurationItems) {
+		this.serviceConfigurationItems = serviceConfigurationItems;
+	}
+
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return String.format("ServiceConfiguration [id=%d, serviceid=%d, user=%s, runtime=%s]"
-				, id, climateservice.getId(), user.getId(), runTime);
+		return "ServiceConfiguration [id=" + id + ", climateservice="
+				+ climateservice + ", user=" + user + ", runTime=" + runTime
+				+ "]";
 	}
+
 	
 }

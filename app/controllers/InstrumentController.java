@@ -61,6 +61,10 @@ public class InstrumentController extends Controller {
 	}
 	
     public Result updateInstrumentById(long id) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
 	    JsonNode json = request().body().asJson();
 		if (json == null) {
 			System.out.println("Instrument not saved, expecting Json data");
@@ -99,6 +103,10 @@ public class InstrumentController extends Controller {
 
 	
     public Result deleteInstrument(long id) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
     	Instrument instument = instumentRepository.findOne(id);
     	if (instument == null) {
     		System.out.println("Instrument not found with id: " + id);
@@ -111,6 +119,10 @@ public class InstrumentController extends Controller {
     }
     
     public Result getInstrument(long id, String format) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
     	Instrument instument = instumentRepository.findOne(id);
     	if (instument == null) {
     		System.out.println("Instrument not found with name: " + id);
@@ -126,7 +138,7 @@ public class InstrumentController extends Controller {
     }
 
     
-    public Result getAllInstrument() {
+    public Result getAllInstruments(String format) {
     	try {
     		Iterable<Instrument>instuments =  instumentRepository.findAll();
     		String result = new String();

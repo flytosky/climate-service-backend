@@ -24,7 +24,7 @@ public class Dataset {
 	@JoinColumn(name = "instrumentId", referencedColumnName = "id")
 	private Instrument instrument;
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(name = "DatasetAndServices", joinColumns = { @JoinColumn(name ="datasetId", referencedColumnName = "id")}, inverseJoinColumns = { @JoinColumn(name = "climateServiceId", referencedColumnName = "id") })
+	@JoinTable(name = "DatasetAndService", joinColumns = { @JoinColumn(name ="datasetId", referencedColumnName = "id")}, inverseJoinColumns = { @JoinColumn(name = "climateServiceId", referencedColumnName = "id") })
 	private List<ClimateService> climateServiceSet;
 	private Date publishTimeStamp;
 	private String url;
@@ -85,5 +85,15 @@ public class Dataset {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	@Override
+	public String toString() {
+		return "Dataset [id=" + id + ", description=" + description
+				+ ", instrument=" + instrument + ", climateServiceSet="
+				+ climateServiceSet + ", publishTimeStamp=" + publishTimeStamp
+				+ ", url=" + url + "]";
+	}
+
+	
 	
 }

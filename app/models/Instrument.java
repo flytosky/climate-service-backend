@@ -15,6 +15,7 @@ public class Instrument {
 	private String name;
 	private String description;
 	private Date launchDate;
+	
 	public Instrument (String name, String description, Date launchDate) {
 		super();
 		this.name = name;
@@ -53,6 +54,13 @@ public class Instrument {
 	public void setLaunchDate(Date launchDate) {
 		this.launchDate = launchDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Instrument [id=" + id + ", name=" + name + ", description="
+				+ description + ", launchDate=" + launchDate + "]";
+	}
+
 	
 
 }
