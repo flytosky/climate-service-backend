@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -86,28 +85,30 @@ public class ServiceExecutionLogController extends Controller {
     	String purpose = json.findPath("purpose").asText();
     	String plotUrl = json.findPath("url").asText();
     	String dataUrl = json.findPath("dataUrl").asText();
-    	String executionStartTimeString = json.findPath("executionStartTime").asText();
-    	String executionEndTimeString = json.findPath("executionEndTime").asText();
-    	Date executionStartTime = new Date();
-    	Date executionEndTime = new Date();
-    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
-    	
-    	try {
-    		executionStartTime = simpleDateFormat.parse(executionStartTimeString);
-    	} catch (ParseException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    		System.out.println("Wrong Date Format :" + executionStartTimeString);
-    		return badRequest("Wrong Date Format :" + executionStartTimeString);
-    	}
-    	try {
-    		executionEndTime = simpleDateFormat.parse(executionEndTimeString);
-    	} catch (ParseException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    		System.out.println("Wrong Date Format :" + executionEndTimeString);
-    		return badRequest("Wrong Date Format :" + executionEndTimeString);
-    	}
+//    	String executionStartTimeString = json.findPath("executionStartTime").asText();
+//    	String executionEndTimeString = json.findPath("executionEndTime").asText();
+    	long executionStartTimeNumber = json.findPath("executionStartTime").asLong();
+    	long executionEndTimeNumber = json.findPath("executionEndTime").asLong();
+    	Date executionStartTime = new Date(executionStartTimeNumber);
+    	Date executionEndTime = new Date(executionEndTimeNumber);
+//    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
+//    	
+//    	try {
+//    		executionStartTime = simpleDateFormat.parse(executionStartTimeString);
+//    	} catch (ParseException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    		System.out.println("Wrong Date Format :" + executionStartTimeString);
+//    		return badRequest("Wrong Date Format :" + executionStartTimeString);
+//    	}
+//    	try {
+//    		executionEndTime = simpleDateFormat.parse(executionEndTimeString);
+//    	} catch (ParseException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    		System.out.println("Wrong Date Format :" + executionEndTimeString);
+//    		return badRequest("Wrong Date Format :" + executionEndTimeString);
+//    	}
     	
 		try {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(serviceConfigurationId);
