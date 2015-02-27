@@ -22,6 +22,11 @@ PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigu
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
 GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getServiceConfigurationsByUser(userId: Long, format: String="json")
 
+# ServiceExecutionLog
+
+POST	/serviceExecutionLog/addServiceExecutionLog		@controllers.ServiceExecutionLogController.addServiceExecutionLog
+GET		/serviceExecutionLog/getAllServiceExecutionLog	@controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
+
 # DatasetLog
 GET		/datasetLog/getAllDatasetLogs/json			@controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
 GET		/datasetLog/getDatasetLog/id/:id/json		@controllers.DatasetLogController.getDatasetLog(id: Long, format: String="json")
