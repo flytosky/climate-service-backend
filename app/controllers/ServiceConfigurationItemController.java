@@ -196,10 +196,11 @@ public class ServiceConfigurationItemController extends Controller {
 					+ serviceConfigurationId);
 		}
 		List<ServiceConfigurationItem> serviceConfigItems = serviceConfigurationItemRepository
-				.findAllByServiceConfiguration(serviceConfiguration);
-
+				.findByServiceConfiguration(serviceConfiguration);
+		System.out.println(serviceConfigItems.size());
+		System.out.println(serviceConfigItems.get(0));
 		String result = new Gson().toJson(serviceConfigItems);
-
+		System.out.println(result);
 		return ok(result);
 	}
 

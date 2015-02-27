@@ -14,7 +14,8 @@ public interface ServiceExecutionLogRepository extends CrudRepository<ServiceExe
 	List<ServiceExecutionLog> findAllByUserId(User user);
 	
 	List<ServiceExecutionLog> findAllByExecutionStartTimeBetweenAndExecutionEndTimeBetween(Date startA, Date startB, Date endA, Date endB);
-	List<ServiceExecutionLog> findAllByPurposeAndClimateServiceAndDatasetLog(String purpose, ClimateService climateServ, DatasetLog dataset);
-	
-	List<ServiceExecutionLog> findAllByServiceConfiguration_ServiceConfigurationItemsParameter(Parameter param);
+	List<ServiceExecutionLog> findAllByPurposeAndClimateService(String purpose, ClimateService climateServ);
+
+
+	//List<ServiceExecutionLog> findByServiceConfiguration_serviceConfigurationItems_Parameter(Parameter param);
 }
