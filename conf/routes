@@ -8,6 +8,7 @@
 
 # Climate Service
 GET		/climate/getClimateService/:name/json		@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
+GET		/climate/getClimateService/id/:id			@controllers.ClimateServiceController.getClimateServiceById(id: Long)
 GET		/climate/getAllClimateServices/json			@controllers.ClimateServiceController.getAllClimateServices(format: String="json")
 POST	/climate/addClimateService					@controllers.ClimateServiceController.addClimateService
 PUT		/climate/updateClimateService/id/:id		@controllers.ClimateServiceController.updateClimateServiceById(id: Long)
