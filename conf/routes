@@ -66,12 +66,12 @@ PUT		/ConferencePublication/updateBookPublication/id/:id			@controllers.Conferen
 DELETE	/ConferencePublication/deleteBookPublication/id/:id			@controllers.ConferencePublicationController.deleteConferencePublication(id: Long)
 
 # Service Configuration Item
-GET		/climate/serviceConfigItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigItemById(id: Long)
-GET		/climate/serviceConfigItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigItemsInServiceConfig(serviceConfigId: Long)
-GET		/climate/serviceConfigItemByParamName/:param				@controllers.ServiceConfigurationItemController.getServiceConfigItemByParamName(param : String)
-POST	/climate/addServiceConfigItem								@controllers.ServiceConfigurationItemController.addServiceConfigItem
-PUT		/climate/updateServiceConfigItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigItem(id:Long)
-DELETE	/climate/deleteServiceConfigItem/:id						@controllers.ServiceConfigurationItemController.deleteClimateService(id: Long)
+GET		/climate/serviceConfigurationItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigurationItemById(id: Long)
+GET		/climate/serviceConfigurationItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigurationItemsInServiceConfig(serviceConfigId: Long)
+GET		/climate/serviceConfigurationItemByParamName/:param				@controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterName(param : String)
+POST	/climate/addServiceConfigurationItem								@controllers.ServiceConfigurationItemController.addServiceConfigurationItem
+PUT		/climate/updateServiceConfigurationItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigurationItemById(id:Long)
+DELETE	/climate/deleteServiceConfigurationItemById/:id						@controllers.ServiceConfigurationItemController.deleteServiceConfigurationItemById(id: Long)
 
 # Users
 GET		/users/:id			@controllers.UserController.getUser(id: Long, format: String="json")

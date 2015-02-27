@@ -3,6 +3,8 @@ package controllers;
 import java.util.List;
 
 import models.Parameter;
+import models.ParameterOption;
+import models.ParameterOptionRepository;
 import models.ParameterRepository;
 import models.ServiceConfiguration;
 import models.ServiceConfigurationItem;
@@ -28,19 +30,22 @@ public class ServiceConfigurationItemController extends Controller {
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 	private final ParameterRepository parameterRepository;
+	private final ParameterOptionRepository parameterOptionRepository;
 	// We are using constructor injection to receive a repository to support our
 	// desire for immutability.
 	@Inject
 	public ServiceConfigurationItemController(
 			final ServiceConfigurationRepository serviceConfigurationRepository,
 			final ParameterRepository parameterRepository,
-			final ServiceConfigurationItemRepository serviceConfigurationItemRepository) {
+			final ServiceConfigurationItemRepository serviceConfigurationItemRepository,
+			final ParameterOptionRepository parameterOptionRepository) {
 		this.parameterRepository = parameterRepository;
 		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
+		this.parameterOptionRepository = parameterOptionRepository;
 	}
 
-	public Result addServiceConfigItem() {
+	public Result addServiceConfigurationItem() {
 		JsonNode json = request().body().asJson();
 		if (json == null) {
 			System.out
@@ -49,16 +54,18 @@ public class ServiceConfigurationItemController extends Controller {
 		}
 
 		// Parse JSON file
-		long serviceConfigId = json.findPath("serviceConfigId").asLong();
-		long paramId = json.findPath("paramId").asLong();
+		long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
+		long parameterId = json.findPath("parameterId").asLong();
+		long parameterOptionId = json.findPath("parameterOption").asLong();
 		String value = json.findPath("value").asText();
 
 		try {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
-					.findOne(serviceConfigId);
-			Parameter param = parameterRepository.findOne(paramId);
+					.findOne(serviceConfigurationId);
+			Parameter parameter = parameterRepository.findOne(parameterId);	
+			ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
 			ServiceConfigurationItem newConfigItem = new ServiceConfigurationItem(
-					serviceConfiguration, param, value);
+					serviceConfiguration, parameter, parameterOption, value);
 			serviceConfigurationItemRepository.save(newConfigItem);
 
 			System.out.println("ServiceConfigurationItem saved: "
@@ -72,7 +79,7 @@ public class ServiceConfigurationItemController extends Controller {
 		}
 	}
 
-	public Result deleteClimateService(long id) {
+	public Result deleteServiceConfigurationItemById(long id) {
 		ServiceConfigurationItem delConfigItem = serviceConfigurationItemRepository
 				.findOne(id);
 		if (delConfigItem == null) {
@@ -86,7 +93,7 @@ public class ServiceConfigurationItemController extends Controller {
 		return ok("ServiceConfigurationItem is deleted: " + id);
 	}
 
-	public Result updateServiceConfigItem(long id) {
+	public Result updateServiceConfigurationItemById(long id) {
 		JsonNode json = request().body().asJson();
 		if (json == null) {
 			System.out
@@ -95,21 +102,23 @@ public class ServiceConfigurationItemController extends Controller {
 		}
 
 		// Parse JSON file
-		long serviceConfigId = json.findPath("serviceConfigId").asLong();
-		long paramId = json.findPath("paramId").asLong();
+		long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
+		long parameterId = json.findPath("parameterId").asLong();
+		long parameterOptionId = json.findPath("parameterOption").asLong();
 		String value = json.findPath("value").asText();
 
 		try {
 
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
-					.findOne(serviceConfigId);
-			Parameter param = parameterRepository.findOne(paramId);
+					.findOne(serviceConfigurationId);
+			Parameter param = parameterRepository.findOne(parameterId);
+			ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
 
 			if (serviceConfiguration != null || param != null || value != null)
 				return ok("Nothing to update, ServiceConfigItem unchanged");
 
 			ServiceConfigurationItem configItem = new ServiceConfigurationItem(
-					serviceConfiguration, param, value);
+					serviceConfiguration, param, parameterOption, value);
 			configItem.setServiceConfiguration(serviceConfiguration);
 			configItem.setParameter(param);
 			configItem.setValue(value);
@@ -126,7 +135,7 @@ public class ServiceConfigurationItemController extends Controller {
 		}
 	}
 
-	public Result getServiceConfigItemByParamName(String parameterName) {
+	public Result getServiceConfigurationItemByParameterName(String parameterName) {
 		if (parameterName == null || parameterName.length() == 0) {
 			System.out.println("Parameter Name is null or empty!");
 			return badRequest("Parameter Name is null or empty!");
@@ -153,7 +162,7 @@ public class ServiceConfigurationItemController extends Controller {
 		return ok(result);
 	}
 
-	public Result getServiceConfigItemById(Long id) {
+	public Result getServiceConfigurationItemById(Long id) {
 		if (id == null) {
 			System.out.println("ServiceConfigItem id is null or empty!");
 			return badRequest("ServiceConfigItem id is null or empty!");
@@ -172,19 +181,19 @@ public class ServiceConfigurationItemController extends Controller {
 		return ok(result);
 	}
 
-	public Result getServiceConfigItemsInServiceConfig(Long serviceConfigId) {
-		if (serviceConfigId == null) {
+	public Result getServiceConfigurationItemsInServiceConfig(Long serviceConfigurationId) {
+		if (serviceConfigurationId == null) {
 			System.out.println("ServiceConfig id is null or empty!");
 			return badRequest("ServiceConfig id is null or empty!");
 		}
 
 		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
-				.findOne(serviceConfigId);
+				.findOne(serviceConfigurationId);
 		if (serviceConfiguration == null) {
 			System.out.println("ServiceConfiguration not found with id: "
-					+ serviceConfigId);
+					+ serviceConfigurationId);
 			return notFound("ServiceConfiguration not found with id: "
-					+ serviceConfigId);
+					+ serviceConfigurationId);
 		}
 		List<ServiceConfigurationItem> serviceConfigItems = serviceConfigurationItemRepository
 				.findAllByServiceConfiguration(serviceConfiguration);

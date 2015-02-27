@@ -15,29 +15,37 @@ public class ServiceConfigurationItem {
 	private long id;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "serviceConfigId", referencedColumnName = "id")
+	@JoinColumn(name = "serviceConfigurationId", referencedColumnName = "id")
 	private ServiceConfiguration serviceConfiguration;
 	
 	@OneToOne(optional = false)
-	@JoinColumn(name = "paramId", referencedColumnName = "id")
-	private Parameter parameter;
+	@JoinColumn(name = "parameterId", referencedColumnName = "id")
+	private Parameter parameter; 
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "parameterOptionId", referencedColumnName = "id")
+	private ParameterOption parameterOption;
 	
 	private String value;
 	
+	
 	@Override
 	public String toString() {
-		return "ServiceConfigurationItem [id=" + id + ", serviceConfigurationId=" + serviceConfiguration.getId()
-				+ ", paramId=" + parameter.getId() + ", value=" + value +  "]";
+		return "ServiceConfigurationItem [id=" + id + ", serviceConfiguration="
+				+ serviceConfiguration + ", parameter=" + parameter
+				+ ", parameterOption=" + parameterOption + ", value=" + value
+				+ "]";
 	}
-	
+
 	public ServiceConfigurationItem() {
 	}
 	
 	public ServiceConfigurationItem(ServiceConfiguration serviceConfiguration, Parameter parameter,
-			String value) {
+			ParameterOption parameterOption, String value) {
 		super();
 		this.serviceConfiguration = serviceConfiguration;
 		this.parameter = parameter;
+		this.parameterOption = parameterOption;
 		this.value = value;
 	}
 
@@ -64,7 +72,12 @@ public class ServiceConfigurationItem {
 	}
 	public void setValue(String value) {
 		this.value = value;
+	}	
+	public ParameterOption getParameterOption() {
+		return parameterOption;
 	}
-	
 
+	public void setParameterOption(ParameterOption parameterOption) {
+		this.parameterOption = parameterOption;
+	}
 }
