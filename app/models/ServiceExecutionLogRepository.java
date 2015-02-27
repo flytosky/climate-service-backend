@@ -10,9 +10,8 @@ import javax.inject.Singleton;
 
 @Named
 @Singleton
-public interface ServiceExecutionLogRepository extends CrudRepository<ServiceConfiguration, Long> {
+public interface ServiceExecutionLogRepository extends CrudRepository<ServiceExecutionLog, Long> {
 	List<ServiceExecutionLog> findAllByUserId(User user);
-	
 	
 	List<ServiceExecutionLog> findAllByExecutionStartTimeBetweenAndExecutionEndTimeBetween(Date startA, Date startB, Date endA, Date endB);
 	List<ServiceExecutionLog> findAllByPurposeAndClimateServiceAndDatasetLog(String purpose, ClimateService climateServ, DatasetLog dataset);
