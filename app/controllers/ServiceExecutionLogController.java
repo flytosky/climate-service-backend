@@ -279,7 +279,7 @@ public class ServiceExecutionLogController extends Controller {
 
 
 			try {
-				SimpleDateFormat yearMonth = new SimpleDateFormat("YYYYMM");
+				SimpleDateFormat yearMonth = new SimpleDateFormat("yyyyMM");
 
 				startMonth = yearMonth.parse(startTime);
 				endMonth = yearMonth.parse(endTime);
