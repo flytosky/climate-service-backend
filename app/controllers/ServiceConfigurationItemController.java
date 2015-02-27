@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import models.Parameter;
@@ -57,6 +58,7 @@ public class ServiceConfigurationItemController extends Controller {
 		long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
 		long parameterId = json.findPath("parameterId").asLong();
 		long parameterOptionId = json.findPath("parameterOption").asLong();
+		Date newDate = new Date(json.findPath("date").asLong());
 		String value = json.findPath("value").asText();
 
 		try {
@@ -187,18 +189,17 @@ public class ServiceConfigurationItemController extends Controller {
 			return badRequest("ServiceConfig id is null or empty!");
 		}
 
-		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
-				.findOne(serviceConfigurationId);
-		if (serviceConfiguration == null) {
-			System.out.println("ServiceConfiguration not found with id: "
-					+ serviceConfigurationId);
-			return notFound("ServiceConfiguration not found with id: "
-					+ serviceConfigurationId);
-		}
+//		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
+//				.findOne(serviceConfigurationId);
+//		if (serviceConfiguration == null) {
+//			System.out.println("ServiceConfiguration not found with id: "
+//					+ serviceConfigurationId);
+//			return notFound("ServiceConfiguration not found with id: "
+//					+ serviceConfigurationId);
+//		}
 		List<ServiceConfigurationItem> serviceConfigItems = serviceConfigurationItemRepository
-				.findByServiceConfiguration(serviceConfiguration);
+				.findByServiceConfiguration_Id(serviceConfigurationId);
 		System.out.println(serviceConfigItems.size());
-		System.out.println(serviceConfigItems.get(0));
 		String result = new Gson().toJson(serviceConfigItems);
 		System.out.println(result);
 		return ok(result);

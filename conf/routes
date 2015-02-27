@@ -107,7 +107,7 @@ GET     /getAllServiceExecutionLogs/json                     @controllers.Servic
 #GET     /getAllServiceExecutionLogs/csv                      @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="csv")
 GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/json 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
 #GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/csv 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="csv")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime 		@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="csv")
+#GET     /getServiceExecutionLogs/:userId/:startTime/:endTime 		@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="csv")
 GET     /getServiceExecutionLogs/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
 DELETE  /deleteServiceExecutionLog/:id         	 @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id:Long)
 # For data manipulation

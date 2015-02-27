@@ -18,9 +18,9 @@ public class ServiceConfigurationItem {
 	@JoinColumn(name = "serviceConfigurationId", referencedColumnName = "id")
 	private ServiceConfiguration serviceConfiguration;
 	
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "parameterId", referencedColumnName = "id")
-	private Parameter parameter; 
+	private Parameter parameter;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "parameterOptionId", referencedColumnName = "id")

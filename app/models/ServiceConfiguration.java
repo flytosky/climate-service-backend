@@ -25,8 +25,8 @@ public class ServiceConfiguration {
 	private User user;
 	private Date runTime;
 	
-	@OneToMany(mappedBy="serviceConfiguration")
-	private List<ServiceConfigurationItem> serviceConfigurationItems;
+//	@OneToMany(mappedBy="serviceConfiguration")
+//	private List<ServiceConfigurationItem> serviceConfigurationItems;
 	
 	public ServiceConfiguration() {
 	}
@@ -71,14 +71,14 @@ public class ServiceConfiguration {
 		this.runTime = runTime;
 	}
 
-	public List<ServiceConfigurationItem> getServiceConfigurationItems() {
-		return serviceConfigurationItems;
-	}
-
-	public void setServiceConfigurationItems(
-			List<ServiceConfigurationItem> serviceConfigurationItems) {
-		this.serviceConfigurationItems = serviceConfigurationItems;
-	}
+//	public List<ServiceConfigurationItem> getServiceConfigurationItems() {
+//		return serviceConfigurationItems;
+//	}
+//
+//	public void setServiceConfigurationItems(
+//			List<ServiceConfigurationItem> serviceConfigurationItems) {
+//		this.serviceConfigurationItems = serviceConfigurationItems;
+//	}
 
 	@Override
 	public String toString() {
