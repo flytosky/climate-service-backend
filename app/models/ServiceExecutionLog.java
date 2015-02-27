@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-
-
 @Entity
 public class ServiceExecutionLog {
 	@Id
@@ -22,22 +20,22 @@ public class ServiceExecutionLog {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
-	private long serviceConfigurationId;
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "datasetId", referencedColumnName = "id")
-	private Dataset dataset;
+	@JoinColumn(name = "serviceConfigurationId", referencedColumnName = "id")
+	private ServiceConfiguration serviceConfiguration;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "datasetLogId", referencedColumnName = "id")
+	private DatasetLog datasetLog;
 	private String purpose;
 	private Date executionStartTime;
 	private Date executionEndTime;
-	public ServiceExecutionLog(long id, ClimateService climateService,
-			User user, long serviceConfigurationId, Dataset dataset,
+	public ServiceExecutionLog(ClimateService climateService,
+			User user, ServiceConfiguration serviceConfiguration, DatasetLog datasetLog,
 			String purpose, Date executionStartTime, Date executionEndTime) {
-		super();
-		this.id = id;
 		this.climateService = climateService;
 		this.user = user;
-		this.serviceConfigurationId = serviceConfigurationId;
-		this.dataset = dataset;
+		this.serviceConfiguration = serviceConfiguration;
+		this.datasetLog = datasetLog;
 		this.purpose = purpose;
 		this.executionStartTime = executionStartTime;
 		this.executionEndTime = executionEndTime;
@@ -51,11 +49,11 @@ public class ServiceExecutionLog {
 	public User getUser() {
 		return user;
 	}
-	public long getServiceConfigurationId() {
-		return serviceConfigurationId;
+	public ServiceConfiguration getServiceConfiguration() {
+		return serviceConfiguration;
 	}
-	public Dataset getDataset() {
-		return dataset;
+	public DatasetLog getDatasetLog() {
+		return datasetLog;
 	}
 	public String getPurpose() {
 		return purpose;
@@ -75,11 +73,11 @@ public class ServiceExecutionLog {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public void setServiceConfigurationId(long serviceConfigurationId) {
-		this.serviceConfigurationId = serviceConfigurationId;
+	public void setServiceConfiguration(ServiceConfiguration serviceConfiguration) {
+		this.serviceConfiguration = serviceConfiguration;
 	}
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
+	public void setDatasetLog(DatasetLog datasetLog) {
+		this.datasetLog = datasetLog;
 	}
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
@@ -94,8 +92,8 @@ public class ServiceExecutionLog {
 	public String toString() {
 		return "ServiceExecutionLog [id=" + id + ", climateService="
 				+ climateService + ", user=" + user
-				+ ", serviceConfigurationId=" + serviceConfigurationId
-				+ ", dataset=" + dataset + ", purpose=" + purpose
+				+ ", serviceConfiguration=" + serviceConfiguration
+				+ ", datasetLog=" + datasetLog + ", purpose=" + purpose
 				+ ", executionStartTime=" + executionStartTime
 				+ ", executionEndTime=" + executionEndTime + "]";
 	}

@@ -75,44 +75,51 @@ public class ServiceConfigurationController extends Controller {
 	}
 	
     public Result updateServiceConfigurationById(long id) {
-	JsonNode json = request().body().asJson();
-	if (json == null) {
-		System.out.println("Service Configuration not saved, expecting Json data");
-		return badRequest("Service Configuration not saved, expecting Json data");
+		if (id < 0) {
+			System.out.println("id is negative!");
+			return badRequest("id is negative!");
+		}
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("Service Configuration not saved, expecting Json data");
+			return badRequest("Service Configuration not saved, expecting Json data");
+		}
+		long serviceId = json.findPath("serviceId").asLong();
+		long userId = json.findPath("userId").asLong();
+		String runTimeString = json.findPath("runTime").asText();
+		Date runTime = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		try {
+			runTime = simpleDateFormat.parse(runTimeString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		try {
+			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
+			serviceConfiguration.setRunTime(runTime);
+			ClimateService climateService = climateServiceRepository.findOne(serviceId);
+			serviceConfiguration.setClimateservice(climateService);
+			User user = userRepository.findOne(userId);
+			serviceConfiguration.setUser(user);
+			ServiceConfiguration savedServiceConfiguration = serviceConfigurationRepository.save(serviceConfiguration);
+			
+			System.out.println("Service Configuration updated: "+ savedServiceConfiguration.getId());
+			return created("Service Configuration updated: "+ savedServiceConfiguration.getId());
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+			System.out.println("Service Configuration not saved: "+id);
+			return badRequest("Service Configuration not saved: "+id);
+		}			
 	}
-	long serviceId = json.findPath("serviceId").asLong();
-	long userId = json.findPath("userId").asLong();
-	String runTimeString = json.findPath("runTime").asText();
-	Date runTime = new Date();
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-	try {
-		runTime = simpleDateFormat.parse(runTimeString);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-
-	try {
-		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
-		serviceConfiguration.setId(id);
-		serviceConfiguration.setRunTime(runTime);
-		ClimateService climateService = climateServiceRepository.findOne(serviceId);
-		serviceConfiguration.setClimateservice(climateService);
-		User user = userRepository.findOne(userId);
-		serviceConfiguration.setUser(user);
-		ServiceConfiguration savedServiceConfiguration = serviceConfigurationRepository.save(serviceConfiguration);
-		
-		System.out.println("Service Configuration updated: "+ savedServiceConfiguration.getId());
-		return created("Service Configuration updated: "+ savedServiceConfiguration.getId());
-	} catch (PersistenceException pe) {
-		pe.printStackTrace();
-		System.out.println("Service Configuration not saved: "+id);
-		return badRequest("Service Configuration not saved: "+id);
-	}			
-}
 
 	
     public Result deleteServiceConfiguration(long id) {
+    	if (id < 0) {
+    		System.out.println("id is negative!");
+			return badRequest("id is negative!");
+    	}
     	ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
     	if (serviceConfiguration == null) {
     		System.out.println("Service Configuration not found with id: " + id);
@@ -139,6 +146,10 @@ public class ServiceConfigurationController extends Controller {
     }
     
     public Result getAllServiceConfigurationsByUserId(long userId, String format) {
+    	if (userId < 0) {
+    		System.out.println("userId is negative!");
+			return badRequest("userId is negative!");
+    	}
     	try {
 			User user = userRepository.findOne(userId);
 			if (user == null) {
