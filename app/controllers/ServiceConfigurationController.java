@@ -156,7 +156,7 @@ public class ServiceConfigurationController extends Controller {
 				System.out.println("Cannot find User by id: "+userId);
 				return notFound("Cannot find User by id: "+userId);
 			}
-			List<ServiceConfiguration>serviceConfigurations = serviceConfigurationRepository.findAllByUserId(user);
+			List<ServiceConfiguration>serviceConfigurations = serviceConfigurationRepository.findAllByUser(user);
 			String result = new String();
 	    	if (format.equals("json")) {
 	    		result = new Gson().toJson(serviceConfigurations);

@@ -10,5 +10,5 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface ServiceConfigurationRepository extends CrudRepository<ServiceConfiguration, Long> {
-	List<ServiceConfiguration>findAllByUserId(User user);
+	List<ServiceConfiguration>findAllByUser(User user);
 }

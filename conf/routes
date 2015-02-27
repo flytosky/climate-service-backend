@@ -20,7 +20,7 @@ GET		/climate/getServiceConfiguration/id/:id/json 					@controllers.ServiceConfi
 POST	/climate/addServiceConfiguration								@controllers.ServiceConfigurationController.addServiceConfiguration
 PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigurationController.updateServiceConfigurationById(id: Long)
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
-GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationsByUserId(userId: Long, format: String="json")
+GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getAllServiceConfigurationsByUser(userId: Long, format: String="json")
 
 # DatasetLog
 GET		/datasetLog/getAllDatasetLogs/json			@controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
@@ -90,7 +90,7 @@ DELETE	/ConferencePublication/deleteBookPublication/id/:id			@controllers.Confer
 # Service Configuration Item
 GET		/climate/serviceConfigurationItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigurationItemById(id: Long)
 GET		/climate/serviceConfigurationItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigurationItemsInServiceConfig(serviceConfigId: Long)
-GET		/climate/serviceConfigurationItemByParamName/:param				@controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterName(param : String)
+GET		/climate/serviceConfigurationItemByParamName/:param					@controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterName(param : String)
 POST	/climate/addServiceConfigurationItem								@controllers.ServiceConfigurationItemController.addServiceConfigurationItem
 PUT		/climate/updateServiceConfigurationItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigurationItemById(id:Long)
 DELETE	/climate/deleteServiceConfigurationItemById/:id						@controllers.ServiceConfigurationItemController.deleteServiceConfigurationItemById(id: Long)

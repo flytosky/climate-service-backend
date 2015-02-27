@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -17,7 +18,13 @@ import models.ClimateService;
 import models.ClimateServiceRepository;
 //import models.DatasetLog;
 import models.DatasetLogRepository;
+import models.Parameter;
+import models.ParameterOption;
+import models.ParameterOptionRepository;
+import models.ParameterRepository;
 import models.ServiceConfiguration;
+import models.ServiceConfigurationItem;
+import models.ServiceConfigurationItemRepository;
 import models.ServiceConfigurationRepository;
 import models.ServiceExecutionLog;
 import models.ServiceExecutionLogRepository;
@@ -34,6 +41,9 @@ public class ServiceExecutionLogController extends Controller {
 	private final ServiceExecutionLogRepository serviceExecutionLogRepository;
     private final UserRepository userRepository;
     private final ClimateServiceRepository climateServiceRepository;
+    private final ParameterRepository parameterRepository;
+    private final ParameterOptionRepository parameterOptionRepository;
+    private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
     //private final DatasetLogRepository datasetLogRepository;
     private final ServiceConfigurationRepository serviceConfigurationRepository;
 	
@@ -41,13 +51,19 @@ public class ServiceExecutionLogController extends Controller {
     @Inject
     public ServiceExecutionLogController(
 			ServiceExecutionLogRepository serviceExecutionLogRepository,
+			ParameterRepository parameterRepository,
+			ParameterOptionRepository parameterOptionRepository,
+			ServiceConfigurationItemRepository serviceConfigurationItemRepository,
 			UserRepository userRepository,
 			ClimateServiceRepository climateServiceRepository,
 			DatasetLogRepository datasetLogRepository,
 			ServiceConfigurationRepository serviceConfigurationRepository) {
+    	this.parameterRepository = parameterRepository;
 		this.serviceExecutionLogRepository = serviceExecutionLogRepository;
 		this.userRepository = userRepository;
+		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.climateServiceRepository = climateServiceRepository;
+		this.parameterOptionRepository = parameterOptionRepository;
 		//this.datasetLogRepository = datasetLogRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
 	}
@@ -89,10 +105,23 @@ public class ServiceExecutionLogController extends Controller {
     		System.out.println("Wrong Date Format :" + executionEndTimeString);
     		return badRequest("Wrong Date Format :" + executionEndTimeString);
     	}
+    	
 		try {
+			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(serviceConfigurationId);
+			JsonNode parameters = json.findPath("parameters");
+	    	Iterator<String> iterator = parameters.fieldNames();
+	    	while(iterator.hasNext()) {
+	    		String fieldName = iterator.next();
+	    		String value = parameters.findPath(fieldName).asText();
+	    		Parameter parameter = parameterRepository.findByName(fieldName);
+	    		ParameterOption parameterOption = parameterOptionRepository.findByParameterValue(value);
+	    		ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(serviceConfiguration, parameter, parameterOption, value);
+	    		ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
+	    		System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
+	    	}
+	    	
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
-			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(serviceConfigurationId);
 			//DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
 			//ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, datasetLog, purpose, executionStartTime, executionEndTime);
 			ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);
