@@ -273,11 +273,14 @@ public class ServiceExecutionLogController extends Controller {
 		String result = new String();
 		
 		if (format.equals("json")) {
-			SimpleDateFormat yearMonth = new SimpleDateFormat("YYYYMM");
-			
+
 			Date startMonth;
 			Date endMonth;
+
+
 			try {
+				SimpleDateFormat yearMonth = new SimpleDateFormat("YYYYMM");
+
 				startMonth = yearMonth.parse(startTime);
 				endMonth = yearMonth.parse(endTime);
 			} catch (ParseException e) {
@@ -285,11 +288,28 @@ public class ServiceExecutionLogController extends Controller {
 				e.printStackTrace();
 				return notFound("Input Date format not correct ");
 			}
+
+			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByUser_Id(userId);
+
+			List<ServiceExecutionLog> logs1 = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetween(startMonth, endMonth, startMonth, endMonth);
 			
-			User user = userRepository.findOne(userId);
-			
-			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findAllByExecutionStartTimeBetweenAndExecutionEndTimeBetween(startMonth, endMonth, startMonth, endMonth);
-			
+			result = new Gson().toJson(logs);
+		}
+
+		return ok(result);
+	}
+
+	public Result getServiceExecutionLogs(String purpose,
+										  long serviceId, String format) {
+		String result = new String();
+
+		if (format.equals("json")) {
+
+
+
+
+			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByPurposeAndClimateService_Id(purpose, serviceId);
+
 			result = new Gson().toJson(logs);
 		}
 
