@@ -145,7 +145,7 @@ public class ServiceConfigurationController extends Controller {
     	return ok(result);
     }
     
-    public Result getAllServiceConfigurationsByUserId(long userId, String format) {
+    public Result getServiceConfigurationsByUser(long userId, String format) {
     	if (userId < 0) {
     		System.out.println("userId is negative!");
 			return badRequest("userId is negative!");
@@ -156,7 +156,7 @@ public class ServiceConfigurationController extends Controller {
 				System.out.println("Cannot find User by id: "+userId);
 				return notFound("Cannot find User by id: "+userId);
 			}
-			List<ServiceConfiguration>serviceConfigurations = serviceConfigurationRepository.findAllByUser(user);
+			List<ServiceConfiguration> serviceConfigurations = serviceConfigurationRepository.findAllByUser(user);
 			String result = new String();
 	    	if (format.equals("json")) {
 	    		result = new Gson().toJson(serviceConfigurations);
@@ -170,7 +170,7 @@ public class ServiceConfigurationController extends Controller {
     
     public Result getAllServiceConfigurations() {
     	try {
-    		Iterable<ServiceConfiguration>serviceConfigurations =  serviceConfigurationRepository.findAll();
+    		Iterable<ServiceConfiguration> serviceConfigurations =  serviceConfigurationRepository.findAll();
     		String result = new String();
     		result = new Gson().toJson(serviceConfigurations);
     		return ok(result);
