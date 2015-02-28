@@ -80,7 +80,6 @@ public class ServiceExecutionLogController extends Controller {
     	//Parse JSON file
     	long serviceId = json.findPath("serviceId").asLong();
     	long userId = json.findPath("userId").asLong();
-    	long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
     	//long datasetLogId = json.findPath("datasetLogId").asLong();
     	String purpose = json.findPath("purpose").asText();
     	String plotUrl = json.findPath("url").asText();
@@ -111,7 +110,10 @@ public class ServiceExecutionLogController extends Controller {
 //    	}
     	
 		try {
-			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(serviceConfigurationId);
+			User user = userRepository.findOne(userId);
+			ClimateService climateService = climateServiceRepository.findOne(serviceId);
+			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(climateService,user,executionStartTime);
+			ServiceConfiguration savedServiceConfiguration = serviceConfigurationRepository.save(serviceConfiguration);
 			JsonNode parameters = json.findPath("parameters");
 	    	Iterator<String> iterator = parameters.fieldNames();
 	    	while(iterator.hasNext()) {
@@ -119,13 +121,12 @@ public class ServiceExecutionLogController extends Controller {
 	    		String value = parameters.findPath(fieldName).asText();
 	    		Parameter parameter = parameterRepository.findByName(fieldName);
 	    		ParameterOption parameterOption = parameterOptionRepository.findByParameterValue(value);
-	    		ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(serviceConfiguration, parameter, parameterOption, value);
+	    		ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(savedServiceConfiguration, parameter, parameterOption, value);
 	    		ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
 	    		System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
 	    	}
 	    	
-			User user = userRepository.findOne(userId);
-			ClimateService climateService = climateServiceRepository.findOne(serviceId);
+			
 			//DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
 			//ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, datasetLog, purpose, executionStartTime, executionEndTime);
 			ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);
