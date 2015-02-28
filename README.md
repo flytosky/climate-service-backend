@@ -110,16 +110,16 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
       - **Result**: HTTP 201 if the user has been successfully deleted.
   
 ####Manage Climate Services                
-5. <a name="5"></a>**QUERY CLIMATE	SERVICE BY SERVICE NAME**
+5. <a name="5"></a>**GET CLIMATE	SERVICE BY SERVICE NAME**
     - **Purpose**: Query for climate service using service name. If there are multiple services with the same name, all will be returned. 
     - **Method**: GET
     - **URL**: /climate/getClimateService/:name/json
     - **Semantics**:
         - **name**: Existing service name.
     - **Sample Usages**:
-      - **Sample json request**: /climate/getClimateService/NightVale/json
+      - **Sample json request**: /climate/getClimateService/testName/json
       - **Sample json result**: 
-			
+      {"id":30,"rootServiceId":1,"user":{"id":31,"firstName":"John","lastName":"Watson"},"name":"testName","purpose":"For testing","url":"http://einstein.sv.cmu.edu:9008/forTesting","scenario":"Used only for testing","createTime":"Feb 26, 2015 4:14:44 PM","versionNo":"1"}		
       - **Result**: HTTP 200 if returned successfully, HTTP 404 if not found.
       
 6. <a name="5"></a>**GET A CLIMATE	SERVICE BY ID**
@@ -145,7 +145,7 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
       - **Sample json result**: [{"id":33,"rootServiceId":0,"user":{"id":33,"firstName":"John","lastName":"Watson"},"name":"NightVale","purpose":"","url":"","scenario":"","createTime":"Feb 26, 2015 4:20:31 PM","versionNo":""},{"id":34,"rootServiceId":1,"user":{"id":33,"firstName":"John","lastName":"Watson"},"name":"testName","purpose":"For testing","url":"http://einstein.sv.cmu.edu:9008/forTesting","scenario":"Used only for testing","createTime":"Feb 26, 2015 4:20:31 PM","versionNo":"1"}]
 [{"climateServiceName":"testName","purpose":"For testing","url":"http://einstein.sv.cmu.edu:9008/forTesting","scenario":"Used only for testing","creatorId":"admin","createTime":"2014/12/18 19:37","versionNo":"1","rootServiceId":"1"}]
       - **Result**: HTTP 200 if successful, HTTP 404 if failed.
-      
+
 7. <a name="7"></a>**ADD A CLIMATE SERVICE**
     - **Purpose**: Add a new climate service to the system.
     - **Method**: POST
@@ -173,7 +173,7 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
     - **URL**: /climate/updateClimateService/id/:id
     - **Semantics**: 
         - **id**: Existing service id.
-         - **name** (string, not null): Non existing unique name of the climate service
+        - **name** (string, not null): Non existing unique name of the climate service
         - **creatorId** (string, not null): ID of the creator
         - **purpose** (string, optional): Purpose of the climate service
         - **url** (string, optional): Url linked to the configuration page of a certian climate service
@@ -183,7 +183,7 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
         - **versionNo** (double, optional): Version number of the service
         - **rootServiceId** (int, optional): Root service id of the service  
     - **Sample Usages**:
-      - /climate/updateClimateService/id/20
+      - /climate/updateClimateService/id/20      
       - **Result**: HTTP 200 if the climate service has been successfully updated to the database.
       
 9. <a name="9"></a>**UPDATE A CLIMATE SERVICE BY SERVICE NAME**
@@ -216,18 +216,16 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
       - **Result**: HTTP 200 if returned successfully, HTTP 404 if not found.
 
 ####Manage Service Configuration
-11. <a name="11"></a>**GET A SERVICE CONFIGURATION BY SERVICE ID**
+11. <a name="11"></a>**GET A SERVICE CONFIGURATION BY SERVICE CONFIGURATION ID**
     - **Purpose**: Query a specific climate service configuration using service id. 
     - **Method**: GET
-    - **URL**: /climate/getServiceConfiguration/:id/json
+    - **URL**: /climate/getServiceConfiguration/id/:id/json
     - **Semantics**:
-        - **id**: Existing service id.
+        - **id**: Existing service configuration id.
     - **Sample Usages**: 
-      - **Sample json request**:       
+      - /climate/getServiceConfiguration/id/1/json       
       - **Sample json result**: <br/>
-          [{"timestamp":1368568993000,"value":517,"sensorName":"sensor1"},
-          ... <br/>
-          {"timestamp":1368568896000,"value": 520,"sensorName":"sensor1"}]
+          {"id":1,"climateservice":{"id":5,"rootServiceId":0,"user":{"id":1,"firstName":"John","lastName":"Watson"},"name":"ServiceByName","purpose":"testing","url":"http://einstein.sv.cmu.edu:9008/forTesting","scenario":"Used for testing","createTime":"Feb 26, 2015 11:20:46 AM","versionNo":"1"},"user":{"id":1,"firstName":"John","lastName":"Watson"}}
       - **Result**: HTTP 200 if successful, HTTP 404 if failed.
 
 12. <a name="12"></a>**GET ALL SERVICE CONFIGURATIONS CREATED BY A USER**
@@ -237,11 +235,10 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
     - **Semantics**:
         - **userId**: Existing user's id.
     - **Sample Usages**: 
-      - **Sample json request**:       
+      - /climate/getAllServiceConfigurationsByUserId/5/json      
       - **Sample json result**: <br/>
-          [{"timestamp":1368568993000,"value":517,"sensorName":"sensor1"},
-          ... <br/>
-          {"timestamp":1368568896000,"value": 520,"sensorName":"sensor1"}]
+          [{"id":1,"climateservice":{"id":5,"rootServiceId":0,"user":{"id":1,"firstName":"John","lastName":"Watson"},"name":"ServiceByName","purpose":"testing","url":"http://einstein.sv.cmu.edu:9008/forTesting","scenario":"Used for testing","createTime":"Feb 26, 2015 11:20:46 AM","versionNo":"1"},"user":{"id":1,"firstName":"John","lastName":"Watson"}}
+          ......]
       - **Result**: HTTP 200 if successful, HTTP 404 if failed.
  
 13. <a name="13"></a>**ADD A SERVICE CONFIGURATION**
@@ -249,29 +246,25 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
     - **Method**: POST
     - **URL**: /climate/addServiceConfiguration
     - **Semantics**: As a POST method, the API cannot be directly executed through a web browser. Instead, it may be executed through Rails, JQuery, Python, BASH, etc.
-        - **serviceId**: 
-        - **userId**
+        - **serviceId**: Existing service id.
+        - **userId**: Existing user id.
+        - **runTime**: The runtime of this service configuration.
     - **Sample Usages**: 
-      - **Sample json request**:       
-      - **Sample json result**: <br/>
-          [{"timestamp":1368568993000,"value":517,"sensorName":"sensor1"},
-          ... <br/>
-          {"timestamp":1368568896000,"value": 520,"sensorName":"sensor1"}]
+      - **Sample json request**: <br/>
+      {"serviceId":2,"userId":5,"runTime":"01/02/2015 9:20:00"}  
       - **Result**: HTTP 201 if the service configuration has been successfully added to the database, HTTP 400 if failed.
       
-14. <a name="14"></a>**UPDATE A SERVICE CONFIGURATION BY SERVICE ID**
+14. <a name="14"></a>**UPDATE A SERVICE CONFIGURATION BY SERVICE CONFIGURATION ID**
     - **Purpose**: Update a service configuration using specific service id in the system. 
     - **Method**: PUT
     - **URL**: /climate/updateServiceConfiguration/id/:id
     - **Semantics**:
-        - **id**: Existing service id.
+        - **id**: Existing service configuration id.
     - **Sample Usages**: 
-      - **Sample json request**:       
-      - **Sample json result**: <br/>
-          [{"timestamp":1368568993000,"value":517,"sensorName":"sensor1"},
-          ... <br/>
-          {"timestamp":1368568896000,"value": 520,"sensorName":"sensor1"}]
-      - **Result**: HTTP 201 if the service configuration has been successfully added to the database, HTTP 400 if failed.
+      - /climate/updateServiceConfiguration/id/1
+      - **Sample json request**:  
+      {"serviceId":2,"userId":4,"runTime":"01/03/2015 9:20:20"}                
+      - **Result**: HTTP 201 if the service configuration has been successfully updated, HTTP 400 if failed.
 
 15. <a name="15"></a>**DELETE A SERVICE CONFIGURATION**
     - **Purpose**: Delete a service configuration from the system. 
@@ -279,12 +272,8 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
     - **URL**: /climate/deleteServiceConfiguration/:id
     - **Semantics**:
         - **id**: Existing service id.
-    - **Sample Usages**: 
-      - **Sample json request**:       
-      - **Sample json result**: <br/>
-          [{"timestamp":1368568993000,"value":517,"sensorName":"sensor1"},
-          ... <br/>
-          {"timestamp":1368568896000,"value": 520,"sensorName":"sensor1"}]
+    - **Sample Usages**: <br/>
+      -  /climate/deleteServiceConfiguration/1       
       - **Result**: HTTP 200 if returned successfully, HTTP 404 if not found. 
  
 ###Manage Climate Service Parameters     
@@ -371,11 +360,7 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
     - **Semantics**:
         - **name**: Existing parameter id.
     - **Sample Usages**: 
-      - **Sample json request**:       
-      - **Sample json result**: <br/>
-          [{"timestamp":1368568993000,"value":517,"sensorName":"sensor1"},
-          ... <br/>
-          {"timestamp":1368568896000,"value": 520,"sensorName":"sensor1"}]
+      - /parameter/deleteParameter/name/parameterName 
       - **Result**: HTTP 200 if returned successfully, HTTP 404 if not found.
 
 ###Manage Service Configuration Item
@@ -458,116 +443,4 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
       
 [1]: http://einstein.sv.cmu.edu:9007/climate "The Application Server running in the Smart Spaces Lab, CMUSV"
 
-Examples:
-----------------
-1. Consume Rest API in Python
-    - GET
-    <pre>
-      <code>
-         import json, requests
-         response = requests.get("http://einstein.sv.cmu.edu:9000/get_devices/json")
-         print(response.json())
-      </code>
-    </pre>
-    - POST
-    <pre>
-      <code>
-         import requests
-         requests.post("http://einstein.sv.cmu.edu:9000/sensors", data={}, headers={}, files={}, cookies=None, auth=None)
-      </code>
-    </pre>
-    
-2. Consume Rest API in Java
-    - GET
-   <pre>
-      <code>
-      import java.net.HttpURLConnection;
-      import java.net.URL;
-      public static String httpGet(String urlStr) throws IOException {
-              URL url = new URL(urlStr);
-      		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      
-      		if (conn.getResponseCode() != 200) {
-      			throw new IOException(conn.getResponseMessage());
-      		}
-      
-      		// Buffer the result into a string
-      		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-      		StringBuilder sb = new StringBuilder();
-      		String line;
-      		while ((line = rd.readLine()) != null) {
-      			sb.append(line);
-      		}
-      		rd.close();
-      
-      		conn.disconnect();
-      		return sb.toString();
-   	}
-      </code>
-   </pre>
-    - POST (Please download Gson Jar first http://code.google.com/p/google-gson/downloads/list)
-   <pre>
-      <code>
-      import java.io.BufferedReader;
-      import java.io.IOException;
-      import java.io.InputStreamReader;
-      import java.io.OutputStream;
-      import java.io.OutputStreamWriter;
-      import java.io.Writer;
-      import java.net.HttpURLConnection;
-      import java.net.URL;
-      import com.google.gson.JsonObject;
-      
-      public class SensorReadingPostExample {
-         	public static void main(String args[]) throws Exception {
-         		String URLStr = "http://einstein.sv.cmu.edu:9000/sensors";
-         		java.util.Date date = new java.util.Date();
-         		
-         		JsonObject jo = new JsonObject();
-         		//Sample data
-         		jo.addProperty("timestamp", date.getTime()); //Long type
-         		jo.addProperty("id", "my_test_device_id");   //String type
-         		jo.addProperty("temp", 888);                 //Double type
-         		   
-         		httpPostSensorReading(URLStr, jo.toString());
-         	}
-         
-         	public static String httpPostSensorReading(String urlStr, String jsonString) throws Exception {
-         		URL url = new URL(urlStr);
-         		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-         		conn.setRequestMethod("POST");
-         		conn.setRequestProperty("Content-Type", "application/json");
-         		conn.setRequestProperty("Accept", "application/json");
-         		conn.setDoOutput(true);
-         
-         		// Create the form content
-         		OutputStream out = conn.getOutputStream();
-         		Writer writer = new OutputStreamWriter(out, "UTF-8");
-         
-         		writer.write(jsonString);
-         
-         		writer.close();
-         		out.close();
-         
-         		if (conn.getResponseCode() != 200) {
-         			throw new IOException(conn.getResponseMessage());
-         		}
-         
-         		// Buffer the result into a string
-         		BufferedReader rd = new BufferedReader(new InputStreamReader(
-         				conn.getInputStream()));
-         		StringBuilder sb = new StringBuilder();
-         		String line;
-         		while ((line = rd.readLine()) != null) {
-         			sb.append(line);
-         		}
-         		rd.close();
-         
-         		conn.disconnect();
-         		return sb.toString();
-         	}
-      
-      }
-      </code>
-   </pre>
 
