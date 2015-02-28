@@ -65,7 +65,7 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
     - **Semantics**: 
         - **id**: Existing user's id.
     - **Sample Usages**:
-      - **Sample request**: /users/10
+      - **Sample request**: /users/1
           
       - **Sample result**: {"id":1,"firstName":"John","lastName":"Watson"}
       
