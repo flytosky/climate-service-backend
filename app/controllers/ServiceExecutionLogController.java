@@ -119,6 +119,7 @@ public class ServiceExecutionLogController extends Controller {
 	    		String value = parameters.findPath(fieldName).asText();
 	    		Parameter parameter = parameterRepository.findByName(fieldName);
 	    		ParameterOption parameterOption = parameterOptionRepository.findByParameterValue(value);
+
 	    		ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(serviceConfiguration, parameter, parameterOption, value);
 	    		ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
 	    		System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
@@ -290,9 +291,7 @@ public class ServiceExecutionLogController extends Controller {
 				return notFound("Input Date format not correct ");
 			}
 
-			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByUser_Id(userId);
-
-			List<ServiceExecutionLog> logs1 = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetween(startMonth, endMonth, startMonth, endMonth);
+			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetween(startMonth, endMonth, startMonth, endMonth);
 			
 			result = new Gson().toJson(logs);
 		}
@@ -300,7 +299,7 @@ public class ServiceExecutionLogController extends Controller {
 		return ok(result);
 	}
 
-	public Result getServiceExecutionLogs(String purpose,
+	public Result getServiceExecutionLogsMultifield(String purpose,
 										  long serviceId, String format) {
 		String result = new String();
 
@@ -309,9 +308,88 @@ public class ServiceExecutionLogController extends Controller {
 
 
 
-			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByPurposeAndClimateService_Id(purpose, serviceId);
+			List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByPurposeLikeAndClimateService_IdLike("%", serviceId);
+
+			System.out.println(logs.size());
+			 logs = serviceExecutionLogRepository.findByPurposeLikeAndClimateService_IdLike(purpose, serviceId);
 
 			result = new Gson().toJson(logs);
+
+			System.out.println(logs.size());
+
+
+		}
+
+		return ok(result);
+	}
+
+	public Result queryServiceExecutionLogs(String format) {
+		String result = new String();
+
+		if (format.equals("json")) {
+			JsonNode json = request().body().asJson();
+			//Parse JSON file
+			long serviceId = json.findPath("serviceId").asLong();
+			long userId = json.findPath("userId").asLong();
+			long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
+			//long datasetLogId = json.findPath("datasetLogId").asLong();
+			String purpose = json.findPath("purpose").asText();
+			String plotUrl = json.findPath("url").asText();
+			String dataUrl = json.findPath("dataUrl").asText();
+//    	String executionStartTimeString = json.findPath("executionStartTime").asText();
+//    	String executionEndTimeString = json.findPath("executionEndTime").asText();
+			long executionStartTimeNumber = json.findPath("executionStartTime").asLong();
+			long executionEndTimeNumber = json.findPath("executionEndTime").asLong();
+			Date executionStartTime = new Date(executionStartTimeNumber);
+			Date executionEndTime = new Date(executionEndTimeNumber);
+//    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
+//
+//    	try {
+//    		executionStartTime = simpleDateFormat.parse(executionStartTimeString);
+//    	} catch (ParseException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    		System.out.println("Wrong Date Format :" + executionStartTimeString);
+//    		return badRequest("Wrong Date Format :" + executionStartTimeString);
+//    	}
+//    	try {
+//    		executionEndTime = simpleDateFormat.parse(executionEndTimeString);
+//    	} catch (ParseException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    		System.out.println("Wrong Date Format :" + executionEndTimeString);
+//    		return badRequest("Wrong Date Format :" + executionEndTimeString);
+//    	}
+
+			try {
+				ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(serviceConfigurationId);
+				JsonNode parameters = json.findPath("parameters");
+				Iterator<String> iterator = parameters.fieldNames();
+				while (iterator.hasNext()) {
+					String fieldName = iterator.next();
+					String value = parameters.findPath(fieldName).asText();
+					Parameter parameter = parameterRepository.findByName(fieldName);
+					ParameterOption parameterOption = parameterOptionRepository.findByParameterValue(value);
+					ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(serviceConfiguration, parameter, parameterOption, value);
+					ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
+					System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
+				}
+
+				User user = userRepository.findOne(userId);
+				ClimateService climateService = climateServiceRepository.findOne(serviceId);
+				//DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
+				//ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, datasetLog, purpose, executionStartTime, executionEndTime);
+				ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);
+				ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository.save(ServiceExecutionLog);
+
+				List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByPurposeLikeAndClimateService_IdLike(purpose, serviceId);
+
+				result = new Gson().toJson(logs);
+			}catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
 		}
 
 		return ok(result);

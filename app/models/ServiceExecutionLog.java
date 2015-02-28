@@ -33,7 +33,9 @@ public class ServiceExecutionLog {
 	private Date executionEndTime;
 	private String plotUrl;
 	private String dataUrl;
-	
+
+	public ServiceExecutionLog(){}
+
 	public ServiceExecutionLog(ClimateService climateService,
 			User user, ServiceConfiguration serviceConfiguration, //DatasetLog datasetLog,
 			String purpose, Date executionStartTime, Date executionEndTime, String dataUrl, String plotUrl) {
