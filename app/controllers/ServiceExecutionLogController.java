@@ -43,7 +43,6 @@ public class ServiceExecutionLogController extends Controller {
     private final UserRepository userRepository;
     private final ClimateServiceRepository climateServiceRepository;
     private final ParameterRepository parameterRepository;
-    private final ParameterOptionRepository parameterOptionRepository;
     private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
     //private final DatasetLogRepository datasetLogRepository;
     private final ServiceConfigurationRepository serviceConfigurationRepository;
@@ -53,7 +52,6 @@ public class ServiceExecutionLogController extends Controller {
     public ServiceExecutionLogController(
 			ServiceExecutionLogRepository serviceExecutionLogRepository,
 			ParameterRepository parameterRepository,
-			ParameterOptionRepository parameterOptionRepository,
 			ServiceConfigurationItemRepository serviceConfigurationItemRepository,
 			UserRepository userRepository,
 			ClimateServiceRepository climateServiceRepository,
@@ -64,7 +62,6 @@ public class ServiceExecutionLogController extends Controller {
 		this.userRepository = userRepository;
 		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.climateServiceRepository = climateServiceRepository;
-		this.parameterOptionRepository = parameterOptionRepository;
 		//this.datasetLogRepository = datasetLogRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
 	}
@@ -120,13 +117,11 @@ public class ServiceExecutionLogController extends Controller {
 	    		String fieldName = iterator.next();
 	    		String value = parameters.findPath(fieldName).asText();
 	    		Parameter parameter = parameterRepository.findByName(fieldName);
-	    		ParameterOption parameterOption = parameterOptionRepository.findByParameterValue(value);
-	    		ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(savedServiceConfiguration, parameter, parameterOption, value);
+	    		ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(savedServiceConfiguration, parameter, value);
 	    		ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
 	    		System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
 	    	}
 	    	
-			
 			//DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
 			//ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, datasetLog, purpose, executionStartTime, executionEndTime);
 			ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);

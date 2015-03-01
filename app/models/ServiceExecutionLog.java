@@ -47,6 +47,9 @@ public class ServiceExecutionLog {
 		this.plotUrl = plotUrl;
 		this.dataUrl = dataUrl;
 	}
+	public ServiceExecutionLog() {
+		
+	}
 	
 	public long getId() {
 		return id;
