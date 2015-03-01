@@ -31,19 +31,20 @@ public class ServiceConfigurationItemController extends Controller {
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 	private final ParameterRepository parameterRepository;
-	private final ParameterOptionRepository parameterOptionRepository;
+	//private final ParameterOptionRepository parameterOptionRepository;
 	// We are using constructor injection to receive a repository to support our
 	// desire for immutability.
 	@Inject
 	public ServiceConfigurationItemController(
 			final ServiceConfigurationRepository serviceConfigurationRepository,
 			final ParameterRepository parameterRepository,
-			final ServiceConfigurationItemRepository serviceConfigurationItemRepository,
-			final ParameterOptionRepository parameterOptionRepository) {
+			//final ParameterOptionRepository parameterOptionRepository,
+			final ServiceConfigurationItemRepository serviceConfigurationItemRepository) {
+			 
 		this.parameterRepository = parameterRepository;
 		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
-		this.parameterOptionRepository = parameterOptionRepository;
+		//this.parameterOptionRepository = parameterOptionRepository;
 	}
 
 	public Result addServiceConfigurationItem() {
@@ -57,17 +58,15 @@ public class ServiceConfigurationItemController extends Controller {
 		// Parse JSON file
 		long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
 		long parameterId = json.findPath("parameterId").asLong();
-		long parameterOptionId = json.findPath("parameterOption").asLong();
-		Date newDate = new Date(json.findPath("date").asLong());
 		String value = json.findPath("value").asText();
 
 		try {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
 					.findOne(serviceConfigurationId);
 			Parameter parameter = parameterRepository.findOne(parameterId);	
-			ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
+			//ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
 			ServiceConfigurationItem newConfigItem = new ServiceConfigurationItem(
-					serviceConfiguration, parameter, parameterOption, value);
+					serviceConfiguration, parameter, value);
 			serviceConfigurationItemRepository.save(newConfigItem);
 
 			System.out.println("ServiceConfigurationItem saved: "
@@ -106,7 +105,6 @@ public class ServiceConfigurationItemController extends Controller {
 		// Parse JSON file
 		long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
 		long parameterId = json.findPath("parameterId").asLong();
-		long parameterOptionId = json.findPath("parameterOption").asLong();
 		String value = json.findPath("value").asText();
 
 		try {
@@ -114,13 +112,12 @@ public class ServiceConfigurationItemController extends Controller {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
 					.findOne(serviceConfigurationId);
 			Parameter param = parameterRepository.findOne(parameterId);
-			ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
 
 			if (serviceConfiguration != null || param != null || value != null)
 				return ok("Nothing to update, ServiceConfigItem unchanged");
 
 			ServiceConfigurationItem configItem = new ServiceConfigurationItem(
-					serviceConfiguration, param, parameterOption, value);
+					serviceConfiguration, param, value);
 			configItem.setServiceConfiguration(serviceConfiguration);
 			configItem.setParameter(param);
 			configItem.setValue(value);
