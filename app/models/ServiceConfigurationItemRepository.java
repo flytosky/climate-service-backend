@@ -11,5 +11,7 @@ import javax.inject.Singleton;
 @Singleton
 public interface ServiceConfigurationItemRepository extends CrudRepository<ServiceConfigurationItem, Long> {
 	List<ServiceConfigurationItem> findByServiceConfiguration_Id (long serviceConfigurationId);
-	ServiceConfigurationItem findByParameter(Parameter parameter);
+    ServiceConfigurationItem findByParameter (Parameter parameter);
+    List<ServiceConfigurationItem> findByParameterAndValue (Parameter parameter, String value);
+
 }

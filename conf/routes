@@ -102,13 +102,13 @@ DELETE	/climate/deleteServiceConfigurationItemById/:id						@controllers.Service
 
 # Climate Service ExecutionLog
 POST    /addServiceExecutionLogUsingPost                     @controllers.ServiceExecutionLogController.addServiceExecutionLog()
-POST    /queryServiceExecutionLogs                           @controllers.ServiceExecutionLogController.queryServiceExecutionLogs(format: String="json")
+POST    /queryServiceExecutionLogs                           @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
 GET     /getAllServiceExecutionLogs/json                     @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
-#GET     /getAllServiceExecutionLogs                          @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="csv")
-#GET     /getAllServiceExecutionLogs/csv                      @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="csv")
+GET     /getAllServiceExecutionLogs                          @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="csv")
+GET     /getAllServiceExecutionLogs/csv                      @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
 GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/json 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-#GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/csv 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="csv")
-#GET     /getServiceExecutionLogs/:userId/:startTime/:endTime 		@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="csv")
+GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/csv 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
+GET     /getServiceExecutionLogs/:userId/:startTime/:endTime 		@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
 GET     /getServiceExecutionLogs/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
 GET     /getServiceExecutionLogsMulti/:purpose/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLogsMultifield(purpose: String, id: Long, format: String="json")
 DELETE  /deleteServiceExecutionLog/:id         	 @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id:Long)

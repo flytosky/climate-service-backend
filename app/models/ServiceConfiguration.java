@@ -87,5 +87,26 @@ public class ServiceConfiguration {
 				+ "]";
 	}
 
-	
+
+    @Override
+    public boolean equals(Object o) {
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of ServiceConfiguration or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof ServiceConfiguration)) {
+            return false;
+        }
+
+        // typecast o to ServiceConfiguration so that we can compare data members
+        ServiceConfiguration c = (ServiceConfiguration) o;
+
+        if (this.getId() == c.getId())
+            return true;
+        else
+            return false;
+    }
 }

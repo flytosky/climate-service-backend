@@ -13,14 +13,22 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface ServiceExecutionLogRepository extends CrudRepository<ServiceExecutionLog, Long>, ServiceExecutionLogRepositoryCustom {
-	List<ServiceExecutionLog> findByUser_Id(long userId);
-	
-	List<ServiceExecutionLog> findByExecutionStartTimeBetweenAndExecutionEndTimeBetween(Date startA, Date startB, Date endA, Date endB);
-	List<ServiceExecutionLog> findByPurposeLikeAndClimateService_IdLike(String purpose, long serviceId);
+    List<ServiceExecutionLog> findByUser_Id(long userId);
 
-	@Query("SELECT l FROM ServiceExecutionLog l INNER JOIN l.climateService s   WHERE s IN (:services)")
-	List<ServiceExecutionLog> findByServiceConfigurationByParam(@Param("services") List<ClimateService> services);
+    List<ServiceExecutionLog> findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_IdAndServiceConfigurationIn(Date startA, Date startB, Date endA, Date endB, String purpose, long userId, List<ServiceConfiguration> serviceConfigurations);
 
+    List<ServiceExecutionLog> findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndServiceConfigurationIn(Date startA, Date startB, Date endA, Date endB, String purpose, List<ServiceConfiguration> serviceConfigurations);
+
+
+    List<ServiceExecutionLog> findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_Id(Date startA, Date startB, Date endA, Date endB, String purpose, long userId);
+
+    List<ServiceExecutionLog> findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLike(Date startA, Date startB, Date endA, Date endB, String purpose);
+
+    //	List<ServiceExecutionLog> findByPurposeLikeAndUser_IdLike(String purpose, String userId);
+//    List<ServiceExecutionLog> findByPurposeLike()
+//	@Query("SELECT l FROM ServiceExecutionLog l INNER JOIN l.ServiceConfiguration c   WHERE c IN (:serviceConfigurations)")  @Param("services")
+//	List<ServiceExecutionLog> findByServiceConfigurationIn(List<ServiceConfiguration> serviceConfigurations);
+    List<ServiceExecutionLog> findByServiceConfigurationIn(List<ServiceConfiguration> serviceConfigurations);
 
 
 }
