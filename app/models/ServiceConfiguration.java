@@ -109,4 +109,9 @@ public class ServiceConfiguration {
         else
             return false;
     }
+
+    @Override
+    public int hashCode(){
+        return (int)id;
+    }
 }

@@ -1,11 +1,8 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -124,17 +121,15 @@ public class ServiceExecutionLogController extends Controller {
             JsonNode parameters = json.findPath("parameters");
             Iterator<String> iterator = parameters.fieldNames();
             List<ServiceExecutionLog> logs;
-            if (!iterator.hasNext())
-            {
+            if (!iterator.hasNext()) {
                 if (userId != 0)
                     logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_Id(start, end, start, end, purpose, userId);
                 else
                     logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLike(start, end, start, end, purpose);
 
-            }
-            else {
+            } else {
 
-                List<ServiceConfiguration> configurationsList = null;
+                Set<ServiceConfiguration> configurationsList = null;
 
                 while (iterator.hasNext()) {
                     String fieldName = iterator.next();
@@ -143,7 +138,7 @@ public class ServiceExecutionLogController extends Controller {
                     //Find the serviceConfigurationItems that match the parameters
                     //If parameter is not ranged
                     List<ServiceConfigurationItem> serviceConfigurationItem = serviceConfigurationItemRepository.findByParameterAndValue(parameter, value);
-                    List<ServiceConfiguration> tempConfigList = new ArrayList<ServiceConfiguration>();
+                    Set<ServiceConfiguration> tempConfigList = new HashSet<ServiceConfiguration>();
 
                     for (ServiceConfigurationItem items : serviceConfigurationItem) {
                         tempConfigList.add(items.getServiceConfiguration());
@@ -158,11 +153,15 @@ public class ServiceExecutionLogController extends Controller {
 //            configurationsList = intersectServiceConfiguration(configurationsList, userConfigList);
                 //DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
 
-
-                if (userId != 0)
-                    logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, start, end, purpose, userId, configurationsList);
-                else
-                    logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndServiceConfigurationIn(start, end, start, end, purpose, configurationsList);
+                if (configurationsList == null || configurationsList.isEmpty()) {
+                    //If no parameter match, just return empty set
+                    logs = new ArrayList<ServiceExecutionLog>();
+                } else {
+                    if (userId != 0)
+                        logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, start, end, purpose, userId, configurationsList);
+                    else
+                        logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndServiceConfigurationIn(start, end, start, end, purpose, configurationsList);
+                }
             }
 //            List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByServiceConfigurationIn(configurationsList);
             result = new Gson().toJson(logs);
@@ -175,7 +174,7 @@ public class ServiceExecutionLogController extends Controller {
         return ok(result);
     }
 
-    private List<ServiceConfiguration> intersectServiceConfiguration(List<ServiceConfiguration> configurationsList, List<ServiceConfiguration> tempConfigList) {
+    private Set<ServiceConfiguration> intersectServiceConfiguration(Set<ServiceConfiguration> configurationsList, Set<ServiceConfiguration> tempConfigList) {
         if (configurationsList == null)
             configurationsList = tempConfigList;
         else {
