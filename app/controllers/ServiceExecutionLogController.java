@@ -36,6 +36,7 @@ import com.google.gson.Gson;
 @Singleton
 public class ServiceExecutionLogController extends Controller {
     public static final String WILDCARD = "%";
+    
     private final ServiceExecutionLogRepository serviceExecutionLogRepository;
     private final UserRepository userRepository;
     private final ClimateServiceRepository climateServiceRepository;
@@ -47,7 +48,7 @@ public class ServiceExecutionLogController extends Controller {
     // We are using constructor injection to receive a repository to support our desire for immutability.
     @Inject
     public ServiceExecutionLogController(
-            ServiceExecutionLogRepository serviceExecutionLogRepository,
+    		ServiceExecutionLogRepository serviceExecutionLogRepository,
             ParameterRepository parameterRepository,
             ServiceConfigurationItemRepository serviceConfigurationItemRepository,
             UserRepository userRepository,
@@ -66,28 +67,22 @@ public class ServiceExecutionLogController extends Controller {
     public Result queryServiceExecutionLogs() {
         JsonNode json = request().body().asJson();
         if (json == null) {
-            System.out
-                    .println("ServiceExecutionLog cannot be queried, expecting Json data");
+            System.out.println("ServiceExecutionLog cannot be queried, expecting Json data");
             return badRequest("ServiceExecutionLog cannot be queried, expecting Json data");
         }
         String result = new String();
 
-
         try {
             //Parse JSON file
             Long userId = json.findPath("userId").asLong();
-
             //long datasetLogId = json.findPath("datasetLogId").asLong();
             String purpose = json.findPath("purpose").asText();
-            if (purpose.isEmpty())
-                purpose = WILDCARD;
+            if (purpose.isEmpty()) {
+            	purpose = WILDCARD;
+            }            
 
-//    	String executionStartTimeString = json.findPath("executionStartTime").asText();
-//    	String executionEndTimeString = json.findPath("executionEndTime").asText();
-
-            Date start = new Date(0);
-            Date end = new Date();  //
-
+			Date start = new Date(0);
+            Date end = new Date();  
 
             if (json.has("executionStartTime")) {
                 long executionStartTimeNumber = json.findPath("executionStartTime").asLong();
@@ -97,39 +92,41 @@ public class ServiceExecutionLogController extends Controller {
                 long executionEndTimeNumber = json.findPath("executionEndTime").asLong();
                 end = new Date(executionEndTimeNumber);
             }
-
-//    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
-//
-//    	try {
-//    		executionStartTime = simpleDateFormat.parse(executionStartTimeString);
-//    	} catch (ParseException e) {
-//    		// TODO Auto-generated catch block
-//    		e.printStackTrace();
-//    		System.out.println("Wrong Date Format :" + executionStartTimeString);
-//    		return badRequest("Wrong Date Format :" + executionStartTimeString);
-//    	}
-//    	try {
-//    		executionEndTime = simpleDateFormat.parse(executionEndTimeString);
-//    	} catch (ParseException e) {
-//    		// TODO Auto-generated catch block
-//    		e.printStackTrace();
-//    		System.out.println("Wrong Date Format :" + executionEndTimeString);
-//    		return badRequest("Wrong Date Format :" + executionEndTimeString);
-//    	}
-
+            
+//          If we change the date format later, we can modify here.
+//            
+//    		String executionStartTimeString = json.findPath("executionStartTime").asText();
+//    		String executionEndTimeString = json.findPath("executionEndTime").asText();
+//	    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
+//	
+//	    	try {
+//	    		executionStartTime = simpleDateFormat.parse(executionStartTimeString);
+//	    	} catch (ParseException e) {
+//	    		// TODO Auto-generated catch block
+//	    		e.printStackTrace();
+//	    		System.out.println("Wrong Date Format :" + executionStartTimeString);
+//	    		return badRequest("Wrong Date Format :" + executionStartTimeString);
+//	    	}
+//	    	try {
+//	    		executionEndTime = simpleDateFormat.parse(executionEndTimeString);
+//	    	} catch (ParseException e) {
+//	    		// TODO Auto-generated catch block
+//	    		e.printStackTrace();
+//	    		System.out.println("Wrong Date Format :" + executionEndTimeString);
+//	    		return badRequest("Wrong Date Format :" + executionEndTimeString);
+//	    	}
 
             JsonNode parameters = json.findPath("parameters");
             Iterator<String> iterator = parameters.fieldNames();
             List<ServiceExecutionLog> logs;
             if (!iterator.hasNext()) {
-                if (userId != 0)
-                    logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_Id(start, end, start, end, purpose, userId);
-                else
-                    logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLike(start, end, start, end, purpose);
-
+                if (userId != 0) {
+                	logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_Id(start, end, start, end, purpose, userId);
+                } else {
+                	logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLike(start, end, start, end, purpose);
+                }
             } else {
-
-                Set<ServiceConfiguration> configurationsList = null;
+                Set<ServiceConfiguration> configurationsSet = null;
 
                 while (iterator.hasNext()) {
                     String fieldName = iterator.next();
@@ -138,68 +135,56 @@ public class ServiceExecutionLogController extends Controller {
                     //Find the serviceConfigurationItems that match the parameters
                     //If parameter is not ranged
                     List<ServiceConfigurationItem> serviceConfigurationItem = serviceConfigurationItemRepository.findByParameterAndValue(parameter, value);
-                    Set<ServiceConfiguration> tempConfigList = new HashSet<ServiceConfiguration>();
+                    Set<ServiceConfiguration> tempConfigSet = new HashSet<ServiceConfiguration>();
 
                     for (ServiceConfigurationItem items : serviceConfigurationItem) {
-                        tempConfigList.add(items.getServiceConfiguration());
+                        tempConfigSet.add(items.getServiceConfiguration());
                     }
 
-                    configurationsList = intersectServiceConfiguration(configurationsList, tempConfigList);
+                    configurationsSet = intersectServiceConfiguration(configurationsSet, tempConfigSet);
                 }
 
-                //Find the serviceConfigurations that match the serviceConfigurationItems
+//              DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
 
-
-//            configurationsList = intersectServiceConfiguration(configurationsList, userConfigList);
-                //DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
-
-                if (configurationsList == null || configurationsList.isEmpty()) {
-                    //If no parameter match, just return empty set
+                if (configurationsSet == null || configurationsSet.isEmpty()) {
+                    // If no parameter matches, just return the empty set
                     logs = new ArrayList<ServiceExecutionLog>();
                 } else {
-                    if (userId != 0)
-                        logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, start, end, purpose, userId, configurationsList);
-                    else
-                        logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndServiceConfigurationIn(start, end, start, end, purpose, configurationsList);
+                    if (userId != 0) {
+                    	logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, start, end, purpose, userId, configurationsSet);
+                    } else {
+                    	logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndServiceConfigurationIn(start, end, start, end, purpose, configurationsSet);
+                    }
                 }
             }
-//            List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByServiceConfigurationIn(configurationsList);
             result = new Gson().toJson(logs);
         } catch (Exception e) {
-            System.out
-                    .println("ServiceExecutionLog cannot be queried, query is corrupt");
+            System.out.println("ServiceExecutionLog cannot be queried, query is corrupt");
             return badRequest("ServiceExecutionLog cannot be queried, query is corrupt");
         }
 
         return ok(result);
     }
 
-    private Set<ServiceConfiguration> intersectServiceConfiguration(Set<ServiceConfiguration> configurationsList, Set<ServiceConfiguration> tempConfigList) {
-        if (configurationsList == null)
-            configurationsList = tempConfigList;
-        else {
-            configurationsList.retainAll(tempConfigList);
+    private Set<ServiceConfiguration> intersectServiceConfiguration(Set<ServiceConfiguration> configurationsSet, Set<ServiceConfiguration> tempConfigSet) {
+        if (configurationsSet == null) {
+        	configurationsSet = tempConfigSet;
+        } else {
+            configurationsSet.retainAll(tempConfigSet);
         }
-        return configurationsList;
-    }
-
-    private List<ServiceConfiguration> intersectConfigurations(List<ServiceConfiguration> configurationsList, List<ServiceConfiguration> tempConfigList) {
-        configurationsList.retainAll(tempConfigList);
-        return configurationsList;
+        return configurationsSet;
     }
 
     public Result addServiceExecutionLog() {
         JsonNode json = request().body().asJson();
         if (json == null) {
-            System.out
-                    .println("ServiceExecutionLog not saved, expecting Json data");
+            System.out.println("ServiceExecutionLog not saved, expecting Json data");
             return badRequest("ServiceExecutionLog not saved, expecting Json data");
         }
 
         //Parse JSON file
         long serviceId = json.findPath("serviceId").asLong();
         long userId = json.findPath("userId").asLong();
-        long serviceConfigurationId = json.findPath("serviceConfigurationId").asLong();
         //long datasetLogId = json.findPath("datasetLogId").asLong();
         String purpose = json.findPath("purpose").asText();
         String plotUrl = json.findPath("url").asText();
@@ -210,6 +195,9 @@ public class ServiceExecutionLogController extends Controller {
         long executionEndTimeNumber = json.findPath("executionEndTime").asLong();
         Date executionStartTime = new Date(executionStartTimeNumber);
         Date executionEndTime = new Date(executionEndTimeNumber);
+        
+//		If we change the date format later, we can modify here.
+//
 //    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
 //
 //    	try {
@@ -325,8 +313,7 @@ public class ServiceExecutionLogController extends Controller {
                     .findOne(serviceId);
             ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
                     .findOne(serviceConfigurationId);
-            // DatasetLog datasetLog =
-            // datasetLogRepository.findOne(datasetLogId);
+            // DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
 
             ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository
                     .findOne(id);
@@ -377,7 +364,6 @@ public class ServiceExecutionLogController extends Controller {
     }
 
     public Result getAllServiceExecutionLogs(String format) {
-
         String result = new String();
 
         if (format.equals("json")) {
@@ -386,55 +372,5 @@ public class ServiceExecutionLogController extends Controller {
 
         return ok(result);
     }
-
-    public Result getServiceExecutionLogs(long userId, String startTime,
-                                          String endTime, String format) {
-        String result = new String();
-
-        if (format.equals("json")) {
-
-            Date startMonth;
-            Date endMonth;
-
-
-            try {
-                SimpleDateFormat yearMonth = new SimpleDateFormat("YYYYMM");
-
-                startMonth = yearMonth.parse(startTime);
-                endMonth = yearMonth.parse(endTime);
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                return notFound("Input Date format not correct ");
-            }
-
-            List<ServiceExecutionLog> logs = serviceExecutionLogRepository.findByUser_Id(userId);
-
-//			List<ServiceExecutionLog> logs1 = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetween(startMonth, endMonth, startMonth, endMonth);
-
-            result = new Gson().toJson(logs);
-        }
-
-        return ok(result);
-    }
-
-    public Result getServiceExecutionLogsMultifield(String purpose,
-                                                    Long serviceId, String format) {
-        String result = new String();
-
-        if (format.equals("json")) {
-
-            if (purpose.isEmpty())
-                purpose = "%";
-            String serviceIdStr;
-            if (serviceId == null)
-                serviceIdStr = "%";
-            else
-                serviceIdStr = Long.toString(serviceId);
-
-            result = new Gson().toJson(serviceExecutionLogRepository.findAll());
-        }
-
-        return ok(result);
-    }
+    
 }

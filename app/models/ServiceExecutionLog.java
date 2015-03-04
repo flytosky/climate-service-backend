@@ -8,10 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class ServiceExecutionLog {
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +30,9 @@ public class ServiceExecutionLog {
 //	@JoinColumn(name = "datasetLogId", referencedColumnName = "id")
 //	private DatasetLog datasetLog;
 	private String purpose;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date executionStartTime;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date executionEndTime;
 	private String plotUrl;
 	private String dataUrl;
@@ -47,6 +50,7 @@ public class ServiceExecutionLog {
 		this.plotUrl = plotUrl;
 		this.dataUrl = dataUrl;
 	}
+	
 	public ServiceExecutionLog() {
 
 	}
@@ -55,96 +59,77 @@ public class ServiceExecutionLog {
 		return id;
 	}
 
-
 	public ClimateService getClimateService() {
 		return climateService;
 	}
-
 
 	public User getUser() {
 		return user;
 	}
 
-
 	public ServiceConfiguration getServiceConfiguration() {
 		return serviceConfiguration;
 	}
-
 
 //	public DatasetLog getDatasetLog() {
 //		return datasetLog;
 //	}
 
-
 	public String getPurpose() {
 		return purpose;
 	}
-
 
 	public Date getExecutionStartTime() {
 		return executionStartTime;
 	}
 
-
 	public Date getExecutionEndTime() {
 		return executionEndTime;
 	}
-
 
 	public String getPlotUrl() {
 		return plotUrl;
 	}
 
-
 	public String getDataUrl() {
 		return dataUrl;
 	}
-
 
 	public void setId(long id) {
 		this.id = id;
 	}
 
-
 	public void setClimateService(ClimateService climateService) {
 		this.climateService = climateService;
 	}
-
 
 	public void setUser(User user) {
 		this.user = user;
 	}
 
-
 	public void setServiceConfiguration(ServiceConfiguration serviceConfiguration) {
 		this.serviceConfiguration = serviceConfiguration;
 	}
-
 
 //	public void setDatasetLog(DatasetLog datasetLog) {
 //		this.datasetLog = datasetLog;
 //	}
 
-
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
-
 
 	public void setExecutionStartTime(Date executionStartTime) {
 		this.executionStartTime = executionStartTime;
 	}
 
-
 	public void setExecutionEndTime(Date executionEndTime) {
 		this.executionEndTime = executionEndTime;
 	}
 
-
 	public void setPlotUrl(String plotUrl) {
 		this.plotUrl = plotUrl;
 	}
-
 
 	public void setDataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
@@ -159,7 +144,6 @@ public class ServiceExecutionLog {
 				+ ", executionEndTime=" + executionEndTime + ", plotUrl="
 				+ plotUrl + ", dataUrl=" + dataUrl + "]";
 	}
-
 	
 //	@Override
 //	public String toString() {
@@ -170,6 +154,5 @@ public class ServiceExecutionLog {
 //				+ ", executionStartTime=" + executionStartTime
 //				+ ", executionEndTime=" + executionEndTime + "]";
 //	}
-	
 	
 }

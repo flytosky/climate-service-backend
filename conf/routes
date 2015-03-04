@@ -22,10 +22,10 @@ PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigu
 DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
 GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getServiceConfigurationsByUser(userId: Long, format: String="json")
 
-# ServiceExecutionLog
-
-POST	/serviceExecutionLog/addServiceExecutionLog		@controllers.ServiceExecutionLogController.addServiceExecutionLog
+# Service Execution Log
 GET		/serviceExecutionLog/getAllServiceExecutionLog	@controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
+POST	/serviceExecutionLog/addServiceExecutionLog		@controllers.ServiceExecutionLogController.addServiceExecutionLog
+POST    /serviceExecutionLog/queryServiceExecutionLogs  @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
 
 # DatasetLog
 GET		/datasetLog/getAllDatasetLogs/json			@controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
@@ -100,27 +100,6 @@ POST	/climate/addServiceConfigurationItem								@controllers.ServiceConfigurati
 PUT		/climate/updateServiceConfigurationItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigurationItemById(id:Long)
 DELETE	/climate/deleteServiceConfigurationItemById/:id						@controllers.ServiceConfigurationItemController.deleteServiceConfigurationItemById(id: Long)
 
-# Climate Service ExecutionLog
-POST    /addServiceExecutionLogUsingPost                     @controllers.ServiceExecutionLogController.addServiceExecutionLog()
-POST    /queryServiceExecutionLogs                           @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
-GET     /getAllServiceExecutionLogs/json                     @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
-GET     /getAllServiceExecutionLogs                          @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="csv")
-GET     /getAllServiceExecutionLogs/csv                      @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/json 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/csv 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime 		@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-GET     /getServiceExecutionLogs/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
-GET     /getServiceExecutionLogsMulti/:purpose/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLogsMultifield(purpose: String, id: Long, format: String="json")
-DELETE  /deleteServiceExecutionLog/:id         	 @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id:Long)
-# For data manipulation
-#DELETE  /hardDeleteServerExecutionLog/:executionLogId         controllers.ClimateServiceController.hardDeleteExecutionLog(executionLogId:String)
-#POST    /updateExecutionLog                                   controllers.ClimateServiceController.updateExecutionLog()
-# Search
-#GET     /searchServiceLogsWithParameter/:parameterName/:value/json controllers.ClimateServiceController.searchServiceLogsWithParameter(parameterName: String, value: String, format: String="json")
-#GET     /searchServiceLogsWithParameterRange/:parameterName1/:value1/:parameterName2/:value2/json controllers.ClimateServiceController.searchServiceLogsWithParameterRange(parameterName1: String, value1: String,parameterName2: String, value2: String, format: String="json")
-#GET     /searchServiceLogsWithMultipleParameter/userid/:value0/datasource/:value1/variablename/:value2/startyearmonth/:value3/endyearmonth/:value4/executionpurpose/:value7/json controllers.ClimateServiceController.searchServiceLogsWithMultipleParameter(userid: String="userid", value0: String, datasource: String="data source", value1: String, variablename: String="variable name", value2: String, startyearmonth: String="start year-month", value3: String, endyearmonth: String="end year-month", value4: String, startlatdeg: String="start lat (deg)", value5: String="null", endlatdeg: String="end lat (deg)", value6: String="null", executionpurpose: String="Execution purpose", value7: String, variablescale: String="variable scale", value8: String="null", format: String="json")
-
-
 # Users
 GET		/users/:id			@controllers.UserController.getUser(id: Long, format: String="json")
 POST	/users/add			@controllers.UserController.addUser
@@ -129,6 +108,3 @@ DELETE	/users/delete/:id	@controllers.UserController.deleteUser(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
-# Swagger API documentation
-#GET     /api-docs               controllers.ApiHelpController.getResources
