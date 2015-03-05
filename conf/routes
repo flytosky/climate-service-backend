@@ -25,7 +25,9 @@ GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.Ser
 # Service Execution Log
 GET		/serviceExecutionLog/getAllServiceExecutionLog	@controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
 POST	/serviceExecutionLog/addServiceExecutionLog		@controllers.ServiceExecutionLogController.addServiceExecutionLog
-POST    /serviceExecutionLog/queryServiceExecutionLogs  @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
+POST    /serviceExecutionLog/queryServiceExecutionLogs  @controllers.ServiceExecutionLogController.queryServiceExecutionLogs
+PUT		/serviceExecutionLog/updateServiceExecutionLogs	@controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
+DELETE	/serviceExecutionLog/deleteServiceExecutionLogs	@controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
 
 # DatasetLog
 GET		/datasetLog/getAllDatasetLogs/json			@controllers.DatasetLogController.getAllDatasetLogs(format: String="json")

@@ -16,5 +16,7 @@ public interface ServiceConfigurationItemRepository extends CrudRepository<Servi
 	ServiceConfigurationItem findByParameter (Parameter parameter);
     
 	List<ServiceConfigurationItem> findByParameterAndValue (Parameter parameter, String value);
+	
+	ServiceConfigurationItem findFirstByParameterAndServiceConfiguration(Parameter parameter, ServiceConfiguration serviceConfiguration);
 
 }

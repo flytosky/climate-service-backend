@@ -233,8 +233,6 @@ public class ServiceExecutionLogController extends Controller {
                 System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
             }
 
-            //DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
-            //ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, datasetLog, purpose, executionStartTime, executionEndTime);
             ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);
             ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository.save(ServiceExecutionLog);
 
@@ -263,70 +261,50 @@ public class ServiceExecutionLogController extends Controller {
     }
 
     public Result updateServiceExecutionLog(long id) {
-        JsonNode json = request().body().asJson();
+    	JsonNode json = request().body().asJson();
         if (json == null) {
-            System.out
-                    .println("ServiceExecutionLog not saved, expecting Json data");
+            System.out.println("ServiceExecutionLog not saved, expecting Json data");
             return badRequest("ServiceExecutionLog not saved, expecting Json data");
         }
 
-        // Parse JSON file
+        //Parse JSON file
         long serviceId = json.findPath("serviceId").asLong();
         long userId = json.findPath("userId").asLong();
-        long serviceConfigurationId = json.findPath("serviceConfigurationId")
-                .asLong();
-        // long datasetLogId = json.findPath("datasetLogId").asLong();
         String purpose = json.findPath("purpose").asText();
-        String executionStartTimeString = json.findPath("executionStartTime")
-                .asText();
-        String executionEndTimeString = json.findPath("executionEndTime")
-                .asText();
         String plotUrl = json.findPath("url").asText();
         String dataUrl = json.findPath("dataUrl").asText();
-        Date executionStartTime = new Date();
-        Date executionEndTime = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                util.Common.DATE_PATTERN);
-
-        try {
-            executionStartTime = simpleDateFormat
-                    .parse(executionStartTimeString);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out
-                    .println("Wrong Date Format :" + executionStartTimeString);
-            return badRequest("Wrong Date Format :" + executionStartTimeString);
-        }
-        try {
-            executionEndTime = simpleDateFormat.parse(executionEndTimeString);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Wrong Date Format :" + executionEndTimeString);
-            return badRequest("Wrong Date Format :" + executionEndTimeString);
-        }
+        long executionStartTimeNumber = json.findPath("executionStartTime").asLong();
+        long executionEndTimeNumber = json.findPath("executionEndTime").asLong();
+        Date executionStartTime = new Date(executionStartTimeNumber);
+        Date executionEndTime = new Date(executionEndTimeNumber);
 
         try {
             User user = userRepository.findOne(userId);
             ClimateService climateService = climateServiceRepository
                     .findOne(serviceId);
-            ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
-                    .findOne(serviceConfigurationId);
-            // DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
-
             ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository
                     .findOne(id);
-
+            ServiceConfiguration serviceConfiguration = serviceExecutionLog.getServiceConfiguration();
             serviceExecutionLog.setClimateService(climateService);
             serviceExecutionLog.setDataUrl(dataUrl);
             serviceExecutionLog.setPlotUrl(plotUrl);
-            // serviceExecutionLog.setDatasetLog(datasetLog);
             serviceExecutionLog.setExecutionEndTime(executionEndTime);
             serviceExecutionLog.setExecutionStartTime(executionStartTime);
             serviceExecutionLog.setPurpose(purpose);
             serviceExecutionLog.setUser(user);
             serviceExecutionLog.setServiceConfiguration(serviceConfiguration);
+            JsonNode parameters = json.findPath("parameters");
+            Iterator<String> iterator = parameters.fieldNames();
+            while (iterator.hasNext()) {
+                String fieldName = iterator.next();
+                String value = parameters.findPath(fieldName).asText();
+                Parameter parameter = parameterRepository.findByName(fieldName);
+                ServiceConfigurationItem serviceConfigurationItem = serviceConfigurationItemRepository.findFirstByParameterAndServiceConfiguration(parameter, serviceConfiguration);
+                serviceConfigurationItem.setValue(value);
+                //if NULL?
+                ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
+                System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
+            }
 
             ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository
                     .save(serviceExecutionLog);
