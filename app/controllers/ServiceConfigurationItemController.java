@@ -28,14 +28,12 @@ public class ServiceConfigurationItemController extends Controller {
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 	private final ParameterRepository parameterRepository;
-	//private final ParameterOptionRepository parameterOptionRepository;
 	// We are using constructor injection to receive a repository to support our
 	// desire for immutability.
 	@Inject
 	public ServiceConfigurationItemController(
 			final ServiceConfigurationRepository serviceConfigurationRepository,
 			final ParameterRepository parameterRepository,
-			//final ParameterOptionRepository parameterOptionRepository,
 			final ServiceConfigurationItemRepository serviceConfigurationItemRepository) {
 			 
 		this.parameterRepository = parameterRepository;
@@ -61,7 +59,6 @@ public class ServiceConfigurationItemController extends Controller {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
 					.findOne(serviceConfigurationId);
 			Parameter parameter = parameterRepository.findOne(parameterId);	
-			//ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
 			ServiceConfigurationItem newConfigItem = new ServiceConfigurationItem(
 					serviceConfiguration, parameter, value);
 			serviceConfigurationItemRepository.save(newConfigItem);

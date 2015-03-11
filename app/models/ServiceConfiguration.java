@@ -24,10 +24,10 @@ public class ServiceConfiguration {
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
 	private Date runTime;
-	
+
 //	@OneToMany(mappedBy="serviceConfiguration")
 //	private List<ServiceConfigurationItem> serviceConfigurationItems;
-	
+
 	public ServiceConfiguration() {
 	}
 	
