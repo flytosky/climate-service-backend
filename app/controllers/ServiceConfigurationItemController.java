@@ -1,11 +1,8 @@
 package controllers;
 
-import java.util.Date;
 import java.util.List;
 
 import models.Parameter;
-//import models.ParameterOption;
-//import models.ParameterOptionRepository;
 import models.ParameterRepository;
 import models.ServiceConfiguration;
 import models.ServiceConfigurationItem;
@@ -31,14 +28,12 @@ public class ServiceConfigurationItemController extends Controller {
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 	private final ParameterRepository parameterRepository;
-	//private final ParameterOptionRepository parameterOptionRepository;
 	// We are using constructor injection to receive a repository to support our
 	// desire for immutability.
 	@Inject
 	public ServiceConfigurationItemController(
 			final ServiceConfigurationRepository serviceConfigurationRepository,
 			final ParameterRepository parameterRepository,
-			//final ParameterOptionRepository parameterOptionRepository,
 			final ServiceConfigurationItemRepository serviceConfigurationItemRepository) {
 			 
 		this.parameterRepository = parameterRepository;
@@ -64,7 +59,6 @@ public class ServiceConfigurationItemController extends Controller {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
 					.findOne(serviceConfigurationId);
 			Parameter parameter = parameterRepository.findOne(parameterId);	
-			//ParameterOption parameterOption = parameterOptionRepository.findOne(parameterOptionId);
 			ServiceConfigurationItem newConfigItem = new ServiceConfigurationItem(
 					serviceConfiguration, parameter, value);
 			serviceConfigurationItemRepository.save(newConfigItem);
@@ -186,14 +180,6 @@ public class ServiceConfigurationItemController extends Controller {
 			return badRequest("ServiceConfig id is null or empty!");
 		}
 
-//		ServiceConfiguration serviceConfiguration = serviceConfigurationRepository
-//				.findOne(serviceConfigurationId);
-//		if (serviceConfiguration == null) {
-//			System.out.println("ServiceConfiguration not found with id: "
-//					+ serviceConfigurationId);
-//			return notFound("ServiceConfiguration not found with id: "
-//					+ serviceConfigurationId);
-//		}
 		List<ServiceConfigurationItem> serviceConfigItems = serviceConfigurationItemRepository
 				.findByServiceConfiguration_Id(serviceConfigurationId);
 		System.out.println(serviceConfigItems.size());

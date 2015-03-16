@@ -7,128 +7,101 @@
 # GET     /                           @controllers.Application.index
 
 # Climate Service
-GET		/climate/getClimateService/:name/json		@controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
-GET		/climate/getClimateService/id/:id			@controllers.ClimateServiceController.getClimateServiceById(id: Long)
-GET		/climate/getAllClimateServices/json			@controllers.ClimateServiceController.getAllClimateServices(format: String="json")
-POST	/climate/addClimateService					@controllers.ClimateServiceController.addClimateService
-PUT		/climate/updateClimateService/id/:id		@controllers.ClimateServiceController.updateClimateServiceById(id: Long)
-PUT		/climate/updateClimateService/name/:oldName	@controllers.ClimateServiceController.updateClimateServiceByName(oldName: String)
-DELETE	/climate/deleteClimateService/:id			@controllers.ClimateServiceController.deleteClimateService(id: Long)
+GET           /climateService/getClimateService/:name/json                                    @controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
+GET           /climateService/getClimateService/id/:id                                        @controllers.ClimateServiceController.getClimateServiceById(id: Long)
+GET           /climateService/getAllClimateServices/json                                      @controllers.ClimateServiceController.getAllClimateServices(format: String="json")
+POST          /climateService/addClimateService                                               @controllers.ClimateServiceController.addClimateService
+PUT           /climateService/updateClimateService/id/:id                                     @controllers.ClimateServiceController.updateClimateServiceById(id: Long)
+PUT           /climateService/updateClimateService/name/:oldName                              @controllers.ClimateServiceController.updateClimateServiceByName(oldName: String)
+DELETE        /climateService/deleteClimateService/id/:id                                     @controllers.ClimateServiceController.deleteClimateServiceById(id: Long)
+DELETE        /climateService/deleteClimateService/name/:name                                 @controllers.ClimateServiceController.deleteClimateServiceByName(name: String)
 
 # Service Configuration
-GET		/climate/getServiceConfiguration/id/:id/json 					@controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
-POST	/climate/addServiceConfiguration								@controllers.ServiceConfigurationController.addServiceConfiguration
-PUT		/climate/updateServiceConfiguration/id/:id						@controllers.ServiceConfigurationController.updateServiceConfigurationById(id: Long)
-DELETE	/climate/deleteServiceConfiguration/:id							@controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
-GET		/climate/getAllServiceConfigurationsByUserId/:userId/json		@controllers.ServiceConfigurationController.getServiceConfigurationsByUser(userId: Long, format: String="json")
-
-# ServiceExecutionLog
-
-POST	/serviceExecutionLog/addServiceExecutionLog		@controllers.ServiceExecutionLogController.addServiceExecutionLog
-GET		/serviceExecutionLog/getAllServiceExecutionLog	@controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
-
-# DatasetLog
-GET		/datasetLog/getAllDatasetLogs/json			@controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
-GET		/datasetLog/getDatasetLog/id/:id/json		@controllers.DatasetLogController.getDatasetLog(id: Long, format: String="json")
-POST	/datasetLog/addDatasetLog					@controllers.DatasetLogController.addDatasetLog
-PUT		/datasetLog/updateDatasetLog/id/:id			@controllers.DatasetLogController.updateDatasetLogById(id: Long)
-DELETE	/datasetLog/deleteDatasetLog/id/:id			@controllers.DatasetLogController.deleteDatasetLog(id: Long)
-
-# Instrument
-GET		/instrument/getAllInstruments/json			@controllers.InstrumentController.getAllInstruments(format: String="json")
-GET		/instrument/getInstrument/id/:id/json		@controllers.InstrumentController.getInstrument(id: Long, format: String="json")
-POST	/instrument/addInstrument					@controllers.InstrumentController.addInstrument
-PUT		/instrument/updateInstrument/id/:id			@controllers.InstrumentController.updateInstrumentById(id: Long)
-DELETE	/instrument/deleteInstrument/id/:id			@controllers.InstrumentController.deleteInstrument(id: Long)
-
-# Dataset
-GET		/dataset/getAllDatasets/json				@controllers.DatasetController.getAllDatasets(format: String="json")
-GET		/dataset/getDataset/id/:id/json				@controllers.DatasetController.getDataset(id: Long, format: String="json")
-POST	/dataset/addDataset							@controllers.DatasetController.addDataset
-PUT		/dataset/updateDataset/id/:id				@controllers.DatasetController.updateDatasetById(id: Long)
-DELETE	/dataset/deleteDataset/id/:id				@controllers.DatasetController.deleteDataset(id: Long)
-
-# Parameter
-GET		/parameter/getAllParameters/json			@controllers.ParameterController.getAllParameters(format: String="json")
-GET		/parameter/getParameter/name/:name/json		@controllers.ParameterController.getParameterByName(name: String, format: String="json")
-GET		/parameter/getParameter/id/:id/json			@controllers.ParameterController.getParameterById(id: Long, format: String="json")
-POST	/parameter/addParameter						@controllers.ParameterController.addParameter
-PUT		/parameter/updateParameter/id/:id			@controllers.ParameterController.updateParameterById(id: Long)
-PUT		/parameter/updateParameter/name/:oldName	@controllers.ParameterController.updateParameterByName(oldName: String)
-DELETE  /parameter/deleteParameter/name/:name		@controllers.ParameterController.deleteParameterByName(name: String)
-
-# ParameterOption
-GET		/parameterOption/getAllParameterOptions/json		@controllers.ParameterOptionController.getAllParameterOptions(format: String="json")
-GET		/parameterOption/getParameterOption/id/:id/json		@controllers.ParameterOptionController.getParameterOptionById(id: Long, format: String="json")
-POST	/parameterOption/addParameterOption					@controllers.ParameterOptionController.addParameterOption
-PUT		/parameterOption/updateParameterOption/id/:id		@controllers.ParameterOptionController.updateParameterOptionById(id: Long)
-DELETE	/parameterOption/deleteParameterOption/id/:id		@controllers.ParameterOptionController.deleteParameterOptionById(id: Long)
-
-# JournalPublication
-GET		/journalPublication/getAllJournalPublications/json		@controllers.JournalPublicationController.getAllJournalPublications(format: String="json")
-GET		/journalPublication/getJournalPublication/id/:id/json	@controllers.JournalPublicationController.getJournalPublicationById(id: Long, format: String="json")
-POST	/journalPublication/addJournalPublication				@controllers.JournalPublicationController.addJournalPublication
-PUT		/journalPublication/updateJournalPublication/id/:id		@controllers.JournalPublicationController.updateJournalPublicationById(id: Long)
-DELETE	/journalPublication/deleteJournalPublication/id/:id		@controllers.JournalPublicationController.deleteJournalPublicationById(id: Long)
-
-# BookPublication
-GET		/BookPublication/getAllBookPublications/json			@controllers.BookPublicationController.getAllBookPublications(format: String="json")
-GET		/BookPublication/getBookPublication/id/:id/json			@controllers.BookPublicationController.getBookPublicationById(id: Long, format: String="json")
-POST	/BookPublication/addBookPublication						@controllers.BookPublicationController.addBookPublication
-PUT		/BookPublication/updateBookPublication/id/:id			@controllers.BookPublicationController.updateBookPublicationById(id: Long)
-DELETE	/BookPublication/deleteBookPublication/id/:id			@controllers.BookPublicationController.deleteBookPublicationById(id: Long)
-
-# BookChapterPublication
-GET		/BookChapterPublication/getAllBookPublications/json			@controllers.BookChapterPublicationController.getAllBookChapterPublications(format: String="json")
-GET		/BookChapterPublication/getBookPublication/id/:id/json		@controllers.BookChapterPublicationController.getBookChapterPublication(id: Long, format: String="json")
-POST	/BookChapterPublication/addBookPublication					@controllers.BookChapterPublicationController.addBookChapterPublication
-PUT		/BookChapterPublication/updateBookPublication/id/:id		@controllers.BookChapterPublicationController.updateBookChapterPublication(id: Long)
-DELETE	/BookChapterPublication/deleteBookPublication/id/:id		@controllers.BookChapterPublicationController.deleteBookChapterPublication(id: Long)
-
-# ConferencePublication
-GET		/ConferencePublication/getAllBookPublications/json			@controllers.ConferencePublicationController.getAllConferencePublications(format: String="json")
-GET		/ConferencePublication/getBookPublication/id/:id/json		@controllers.ConferencePublicationController.getConferencePublication(id: Long, format: String="json")
-POST	/ConferencePublication/addBookPublication					@controllers.ConferencePublicationController.addConferencePublication
-PUT		/ConferencePublication/updateBookPublication/id/:id			@controllers.ConferencePublicationController.updateConferencePublication(id: Long)
-DELETE	/ConferencePublication/deleteBookPublication/id/:id			@controllers.ConferencePublicationController.deleteConferencePublication(id: Long)
+GET           /serviceConfiguration/getServiceConfiguration/id/:id/json                             @controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
+POST          /serviceConfiguration/addServiceConfiguration                                         @controllers.ServiceConfigurationController.addServiceConfiguration
+PUT           /serviceConfiguration/updateServiceConfiguration/id/:id                               @controllers.ServiceConfigurationController.updateServiceConfigurationById(id: Long)
+DELETE        /serviceConfiguration/deleteServiceConfiguration/:id                                  @controllers.ServiceConfigurationController.deleteServiceConfiguration(id: Long)
+GET           /serviceConfiguration/getAllServiceConfigurationsByUserId/:userId/json                @controllers.ServiceConfigurationController.getServiceConfigurationsByUser(userId: Long, format: String="json")
 
 # Service Configuration Item
-GET		/climate/serviceConfigurationItemById/:id							@controllers.ServiceConfigurationItemController.getServiceConfigurationItemById(id: Long)
-GET		/climate/serviceConfigurationItemByServiceConfig/:serviceConfigId	@controllers.ServiceConfigurationItemController.getServiceConfigurationItemsInServiceConfig(serviceConfigId: Long)
-GET		/climate/serviceConfigurationItemByParamName/:param					@controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterName(param : String)
-POST	/climate/addServiceConfigurationItem								@controllers.ServiceConfigurationItemController.addServiceConfigurationItem
-PUT		/climate/updateServiceConfigurationItem/id/:id						@controllers.ServiceConfigurationItemController.updateServiceConfigurationItemById(id:Long)
-DELETE	/climate/deleteServiceConfigurationItemById/:id						@controllers.ServiceConfigurationItemController.deleteServiceConfigurationItemById(id: Long)
+GET           /serviceConfigurationItem/serviceConfigurationItemById/:id                                @controllers.ServiceConfigurationItemController.getServiceConfigurationItemById(id: Long)
+GET           /serviceConfigurationItem/serviceConfigurationItemByServiceConfig/:serviceConfigId        @controllers.ServiceConfigurationItemController.getServiceConfigurationItemsInServiceConfig(serviceConfigId: Long)
+GET           /serviceConfigurationItem/serviceConfigurationItemByParamName/:param                      @controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterName(param : String)
+POST          /serviceConfigurationItem/addServiceConfigurationItem                                     @controllers.ServiceConfigurationItemController.addServiceConfigurationItem
+PUT           /serviceConfigurationItem/updateServiceConfigurationItem/id/:id                           @controllers.ServiceConfigurationItemController.updateServiceConfigurationItemById(id:Long)
+DELETE        /serviceConfigurationItem/deleteServiceConfigurationItemById/:id                          @controllers.ServiceConfigurationItemController.deleteServiceConfigurationItemById(id: Long)
 
-# Climate Service ExecutionLog
-POST    /addServiceExecutionLogUsingPost                     @controllers.ServiceExecutionLogController.addServiceExecutionLog()
-POST    /queryServiceExecutionLogs                           @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
-GET     /getAllServiceExecutionLogs/json                     @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
-GET     /getAllServiceExecutionLogs                          @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="csv")
-GET     /getAllServiceExecutionLogs/csv                      @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/json 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime/csv 	@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-GET     /getServiceExecutionLogs/:userId/:startTime/:endTime 		@controllers.ServiceExecutionLogController.getServiceExecutionLogs(userId: Long, startTime: String, endTime: String, format: String="json")
-GET     /getServiceExecutionLogs/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
-GET     /getServiceExecutionLogsMulti/:purpose/:id/json 						@controllers.ServiceExecutionLogController.getServiceExecutionLogsMultifield(purpose: String, id: Long, format: String="json")
-DELETE  /deleteServiceExecutionLog/:id         	 @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id:Long)
-# For data manipulation
-#DELETE  /hardDeleteServerExecutionLog/:executionLogId         controllers.ClimateServiceController.hardDeleteExecutionLog(executionLogId:String)
-#POST    /updateExecutionLog                                   controllers.ClimateServiceController.updateExecutionLog()
-# Search
-#GET     /searchServiceLogsWithParameter/:parameterName/:value/json controllers.ClimateServiceController.searchServiceLogsWithParameter(parameterName: String, value: String, format: String="json")
-#GET     /searchServiceLogsWithParameterRange/:parameterName1/:value1/:parameterName2/:value2/json controllers.ClimateServiceController.searchServiceLogsWithParameterRange(parameterName1: String, value1: String,parameterName2: String, value2: String, format: String="json")
-#GET     /searchServiceLogsWithMultipleParameter/userid/:value0/datasource/:value1/variablename/:value2/startyearmonth/:value3/endyearmonth/:value4/executionpurpose/:value7/json controllers.ClimateServiceController.searchServiceLogsWithMultipleParameter(userid: String="userid", value0: String, datasource: String="data source", value1: String, variablename: String="variable name", value2: String, startyearmonth: String="start year-month", value3: String, endyearmonth: String="end year-month", value4: String, startlatdeg: String="start lat (deg)", value5: String="null", endlatdeg: String="end lat (deg)", value6: String="null", executionpurpose: String="Execution purpose", value7: String, variablescale: String="variable scale", value8: String="null", format: String="json")
+# Service Execution Log
+GET           /serviceExecutionLog/getAllServiceExecutionLog                           @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
+GET           /serviceExecutionLog/getServiceExecutionLog/:id                          @controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
+POST          /serviceExecutionLog/addServiceExecutionLog                              @controllers.ServiceExecutionLogController.addServiceExecutionLog()
+POST          /serviceExecutionLog/queryServiceExecutionLogs                           @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
+PUT           /serviceExecutionLog/updateServiceExecutionLogs                          @controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
+DELETE        /serviceExecutionLog/deleteServiceExecutionLogs                          @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
 
+# DatasetLog
+GET           /datasetLog/getAllDatasetLogs/json                                       @controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
+GET           /datasetLog/getDatasetLog/id/:id/json                                    @controllers.DatasetLogController.getDatasetLog(id: Long, format: String="json")
+POST          /datasetLog/addDatasetLog                                                @controllers.DatasetLogController.addDatasetLog
+PUT           /datasetLog/updateDatasetLog/id/:id                                      @controllers.DatasetLogController.updateDatasetLogById(id: Long)
+DELETE        /datasetLog/deleteDatasetLog/id/:id                                      @controllers.DatasetLogController.deleteDatasetLog(id: Long)
+
+# Instrument
+GET           /instrument/getAllInstruments/json                                       @controllers.InstrumentController.getAllInstruments(format: String="json")
+GET           /instrument/getInstrument/id/:id/json                                    @controllers.InstrumentController.getInstrument(id: Long, format: String="json")
+POST          /instrument/addInstrument                                                @controllers.InstrumentController.addInstrument
+PUT           /instrument/updateInstrument/id/:id                                      @controllers.InstrumentController.updateInstrumentById(id: Long)
+DELETE        /instrument/deleteInstrument/id/:id                                      @controllers.InstrumentController.deleteInstrument(id: Long)
+
+# Dataset
+GET           /dataset/getAllDatasets/json                                             @controllers.DatasetController.getAllDatasets(format: String="json")
+GET           /dataset/getDataset/id/:id/json                                          @controllers.DatasetController.getDataset(id: Long, format: String="json")
+POST          /dataset/addDataset                                                      @controllers.DatasetController.addDataset
+PUT           /dataset/updateDataset/id/:id                                            @controllers.DatasetController.updateDatasetById(id: Long)
+DELETE        /dataset/deleteDataset/id/:id                                            @controllers.DatasetController.deleteDataset(id: Long)
+
+# Parameter
+GET           /parameter/getAllParameters/json                                         @controllers.ParameterController.getAllParameters(format: String="json")
+GET           /parameter/getParameter/name/:name/json                                  @controllers.ParameterController.getParameterByName(name: String, format: String="json")
+GET           /parameter/getParameter/id/:id/json                                      @controllers.ParameterController.getParameterById(id: Long, format: String="json")
+POST          /parameter/addParameter                                                  @controllers.ParameterController.addParameter
+PUT           /parameter/updateParameter/id/:id                                        @controllers.ParameterController.updateParameterById(id: Long)
+PUT           /parameter/updateParameter/name/:oldName                                 @controllers.ParameterController.updateParameterByName(oldName: String)
+DELETE        /parameter/deleteParameter/name/:name                                    @controllers.ParameterController.deleteParameterByName(name: String)
+
+# JournalPublication
+GET           /journalPublication/getAllJournalPublications/json                       @controllers.JournalPublicationController.getAllJournalPublications(format: String="json")
+GET           /journalPublication/getJournalPublication/id/:id/json                    @controllers.JournalPublicationController.getJournalPublicationById(id: Long, format: String="json")
+POST          /journalPublication/addJournalPublication                                @controllers.JournalPublicationController.addJournalPublication
+PUT           /journalPublication/updateJournalPublication/id/:id                      @controllers.JournalPublicationController.updateJournalPublicationById(id: Long)
+DELETE        /journalPublication/deleteJournalPublication/id/:id                      @controllers.JournalPublicationController.deleteJournalPublicationById(id: Long)
+
+# BookPublication
+GET           /BookPublication/getAllBookPublications/json                             @controllers.BookPublicationController.getAllBookPublications(format: String="json")
+GET           /BookPublication/getBookPublication/id/:id/json                          @controllers.BookPublicationController.getBookPublicationById(id: Long, format: String="json")
+POST          /BookPublication/addBookPublication                                      @controllers.BookPublicationController.addBookPublication
+PUT           /BookPublication/updateBookPublication/id/:id                            @controllers.BookPublicationController.updateBookPublicationById(id: Long)
+DELETE        /BookPublication/deleteBookPublication/id/:id                            @controllers.BookPublicationController.deleteBookPublicationById(id: Long)
+
+# BookChapterPublication
+GET           /BookChapterPublication/getAllBookPublications/json                      @controllers.BookChapterPublicationController.getAllBookChapterPublications(format: String="json")
+GET           /BookChapterPublication/getBookPublication/id/:id/json                   @controllers.BookChapterPublicationController.getBookChapterPublication(id: Long, format: String="json")
+POST          /BookChapterPublication/addBookPublication                               @controllers.BookChapterPublicationController.addBookChapterPublication
+PUT           /BookChapterPublication/updateBookPublication/id/:id                     @controllers.BookChapterPublicationController.updateBookChapterPublication(id: Long)
+DELETE        /BookChapterPublication/deleteBookPublication/id/:id                     @controllers.BookChapterPublicationController.deleteBookChapterPublication(id: Long)
+
+# ConferencePublication
+GET           /ConferencePublication/getAllBookPublications/json                       @controllers.ConferencePublicationController.getAllConferencePublications(format: String="json")
+GET           /ConferencePublication/getBookPublication/id/:id/json                    @controllers.ConferencePublicationController.getConferencePublication(id: Long, format: String="json")
+POST          /ConferencePublication/addBookPublication                                @controllers.ConferencePublicationController.addConferencePublication
+PUT           /ConferencePublication/updateBookPublication/id/:id                      @controllers.ConferencePublicationController.updateConferencePublication(id: Long)
+DELETE        /ConferencePublication/deleteBookPublication/id/:id                      @controllers.ConferencePublicationController.deleteConferencePublication(id: Long)
 
 # Users
-GET		/users/:id			@controllers.UserController.getUser(id: Long, format: String="json")
-POST	/users/add			@controllers.UserController.addUser
-PUT		/users/update/:id	@controllers.UserController.updateUser(id: Long)
-DELETE	/users/delete/:id	@controllers.UserController.deleteUser(id: Long)
+GET           /users/:id                                                               @controllers.UserController.getUser(id: Long, format: String="json")
+POST          /users/add                                                               @controllers.UserController.addUser
+PUT           /users/update/:id                                                        @controllers.UserController.updateUser(id: Long)
+DELETE        /users/delete/:id                                                        @controllers.UserController.deleteUser(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
-# Swagger API documentation
-#GET     /api-docs               controllers.ApiHelpController.getResources
+GET           /assets/*file                                                            controllers.Assets.at(path="/public", file)

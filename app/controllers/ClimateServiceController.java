@@ -84,7 +84,7 @@ public class ClimateServiceController extends Controller {
 		}
 	}
 
-	public Result deleteClimateService(long id) {
+	public Result deleteClimateServiceById(long id) {
 		ClimateService climateService = climateServiceRepository.findOne(id);
 		if (climateService == null) {
 			System.out.println("Climate service not found with id: " + id);
@@ -94,6 +94,18 @@ public class ClimateServiceController extends Controller {
 		climateServiceRepository.delete(climateService);
 		System.out.println("Climate service is deleted: " + id);
 		return ok("Climate service is deleted: " + id);
+	}
+	
+	public Result deleteClimateServiceByName(String name) {
+		ClimateService climateService = climateServiceRepository.findFirstByName(name);
+		if (climateService == null) {
+			System.out.println("Climate service not found with name: " + name);
+			return notFound("Climate service not found with name: " + name);
+		}
+
+		climateServiceRepository.delete(climateService);
+		System.out.println("Climate service is deleted: " + name);
+		return ok("Climate service is deleted: " + name);
 	}
 
 	public Result updateClimateServiceById(long id) {
