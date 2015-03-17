@@ -229,7 +229,7 @@ public class ServiceExecutionLogController extends Controller {
 			while (iterator.hasNext()) {
 				String fieldName = iterator.next();
 				String value = parameters.findPath(fieldName).asText();
-				Parameter parameter = parameterRepository.findByName(fieldName);
+				Parameter parameter = parameterRepository.findByNameAndClimateService(fieldName, climateService);
 				ServiceConfigurationItem serviceConfigurationItem = new ServiceConfigurationItem(savedServiceConfiguration, parameter, value);
 				ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
 				System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());

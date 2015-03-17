@@ -18,7 +18,6 @@ public class Parameter {
 	private long indexInService;
 	private String name;
 	private String dataRange;
-	private String enumeration;
 	private String rule;
 	private String purpose;
 	
@@ -26,14 +25,13 @@ public class Parameter {
 	}
 
 	public Parameter(ClimateService climateService, long indexInService,
-			String name, String dataRange, String enumeration,
+			String name, String dataRange,
 			String rule, String purpose) {
 		super();
 		this.climateService = climateService;
 		this.indexInService = indexInService;
 		this.name = name;
 		this.dataRange = dataRange;
-		this.enumeration = enumeration;
 		this.rule = rule;
 		this.purpose = purpose;
 	}
@@ -73,15 +71,7 @@ public class Parameter {
 	public void setDataRange(String dataRange) {
 		this.dataRange = dataRange;
 	}
-
-	public String getEnumeration() {
-		return enumeration;
-	}
-
-	public void setEnumeration(String enumeration) {
-		this.enumeration = enumeration;
-	}
-
+	
 	public String getRule() {
 		return rule;
 	}
@@ -102,7 +92,7 @@ public class Parameter {
 	public String toString() {
 		return "Parameter [id=" + id + ", climateService=" + climateService
 				+ ", indexInService=" + indexInService + ", name=" + name
-				+ ", dataRange=" + dataRange + ", enumeration=" + enumeration
+				+ ", dataRange=" + dataRange
 				+ ", rule=" + rule + ", purpose=" + purpose + "]";
 	}
 

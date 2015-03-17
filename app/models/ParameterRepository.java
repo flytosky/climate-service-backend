@@ -9,4 +9,5 @@ import javax.inject.Singleton;
 @Singleton
 public interface ParameterRepository extends CrudRepository<Parameter, Long> {
 	Parameter findByName(String name);
+	Parameter findByNameAndClimateService(String name, ClimateService climateService);
 }

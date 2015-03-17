@@ -46,14 +46,13 @@ public class ParameterController extends Controller {
     	long indexInService = json.findPath("indexInService").asLong();
 		String name = json.findPath("name").asText();
 		String dataRange = json.findPath("dataRange").asText();
-		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
 		String purpose = json.findPath("purpose").asText();
 		
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
 			Parameter parameter = new Parameter(climateService, indexInService, name,
-					dataRange, enumeration, rule, purpose);
+					dataRange, rule, purpose);
 			Parameter savedParameter = parameterRepository.save(parameter);
 			
 			System.out.println("Parameter saved: " + savedParameter.getName());
@@ -98,7 +97,6 @@ public class ParameterController extends Controller {
 		}
 		dataType.deleteCharAt(dataType.length() - 1);
 		String dataRange = json.findPath("dataRange").asText();
-		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
 		String purpose = json.findPath("purpose").asText();
 		
@@ -115,7 +113,6 @@ public class ParameterController extends Controller {
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
 			parameter.setDataRange(dataRange);
-			parameter.setEnumeration(enumeration);
 			parameter.setRule(rule);
 			parameter.setPurpose(purpose);
 			
@@ -149,7 +146,6 @@ public class ParameterController extends Controller {
 		}
 		dataType.deleteCharAt(dataType.length() - 1);
 		String dataRange = json.findPath("dataRange").asText();
-		String enumeration = json.findPath("enumeration").asText();
 		String rule = json.findPath("rule").asText();
 		String purpose = json.findPath("purpose").asText();
 		
@@ -161,7 +157,6 @@ public class ParameterController extends Controller {
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
 			parameter.setDataRange(dataRange);
-			parameter.setEnumeration(enumeration);
 			parameter.setRule(rule);
 			parameter.setPurpose(purpose);
 			
