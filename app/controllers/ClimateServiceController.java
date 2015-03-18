@@ -160,7 +160,7 @@ public class ClimateServiceController extends Controller {
 					.println("Climate service not saved, expecting Json data");
 			return badRequest("Climate service not saved, expecting Json data");
 		}
-
+		System.out.println(json);
 		// Parse JSON file
 		long rootServiceId = json.findPath("rootServiceId").asLong();
 		long creatorId = json.findPath("creatorId").asLong();
