@@ -36,8 +36,8 @@ GET           /serviceExecutionLog/getAllServiceExecutionLog                    
 GET           /serviceExecutionLog/getServiceExecutionLog/:id                          @controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
 POST          /serviceExecutionLog/addServiceExecutionLog                              @controllers.ServiceExecutionLogController.addServiceExecutionLog()
 POST          /serviceExecutionLog/queryServiceExecutionLogs                           @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
-PUT           /serviceExecutionLog/updateServiceExecutionLogs                          @controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
-DELETE        /serviceExecutionLog/deleteServiceExecutionLogs                          @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
+PUT           /serviceExecutionLog/updateServiceExecutionLogs/:id                          @controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
+DELETE        /serviceExecutionLog/deleteServiceExecutionLogs/:id                          @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
 
 # DatasetLog
 GET           /datasetLog/getAllDatasetLogs/json                                       @controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
