@@ -17,5 +17,6 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-entitymanager" % "4.3.7.Final",
   "org.mockito" % "mockito-core" % "1.10.19" % "test",
   "mysql" % "mysql-connector-java" % "5.1.34",
-  "com.google.code.gson" % "gson" % "2.3.1"
+  "com.google.code.gson" % "gson" % "2.3.1",
+  "org.hibernate" % "hibernate-c3p0" % "4.3.7.Final"
 )
