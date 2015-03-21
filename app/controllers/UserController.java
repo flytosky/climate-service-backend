@@ -13,7 +13,6 @@ import javax.persistence.PersistenceException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * The main set of web services.

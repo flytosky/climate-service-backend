@@ -222,7 +222,8 @@ public class ServiceExecutionLogController extends Controller {
 		try {
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
-			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(climateService, user, executionStartTime);
+			long difference = executionEndTime.getTime() - executionStartTime.getTime();
+			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(climateService, user, difference+"ms");
 			ServiceConfiguration savedServiceConfiguration = serviceConfigurationRepository.save(serviceConfiguration);
 			JsonNode parameters = json.findPath("parameters");
 			Iterator<String> iterator = parameters.fieldNames();

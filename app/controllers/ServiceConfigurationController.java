@@ -49,15 +49,8 @@ public class ServiceConfigurationController extends Controller {
     	}
     	long serviceId = json.findPath("serviceId").asLong();
     	long userId = json.findPath("userId").asLong();
-    	String runTimeString = json.findPath("runTime").asText();
-    	Date runTime = new Date();
-    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-    	try {
-    		runTime = simpleDateFormat.parse(runTimeString);
-    	} catch (ParseException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	}
+    	String runTime = json.findPath("runTime").asText();
+
     	try {
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
@@ -86,15 +79,9 @@ public class ServiceConfigurationController extends Controller {
 		}
 		long serviceId = json.findPath("serviceId").asLong();
 		long userId = json.findPath("userId").asLong();
-		String runTimeString = json.findPath("runTime").asText();
-		Date runTime = new Date();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-		try {
-			runTime = simpleDateFormat.parse(runTimeString);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String runTime = json.findPath("runTime").asText();
+
+
 	
 		try {
 			ServiceConfiguration serviceConfiguration = serviceConfigurationRepository.findOne(id);
