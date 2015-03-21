@@ -2,12 +2,14 @@ package models;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,7 +25,7 @@ public class ServiceExecutionLog {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
-	@ManyToOne(optional = false)
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "serviceConfigurationId", referencedColumnName = "id")
 	private ServiceConfiguration serviceConfiguration;
 //	@ManyToOne(optional = false)
