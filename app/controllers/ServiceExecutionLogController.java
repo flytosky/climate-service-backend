@@ -257,6 +257,10 @@ public class ServiceExecutionLogController extends Controller {
 			return notFound("ServiceExecutionLog not found with id: " + id);
 		}
 
+		for (ServiceConfigurationItem items: serviceConfigurationItemRepository.findByServiceConfiguration_Id(serviceExecutionLog.getServiceConfiguration().getId()))
+		{
+			serviceConfigurationItemRepository.delete(items.getId());
+		}
 		serviceExecutionLogRepository.delete(serviceExecutionLog);
 		System.out.println("ServiceExecutionLog is deleted: " + id);
 		return ok("ServiceExecutionLog is deleted: " + id);
