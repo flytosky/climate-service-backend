@@ -1,9 +1,17 @@
 package models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import org.hibernate.Hibernate;
 
 @Entity
 public class User {
@@ -14,11 +22,17 @@ public class User {
     private String firstName;
     private String lastName;
     
-    public User() {}
+//    @OneToMany(orphanRemoval=true, mappedBy = "user", cascade={CascadeType.MERGE, CascadeType.REMOVE})
+//    private Set<ClimateService> climateServices = new HashSet<ClimateService>();
+    
+    public User() {
+//        Hibernate.initialize(climateServices);
+    }
 
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+//        Hibernate.initialize(climateServices);
     }
 
     @Override
@@ -48,5 +62,17 @@ public class User {
 		this.lastName = lastName;
 	}
 
+//	public Set<ClimateService> getClimateServices() {
+//		return climateServices;
+//	}
+//
+//	public void setClimateServices(Set<ClimateService> climateServices) {
+//		this.climateServices = climateServices;
+//	}
+//	
+//	public void addClimateService(ClimateService climateService) {
+//		climateService.setUser(this);
+//		this.climateServices.add(climateService);
+//	}
 }
 

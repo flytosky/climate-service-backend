@@ -1,7 +1,5 @@
 package controllers;
 
-import models.ClimateService;
-import models.ClimateServiceRepository;
 import models.User;
 import models.UserRepository;
 import play.mvc.*;
@@ -13,7 +11,6 @@ import javax.persistence.PersistenceException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * The main set of web services.
@@ -108,7 +105,6 @@ public class UserController extends Controller {
 			System.out.println("User not found with with id: " + id);
 			return notFound("User not found with with id: " + id);
 		}
-
 		String result = new String();
 		if (format.equals("json")) {
 			result = new Gson().toJson(user);
