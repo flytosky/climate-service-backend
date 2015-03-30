@@ -222,8 +222,11 @@ public class ServiceExecutionLogController extends Controller {
 		try {
 			User user = userRepository.findOne(userId);
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
-			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(climateService, user, executionStartTime);
-			ServiceConfiguration savedServiceConfiguration = serviceConfigurationRepository.save(serviceConfiguration);
+			long difference = executionEndTime.getTime() - executionStartTime.getTime();
+			ServiceConfiguration serviceConfiguration = new ServiceConfiguration(climateService, user, difference+"ms");
+			ServiceExecutionLog serviceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);
+			ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository.save(serviceExecutionLog);
+			ServiceConfiguration savedServiceConfiguration = savedServiceExecutionLog.getServiceConfiguration();
 			JsonNode parameters = json.findPath("parameters");
 			Iterator<String> iterator = parameters.fieldNames();
 			while (iterator.hasNext()) {
@@ -234,9 +237,6 @@ public class ServiceExecutionLogController extends Controller {
 				ServiceConfigurationItem savedServiceConfigurationItem = serviceConfigurationItemRepository.save(serviceConfigurationItem);
 				System.out.println("ServiceConfigurationItem saved: " + savedServiceConfigurationItem.getId());
 			}
-
-			ServiceExecutionLog ServiceExecutionLog = new ServiceExecutionLog(climateService, user, serviceConfiguration, purpose, executionStartTime, executionEndTime, dataUrl, plotUrl);
-			ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository.save(ServiceExecutionLog);
 
 			System.out.println("ServiceExecutionLog saved: " + savedServiceExecutionLog.getId());
 			return created(new Gson().toJson(savedServiceExecutionLog.getId()));
@@ -257,6 +257,10 @@ public class ServiceExecutionLogController extends Controller {
 			return notFound("ServiceExecutionLog not found with id: " + id);
 		}
 
+		for (ServiceConfigurationItem items: serviceConfigurationItemRepository.findByServiceConfiguration_Id(serviceExecutionLog.getServiceConfiguration().getId()))
+		{
+			serviceConfigurationItemRepository.delete(items.getId());
+		}
 		serviceExecutionLogRepository.delete(serviceExecutionLog);
 		System.out.println("ServiceExecutionLog is deleted: " + id);
 		return ok("ServiceExecutionLog is deleted: " + id);

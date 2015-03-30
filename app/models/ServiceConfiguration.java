@@ -23,7 +23,7 @@ public class ServiceConfiguration {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
-	private Date runTime;
+	private String runTime;
 
 //	@OneToMany(mappedBy="serviceConfiguration")
 //	private List<ServiceConfigurationItem> serviceConfigurationItems;
@@ -32,7 +32,7 @@ public class ServiceConfiguration {
 	}
 	
 	public ServiceConfiguration(ClimateService climateservice,
-			User user,Date runtime){
+			User user,String runtime){
 		super();
 		this.climateservice = climateservice;
 		this.user = user;
@@ -51,7 +51,7 @@ public class ServiceConfiguration {
 		return user;
 	}
 
-	public Date getRunTime() {
+	public String getRunTime() {
 		return runTime;
 	}
 
@@ -67,7 +67,7 @@ public class ServiceConfiguration {
 		this.user = user;
 	}
 
-	public void setRunTime(Date runTime) {
+	public void setRunTime(String runTime) {
 		this.runTime = runTime;
 	}
 
