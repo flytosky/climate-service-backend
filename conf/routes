@@ -16,6 +16,15 @@ PUT           /climateService/updateClimateService/name/:oldName                
 DELETE        /climateService/deleteClimateService/id/:id                                     @controllers.ClimateServiceController.deleteClimateServiceById(id: Long)
 DELETE        /climateService/deleteClimateService/name/:name                                 @controllers.ClimateServiceController.deleteClimateServiceByName(name: String)
 
+# Bug Report
+GET			  /bugReport/getBugReport/id/:id     											  @controllers.BugReportController.getBugReport(id: Long, format: String="json")
+GET			  /bugReport/getAllBugReports/json											      @controllers.BugReportController.getAllBugReports
+GET			  /bugReport/getAllUnsolvedBugReports/json										  @controllers.BugReportController.getAllUnsolvedBugReports
+GET			  /bugReport/getAllSolvedBugReports/json										  @controllers.BugReportController.getAllSolvedBugReports
+POST		  /bugReport/addBugReport														  @controllers.BugReportController.addBugReport
+PUT			  /bugReport/updateBugReport/id/:id												  @controllers.BugReportController.updateBugReportById(id: Long)
+DELETE		  /bugReport/deleteBugReport/id/:id												  @controllers.BugReportController.deleteBugReport(id: Long)
+
 # Service Configuration
 GET           /serviceConfiguration/getServiceConfiguration/id/:id/json                             @controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
 POST          /serviceConfiguration/addServiceConfiguration                                         @controllers.ServiceConfigurationController.addServiceConfiguration

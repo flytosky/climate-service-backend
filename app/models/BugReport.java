@@ -24,7 +24,7 @@ public class BugReport {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private long id;
 
 	private String title;
 	private String email;
@@ -53,11 +53,11 @@ public class BugReport {
 		this.updateDate = updateDate;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -129,4 +129,7 @@ public class BugReport {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+	
+	
+	
 }
