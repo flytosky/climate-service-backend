@@ -80,6 +80,9 @@ public class ServiceExecutionLogController extends Controller {
 			if (purpose.isEmpty()) {
 				purpose = WILDCARD;
 			}
+			else {
+				purpose = WILDCARD+purpose+WILDCARD;
+			}
 
 			Date start = new Date(0);
 			Date end = new Date();
