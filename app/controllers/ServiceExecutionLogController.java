@@ -360,4 +360,39 @@ public class ServiceExecutionLogController extends Controller {
 		return ok(result);
 	}
 
+	public Result replaceUserWithPurpose() {
+		// Get all execution logs with userid = 1
+		List<ServiceExecutionLog> executionLogs = serviceExecutionLogRepository.findByUser_Id(1);
+
+		if(executionLogs == null || executionLogs.isEmpty()){
+			System.out.println("No logs need to be updated");
+			return notFound("No logs need to be updated");
+		}
+
+		// For each log, set its user to a new user with new name
+		for(ServiceExecutionLog log: executionLogs){
+			String userName = "";
+			String purpose = log.getPurpose().trim();
+			if(purpose.startsWith("CCS student")) {
+				System.out.println(purpose);
+				// Temporarily
+				userName = purpose.substring(0, 11)+" ";
+				for(int i = 12; i < purpose.length(); i++)
+					if(Character.isDigit(purpose.charAt(i))){
+						userName += purpose.charAt(i);
+					}
+					else break;
+				User newUser = new User(userName,"");
+				userRepository.save(newUser);
+				log.setUser(newUser);
+				serviceExecutionLogRepository.save(log);
+			}
+		}
+
+		String result = new Gson().toJson(serviceExecutionLogRepository.findAll());
+
+
+		return ok(result);
+	}
+
 }
