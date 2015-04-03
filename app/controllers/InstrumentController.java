@@ -20,11 +20,11 @@ import play.mvc.*;
 @Singleton
 public class InstrumentController extends Controller {
 	
-	private final InstrumentRepository instumentRepository;
+	private final InstrumentRepository instrumentRepository;
 	
 	@Inject
 	public InstrumentController(InstrumentRepository instrumentRepository) {
-		this.instumentRepository = instrumentRepository;
+		this.instrumentRepository = instrumentRepository;
 	}
 	
 	public Result addInstrument() {
@@ -48,10 +48,10 @@ public class InstrumentController extends Controller {
 		}
     	
     	try {
-			Instrument instument = new Instrument(name, description,launchDate);
-			Instrument savedinstument = instumentRepository.save(instument);
-			System.out.println("Instrument saved: "+ savedinstument.getId());
-			return created(new Gson().toJson(instument.getId()));
+			Instrument instrument = new Instrument(name, description,launchDate);
+			Instrument savedinstrument = instrumentRepository.save(instrument);
+			System.out.println("Instrument saved: "+ savedinstrument.getId());
+			return created(new Gson().toJson(instrument.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println("Instrument not created");
@@ -86,11 +86,11 @@ public class InstrumentController extends Controller {
 		}
     	
 		try {
-			Instrument instrument = instumentRepository.findOne(instrumentId);
+			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			instrument.setDescription(description);
 			instrument.setLaunchDate(launchDate);
 			instrument.setName(name);
-			Instrument savedInstrument = instumentRepository.save(instrument);
+			Instrument savedInstrument = instrumentRepository.save(instrument);
 			
 			System.out.println("Instrument updated: "+ savedInstrument.getId());
 			return created("Instrument updated: "+ savedInstrument.getId());
@@ -107,13 +107,13 @@ public class InstrumentController extends Controller {
     		System.out.println("id is negative!");
 			return badRequest("id is negative!");
     	}
-    	Instrument instument = instumentRepository.findOne(id);
-    	if (instument == null) {
+    	Instrument instrument = instrumentRepository.findOne(id);
+    	if (instrument == null) {
     		System.out.println("Instrument not found with id: " + id);
 			return notFound("Instrument not found with id: " + id);
     	}
     	
-    	instumentRepository.delete(instument);
+    	instrumentRepository.delete(instrument);
     	System.out.println("Instrument is deleted: " + id);
 		return ok("Instrument is deleted: " + id);
     }
@@ -123,15 +123,15 @@ public class InstrumentController extends Controller {
     		System.out.println("id is negative!");
 			return badRequest("id is negative!");
     	}
-    	Instrument instument = instumentRepository.findOne(id);
-    	if (instument == null) {
+    	Instrument instrument = instrumentRepository.findOne(id);
+    	if (instrument == null) {
     		System.out.println("Instrument not found with name: " + id);
 			return notFound("Instrument not found with name: " + id);
     	}
     	
     	String result = new String();
     	if (format.equals("json")) {
-    		result = new Gson().toJson(instument);
+    		result = new Gson().toJson(instrument);
     	}
     	
     	return ok(result);
@@ -140,9 +140,9 @@ public class InstrumentController extends Controller {
     
     public Result getAllInstruments(String format) {
     	try {
-    		Iterable<Instrument>instuments =  instumentRepository.findAll();
+    		Iterable<Instrument>instruments =  instrumentRepository.findAll();
     		String result = new String();
-    		result = new Gson().toJson(instuments);
+    		result = new Gson().toJson(instruments);
     		return ok(result);
     	} catch (Exception e) {
     		return badRequest("Service Configurations not found");
