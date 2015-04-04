@@ -1,7 +1,5 @@
 package controllers;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -35,18 +33,8 @@ public class InstrumentController extends Controller {
     	}
     	String name = json.findPath("name").asText();
     	String description = json.findPath("description").asText();
-    	String launchDateString = json.findPath("launchDate").asText();
-    	Date launchDate = new Date();
-    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
-    	try {
-			launchDate = simpleDateFormat.parse(launchDateString);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Wrong Date Format :" + launchDateString);
-			return badRequest("Wrong Date Format :" + launchDateString);
-		}
-    	
+    	long launchDateNumber = json.findPath("launchDate").asLong();
+    	Date launchDate = new Date(launchDateNumber);
     	try {
 			Instrument instrument = new Instrument(name, description,launchDate);
 			Instrument savedinstrument = instrumentRepository.save(instrument);
@@ -73,18 +61,8 @@ public class InstrumentController extends Controller {
 		long instrumentId = json.findPath("id").asLong();
 		String name = json.findPath("name").asText();
     	String description = json.findPath("description").asText();
-    	String launchDateString = json.findPath("launchDate").asText();
-    	Date launchDate = new Date();
-    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
-    	try {
-			launchDate = simpleDateFormat.parse(launchDateString);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Wrong Date Format :" + launchDateString);
-			return badRequest("Wrong Date Format :" + launchDateString);
-		}
-    	
+    	long launchDateNumber = json.findPath("launchDate").asLong();
+    	Date launchDate = new Date(launchDateNumber);
 		try {
 			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			instrument.setDescription(description);

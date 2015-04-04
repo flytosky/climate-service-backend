@@ -1,6 +1,5 @@
 package controllers;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,40 +41,42 @@ public class DatasetController extends Controller {
     		System.out.println("Dataset not saved, expecting Json data");
 			return badRequest("Dataset not saved, expecting Json data");
     	}
+    	String name = json.findPath("name").asText();
     	String description = json.findPath("description").asText();
+    	String agencyId = json.findPath("agencyId").asText();
     	long instrumentId = json.findPath("instrumentId").asLong();
     	String url = json.findPath("url").asText();
-    	String publishTimeStampString = json.findPath("publishTimeStamp").asText();
-    	
-    	Date publishTimeStamp = new Date();
-    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
+    	long publishTimeStampNumber = json.findPath("publishTimeStamp").asLong();
+    	String physicalVariable = json.findPath("physicalVariable").asText();
+    	String CMIP5VarName = json.findPath("CMIP5VarName").asText();
+    	String units = json.findPath("units").asText();
+    	String gridDimension = json.findPath("gridDimension").asText();
+    	String source = json.findPath("source").asText();
+    	String status = json.findPath("status").asText();
+    	String responsiblePerson = json.findPath("responsiblePerson").asText();
+    	String variableNameInWebInterface = json.findPath("variableNameInWebInterface").asText();
+    	String dataSourceInputParameterToCallScienceApplicationCode = json.findPath("dataSourceInputParameterToCallScienceApplicationCode").asText();
+    	String variableNameInputParameterToCallScienceApplicationCode = json.findPath("variableNameInputParameterToCallScienceApplicationCode").asText();
+    	Date publishTimeStamp = new Date(publishTimeStampNumber);
     	JsonNode ClimateServices = json.findPath("ServiesId");
     	List<Long> climateServicesId = new ArrayList<Long>();
     	for(int i = 0; i < ClimateServices.size(); i++) {
     		climateServicesId.add(ClimateServices.get(i).asLong());
     	}
     	try {
-    		publishTimeStamp = simpleDateFormat.parse(publishTimeStampString);
-    	} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Wrong Date Format :" + publishTimeStampString);
-			return badRequest("Wrong Date Format :" + publishTimeStampString);
-		}
-    	try {
 			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			List<ClimateService>climateServiceSet = new ArrayList<ClimateService>();
 			for(int i=0;i<climateServicesId.size();i++) {
 				climateServiceSet.add(climateServiceRepository.findOne(climateServicesId.get(i)));
 			}
-			Dataset dataset = new Dataset(description, instrument,climateServiceSet , publishTimeStamp, url);
+			Dataset dataset = new Dataset(name, description, agencyId, instrument, climateServiceSet, publishTimeStamp, url, physicalVariable, CMIP5VarName, units, gridDimension, source, status, responsiblePerson, variableNameInWebInterface, dataSourceInputParameterToCallScienceApplicationCode, variableNameInputParameterToCallScienceApplicationCode);
 			Dataset savedServiceConfiguration = datasetRepository.save(dataset);
-			System.out.println("Service Configuration saved: "+ savedServiceConfiguration.getId());
+			System.out.println("Dataset saved: "+ savedServiceConfiguration.getId());
 			return created(new Gson().toJson(dataset.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println("Dataset not created");
-			return badRequest("Dataset Configuration not created");
+			return badRequest("Dataset not created");
 		}
     	
 	}
@@ -90,39 +91,55 @@ public class DatasetController extends Controller {
 			System.out.println("Dataset not saved, expecting Json data");
 			return badRequest("Dataset Configuration not saved, expecting Json data");
 		}
-		String description = json.findPath("description").asText();
-		long instrumentId = json.findPath("instrumentId").asLong();
-		String url = json.findPath("url").asText();
-		String publishTimeStampString = json.findPath("publishTimeStamp").asText();
-		
-		Date publishTimeStamp = new Date();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/yyyy");
-		JsonNode ClimateServices = json.findPath("ServiesId");
-		List<Long> climateServicesId = new ArrayList<Long>();
-		for(int i = 0; i < ClimateServices.size(); i++) {
-			climateServicesId.add(ClimateServices.get(i).asLong());
-		}
-		try {
-			publishTimeStamp = simpleDateFormat.parse(publishTimeStampString);
-		} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String name = json.findPath("name").asText();
+    	String description = json.findPath("description").asText();
+    	String agencyId = json.findPath("agencyId").asText();
+    	long instrumentId = json.findPath("instrumentId").asLong();
+    	String url = json.findPath("url").asText();
+    	long publishTimeStampNumber = json.findPath("publishTimeStamp").asLong();
+    	String physicalVariable = json.findPath("physicalVariable").asText();
+    	String CMIP5VarName = json.findPath("CMIP5VarName").asText();
+    	String units = json.findPath("units").asText();
+    	String gridDimension = json.findPath("gridDimension").asText();
+    	String source = json.findPath("source").asText();
+    	String status = json.findPath("status").asText();
+    	String responsiblePerson = json.findPath("responsiblePerson").asText();
+    	String variableNameInWebInterface = json.findPath("variableNameInWebInterface").asText();
+    	String dataSourceInputParameterToCallScienceApplicationCode = json.findPath("dataSourceInputParameterToCallScienceApplicationCode").asText();
+    	String variableNameInputParameterToCallScienceApplicationCode = json.findPath("variableNameInputParameterToCallScienceApplicationCode").asText();
+    	Date publishTimeStamp = new Date(publishTimeStampNumber);
+    	JsonNode ClimateServices = json.findPath("ServiesId");
+    	List<Long> climateServicesId = new ArrayList<Long>();
+    	for(int i = 0; i < ClimateServices.size(); i++) {
+    		climateServicesId.add(ClimateServices.get(i).asLong());
+    	}
 	
 		try {
 			Dataset dataset = datasetRepository.findOne(id);
+			
+			dataset.setName(name);
+			dataset.setDescription(description);
+			dataset.setAgencyId(agencyId);
 			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			dataset.setInstrument(instrument);
-			dataset.setDescription(description);
 			dataset.setUrl(url);
 			dataset.setPublishTimeStamp(publishTimeStamp);
+			dataset.setPhysicalVariable(physicalVariable);
+			dataset.setCMIP5VarName(CMIP5VarName);
+			dataset.setUnits(units);
+			dataset.setGridDimension(gridDimension);
+			dataset.setSource(source);
+			dataset.setStatus(status);
+			dataset.setResponsiblePerson(responsiblePerson);
+			dataset.setVariableNameInputParameterToCallScienceApplicationCode(variableNameInputParameterToCallScienceApplicationCode);
+			dataset.setDataSourceInputParameterToCallScienceApplicationCode(dataSourceInputParameterToCallScienceApplicationCode);
+			dataset.setVariableNameInWebInterface(variableNameInWebInterface);
 			List<ClimateService>climateServiceSet = new ArrayList<ClimateService>();
 			for(int i=0;i<climateServicesId.size();i++) {
 				climateServiceSet.add(climateServiceRepository.findOne(climateServicesId.get(i)));
 			}
 			dataset.setClimateServiceSet(climateServiceSet);
 			Dataset savedDataset = datasetRepository.save(dataset);
-			
 			System.out.println("Dataset updated: "+ savedDataset.getId());
 			return created("Dataset updated: "+ savedDataset.getId());
 		} catch (PersistenceException pe) {
@@ -143,7 +160,6 @@ public class DatasetController extends Controller {
     		System.out.println("Dataset not found with id: " + id);
 			return notFound("Dataset not found with id: " + id);
     	}
-    	
     	datasetRepository.delete(dataset);
     	System.out.println("Dataset is deleted: " + id);
 		return ok("Dataset is deleted: " + id);
@@ -175,7 +191,7 @@ public class DatasetController extends Controller {
     		result = new Gson().toJson(datasets);
     		return ok(result);
     	} catch (Exception e) {
-    		return badRequest("Service Configurations not found");
+    		return badRequest("Dataset not found");
     	}
     }
 	
