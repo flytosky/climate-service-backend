@@ -59,6 +59,13 @@ Currently we are providing APIs in 5 categores:
    - [Add a dataset](#31)<br/>
    - [Update a dataset by Id](#32)<br/>
    - [Delete a dataset](#33)<br/>
+
+**Category 7: Manage Instrument**<br/>
+   - [Get a instrument by Id](#29)<br/>
+   - [Get all instruments](#30)<br/>
+   - [Add a instrument](#31)<br/>
+   - [Update a instrument by Id](#32)<br/>
+   - [Delete a instrument](#33)<br/>
    
 Detailed Usages:
 ----------------
@@ -501,6 +508,61 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
       - **Sample request**: 
       - **Sample result**: 
       - **Result**: HTTP 200 if successful, HTTP 404 if failed.
+
+###Manage Instrument
+33. <a name="33"></a>**GET A INSTRUMENT BY ID**
+    - **Purpose**: Query a specific instrument using id.
+    - **Method**: GET
+    - **URL**: /instrument/getInstrument/id/:id/json
+    - **Semantics**: 
+        - **id**: Existing instrument id.
+    - **Sample Usages**:
+      - **Sample request**:
+      - **Sample result**:
+      - **Result**: HTTP 200 if successful, HTTP 404 if failed.
+
+34. <a name="34"></a>**GET ALL INSTRUMENTS**
+    - **Purpose**: Query all instruments.
+    - **Method**: GET
+    - **URL**: /instrument/getAllInstruments/json
+    - **Semantics**:
+    - **Sample Usages**:
+      - **Sample request**: 
+      - **Sample result**:
+      - **Result**: HTTP 200 if successful, HTTP 404 if failed.
+
+35. <a name="35"></a>**ADD A INSTRUMENT**
+    - **Purpose**: Add a new instrument to the system.
+    - **Method**: POST
+    - **URL**: /instrument/addInstrument
+    - **Semantics**: As a POST method, the API cannot be directly executed through a web browser. Instead, it may be executed through Rails, JQuery, Python, BASH, etc.
+    	- **instrumentId**: Existing instrument id.
+    	- **ServiesId**: List of existing services id.
+    - **Sample Usages**:
+      - **Sample request**: 
+      - **Sample result**: 
+      - **Result**: HTTP 200 if successful, HTTP 404 if failed.
+
+36. <a name="36"></a>**UPDATE A INSTRUMENT BY ID**
+    - **Purpose**: Update a instrument using instrument id.
+    - **Method**: PUT
+    - **URL**: /instrument/updateInstrument/id/:id
+    - **Semantics**:
+    - **Sample Usages**:
+      - **Sample request**: 
+      - **Sample result**: 
+      - **Result**: HTTP 200 if successful, HTTP 404 if failed.
+
+37. <a name="37"></a>**DELETE A INSTRUMENT BY ID**
+    - **Purpose**: Delete a instrument using instrument id.
+    - **Method**: DELETE
+    - **URL**: /instrument/deleteInstrument/id/:id
+    - **Semantics**:
+    - **Sample Usages**:
+      - **Sample request**: 
+      - **Sample result**: 
+      - **Result**: HTTP 200 if successful, HTTP 404 if failed.
+
 [1]: http://einstein.sv.cmu.edu:9007/climate "The Application Server running in the Smart Spaces Lab, CMUSV"
 
 
