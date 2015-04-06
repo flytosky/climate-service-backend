@@ -129,7 +129,6 @@ public class DatasetLogController extends Controller {
     	return ok(result);
     }
 
-    
     public Result getAllDatasetLogs(String format) {
     	try {
     		Iterable<DatasetLog>datasetLogs =  datasetLogRepository.findAll();

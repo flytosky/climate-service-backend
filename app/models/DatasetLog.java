@@ -28,6 +28,10 @@ public class DatasetLog {
 	@JoinColumn(name = "outputDatasetId", referencedColumnName = "id")
 	private Dataset outputDataset;
 	
+	public DatasetLog() {
+		
+	}
+	
 	public DatasetLog(ServiceExecutionLog serviceExecutionLog, Dataset dataset,
 			String plotUrl, String dataUrl, Dataset originalDataset,
 			Dataset outputDataset) {
