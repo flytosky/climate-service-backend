@@ -16,6 +16,9 @@ public class Instrument {
 	private String description;
 	private Date launchDate;
 	
+	public Instrument() {
+	}
+	
 	public Instrument (String name, String description, Date launchDate) {
 		super();
 		this.name = name;

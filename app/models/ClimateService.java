@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +19,7 @@ public class ClimateService {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private long rootServiceId;
-	@ManyToOne(optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "creatorId", referencedColumnName = "id")
 	private User user;
 	private String name;
