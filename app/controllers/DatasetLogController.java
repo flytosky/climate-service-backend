@@ -12,24 +12,25 @@ import models.Dataset;
 import models.DatasetLog;
 import models.DatasetLogRepository;
 import models.DatasetRepository;
-import models.Instrument;
-import models.InstrumentRepository;
+import models.ServiceExecutionLog;
+import models.ServiceExecutionLogRepository;
 import play.mvc.*;
 
 @Named
 @Singleton
 public class DatasetLogController extends Controller {
 	
-	private final InstrumentRepository instrumentRepository;
 	private final DatasetLogRepository datasetLogRepository;
 	private final DatasetRepository datasetRepository;
+	private final ServiceExecutionLogRepository serviceExecutionLogRepository;
 	
 	@Inject
 	public DatasetLogController(DatasetRepository datasetRepository, 
-			InstrumentRepository instrumentRepository, DatasetLogRepository datasetLogRepository) {
-		this.instrumentRepository = instrumentRepository;
+			DatasetLogRepository datasetLogRepository,
+			ServiceExecutionLogRepository serviceExecutionLogRepository) {
 		this.datasetLogRepository = datasetLogRepository;
 		this.datasetRepository = datasetRepository;
+		this.serviceExecutionLogRepository = serviceExecutionLogRepository;
 	}
 	
 	public Result addDatasetLog() {
@@ -38,17 +39,20 @@ public class DatasetLogController extends Controller {
     		System.out.println("DatasetLog not saved, expecting Json data");
 			return badRequest("DatasetLog not saved, expecting Json data");
     	}
+    	
     	String plotUrl = json.findPath("plotUrl").asText();
-    	long instrumentId = json.findPath("instrumentId").asLong();
+    	String dataUrl = json.findPath("dataUrl").asText();
     	long originalDatasetId = json.findPath("originalDatasetId").asLong();
     	long outputDatasetId = json.findPath("outputDatasetId").asLong();
-    	String serviceExecutionLog = json.findPath("serviceExecutionLog").asText();
+    	long serviceExecutionLogId = json.findPath("serviceExecutionLogId").asLong();
+    	long datasetId = json.findPath("datasetId").asLong();
     	
     	try {
-			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			Dataset originalDataset = datasetRepository.findOne(originalDatasetId);
 			Dataset outputDataset = datasetRepository.findOne(outputDatasetId);
-			DatasetLog datasetLog = new DatasetLog(originalDataset, outputDataset, plotUrl, serviceExecutionLog, instrument);
+			Dataset dataset = datasetRepository.findOne(datasetId);
+			ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository.findOne(serviceExecutionLogId);
+			DatasetLog datasetLog = new DatasetLog(serviceExecutionLog, dataset, plotUrl, dataUrl, originalDataset, outputDataset);
 			DatasetLog saveddatasetLog = datasetLogRepository.save(datasetLog);
 			System.out.println("DatasetLog saved: "+ saveddatasetLog.getId());
 			return created(new Gson().toJson(datasetLog.getId()));
@@ -66,21 +70,25 @@ public class DatasetLogController extends Controller {
 			System.out.println("DatasetLog not saved, expecting Json data");
 			return badRequest("DatasetLog Configuration not saved, expecting Json data");
 		}
-		String plotUrl = json.findPath("plotUrl").asText();
-		long instrumentId = json.findPath("instrumentId").asLong();
-		long originalDatasetId = json.findPath("originalDatasetId").asLong();
-		long outputDatasetId = json.findPath("outputDatasetId").asLong();
-		String serviceExecutionLog = json.findPath("serviceExecutionLog").asText();
+		
+    	String plotUrl = json.findPath("plotUrl").asText();
+    	String dataUrl = json.findPath("dataUrl").asText();
+    	long originalDatasetId = json.findPath("originalDatasetId").asLong();
+    	long outputDatasetId = json.findPath("outputDatasetId").asLong();
+    	long serviceExecutionLogId = json.findPath("serviceExecutionLogId").asLong();
+    	long datasetId = json.findPath("datasetId").asLong();
 
 		try {
-			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			Dataset originalDataset = datasetRepository.findOne(originalDatasetId);
 			Dataset outputDataset = datasetRepository.findOne(outputDatasetId);
+			Dataset dataset = datasetRepository.findOne(datasetId);
+			ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository.findOne(serviceExecutionLogId);
 			DatasetLog datasetLog = datasetLogRepository.findOne(id);
-			datasetLog.setInstrument(instrument);
+			datasetLog.setDataSet(dataset);
+			datasetLog.setDataUrl(dataUrl);
+			datasetLog.setOriginalDataset(originalDataset);
+			datasetLog.setOutputDataset(outputDataset);
 			datasetLog.setPlotUrl(plotUrl);
-			datasetLog.setOriginalDataSet(originalDataset);
-			datasetLog.setOutputDataSet(outputDataset);
 			datasetLog.setServiceExecutionLog(serviceExecutionLog);
 			DatasetLog savedDatasetLog = datasetLogRepository.save(datasetLog);
 			
@@ -105,6 +113,7 @@ public class DatasetLogController extends Controller {
     	System.out.println("DatasetLog is deleted: " + id);
 		return ok("DatasetLog is deleted: " + id);
     }
+    
     public Result getDatasetLog(long id, String format) {
     	DatasetLog datasetLog = datasetLogRepository.findOne(id);
     	if (datasetLog == null) {
@@ -128,7 +137,7 @@ public class DatasetLogController extends Controller {
     		result = new Gson().toJson(datasetLogs);
     		return ok(result);
     	} catch (Exception e) {
-    		return badRequest("Service Configurations not found");
+    		return badRequest("DatasetLog not found");
     	}
     }
 	

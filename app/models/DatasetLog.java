@@ -6,81 +6,99 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class DatasetLog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "serviceExecutionLogId", referencedColumnName = "id")
+	private ServiceExecutionLog serviceExecutionLog;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "dataSetId", referencedColumnName = "id")
+	private Dataset dataset;
 	private String plotUrl;
-	private String serviceExecutionLog;
+	private String dataUrl;
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "instrumentId", referencedColumnName = "id")
-	private Instrument instrument;
+	@JoinColumn(name = "originalDatasetId", referencedColumnName = "id")
+	private Dataset originalDataset;
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "originalDataSetId", referencedColumnName = "id")
-	private Dataset originalDataSet;
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "outputDataSetId", referencedColumnName = "id")
-	private Dataset outputDataSet;
+	@JoinColumn(name = "outputDatasetId", referencedColumnName = "id")
+	private Dataset outputDataset;
 	
-	public DatasetLog(Dataset originalDataSet, Dataset outputDataSet,
-			String plotUrl, String serviceExecutionLog, Instrument instrument) {		
-		super();	
-		this.originalDataSet = originalDataSet;
-		this.outputDataSet = outputDataSet;
-		this.plotUrl = plotUrl;
+	public DatasetLog(ServiceExecutionLog serviceExecutionLog, Dataset dataset,
+			String plotUrl, String dataUrl, Dataset originalDataset,
+			Dataset outputDataset) {
+		super();
 		this.serviceExecutionLog = serviceExecutionLog;
-		this.instrument = instrument;
-	}
-	public long getId() {
-		return id;
-	}
-	
-	public String getPlotUrl() {
-		return plotUrl;
-	}
-	public String getServiceExecutionLog() {
-		return serviceExecutionLog;
-	}
-	public Instrument getInstrument() {
-		return instrument;
+		this.dataset = dataset;
+		this.plotUrl = plotUrl;
+		this.dataUrl = dataUrl;
+		this.originalDataset = originalDataset;
+		this.outputDataset = outputDataset;
 	}
 
-	public Dataset getOriginalDataSet() {
-		return originalDataSet;
+	public ServiceExecutionLog getServiceExecutionLog() {
+		return serviceExecutionLog;
 	}
-	public Dataset getOutputDataSet() {
-		return outputDataSet;
+
+	public void setServiceExecutionLog(ServiceExecutionLog serviceExecutionLog) {
+		this.serviceExecutionLog = serviceExecutionLog;
 	}
-	public void setOriginalDataSet(Dataset originalDataSet) {
-		this.originalDataSet = originalDataSet;
+
+	public Dataset getDataset() {
+		return dataset;
 	}
-	public void setOutputDataSet(Dataset outputDataSet) {
-		this.outputDataSet = outputDataSet;
+
+	public void setDataSet(Dataset dataset) {
+		this.dataset = dataset;
 	}
-	public void setId(long id) {
-		this.id = id;
+
+	public String getPlotUrl() {
+		return plotUrl;
 	}
 
 	public void setPlotUrl(String plotUrl) {
 		this.plotUrl = plotUrl;
 	}
-	public void setServiceExecutionLog(String serviceExecutionLog) {
-		this.serviceExecutionLog = serviceExecutionLog;
+
+	public String getDataUrl() {
+		return dataUrl;
 	}
-	public void setInstrument(Instrument instrument) {
-		this.instrument = instrument;
+
+	public void setDataUrl(String dataUrl) {
+		this.dataUrl = dataUrl;
 	}
+
+	public Dataset getOriginalDataset() {
+		return originalDataset;
+	}
+
+	public void setOriginalDataset(Dataset originalDataset) {
+		this.originalDataset = originalDataset;
+	}
+
+	public Dataset getOutputDataset() {
+		return outputDataset;
+	}
+
+	public void setOutputDataset(Dataset outputDataset) {
+		this.outputDataset = outputDataset;
+	}
+
+	public long getId() {
+		return id;
+	}
+
 	@Override
 	public String toString() {
-		return "DatasetLog [id=" + id + ", plotUrl=" + plotUrl
-				+ ", serviceExecutionLog=" + serviceExecutionLog
-				+ ", instrument=" + instrument + ", originalDataSet="
-				+ originalDataSet + ", outputDataSet=" + outputDataSet + "]";
+		return "DatasetLog [id=" + id + ", serviceExecutionLog="
+				+ serviceExecutionLog + ", dataSet=" + dataset + ", plotUrl="
+				+ plotUrl + ", dataUrl=" + dataUrl + ", originalDataSet="
+				+ originalDataset + ", outputDataSet=" + outputDataset + "]";
 	}
-	
-
 	
 	
 }
