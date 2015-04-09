@@ -97,11 +97,11 @@ public class ServiceExecutionLogController extends Controller {
 			}
 
 //          If we change the date format later, we can modify here.
-//            
+//
 //    		String executionStartTimeString = json.findPath("executionStartTime").asText();
 //    		String executionEndTimeString = json.findPath("executionEndTime").asText();
 //	    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATE_PATTERN);
-//	
+//
 //	    	try {
 //	    		executionStartTime = simpleDateFormat.parse(executionStartTimeString);
 //	    	} catch (ParseException e) {
@@ -124,21 +124,21 @@ public class ServiceExecutionLogController extends Controller {
 			List<ServiceExecutionLog> logs;
 			if (!iterator.hasNext()) {
 				if (userId != 0) {
-					logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_Id(start, end, start, end, purpose, userId);
+					logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLikeAndUser_Id(start, end, purpose, userId);
 				} else {
-					logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLike(start, end, start, end, purpose);
+					logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLike(start, end, purpose);
 				}
 			} else {
 				Set<ServiceConfiguration> configurationsSet = null;
 
 				while (iterator.hasNext()) {
-					String fieldName = iterator.next();
-					String value = parameters.findPath(fieldName).asText();
+					String parameterName = iterator.next();
+					String value = parameters.findPath(parameterName).asText();
 					if (value != null && !value.isEmpty()) {
-						Parameter parameter = parameterRepository.findByName(fieldName);
+						List<Parameter> parameterList = parameterRepository.findByName(parameterName);
 						//Find the serviceConfigurationItems that match the parameters
 						//If parameter is not ranged
-						List<ServiceConfigurationItem> serviceConfigurationItem = serviceConfigurationItemRepository.findByParameterAndValue(parameter, value);
+						List<ServiceConfigurationItem> serviceConfigurationItem = serviceConfigurationItemRepository.findByParameterInAndValue(parameterList, value);
 						Set<ServiceConfiguration> tempConfigSet = new HashSet<ServiceConfiguration>();
 
 						for (ServiceConfigurationItem items : serviceConfigurationItem) {
@@ -156,9 +156,9 @@ public class ServiceExecutionLogController extends Controller {
 					logs = new ArrayList<ServiceExecutionLog>();
 				} else {
 					if (userId != 0) {
-						logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, start, end, purpose, userId, configurationsSet);
+						logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, purpose, userId, configurationsSet);
 					} else {
-						logs = serviceExecutionLogRepository.findByExecutionStartTimeBetweenAndExecutionEndTimeBetweenAndPurposeLikeAndServiceConfigurationIn(start, end, start, end, purpose, configurationsSet);
+						logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLikeAndServiceConfigurationIn(start, end, purpose, configurationsSet);
 					}
 				}
 			}
@@ -307,7 +307,7 @@ public class ServiceExecutionLogController extends Controller {
 			while (iterator.hasNext()) {
 				String fieldName = iterator.next();
 				String value = parameters.findPath(fieldName).asText();
-				Parameter parameter = parameterRepository.findByName(fieldName);
+				Parameter parameter = parameterRepository.findByNameAndClimateService(fieldName, climateService);
 				ServiceConfigurationItem serviceConfigurationItem = serviceConfigurationItemRepository.findFirstByParameterAndServiceConfiguration(parameter, serviceConfiguration);
 				serviceConfigurationItem.setValue(value);
 				//if NULL?

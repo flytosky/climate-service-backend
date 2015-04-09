@@ -4,10 +4,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Named
 @Singleton
 public interface ParameterRepository extends CrudRepository<Parameter, Long> {
-	Parameter findByName(String name);
+	List<Parameter> findByName(String name);
 	Parameter findByNameAndClimateService(String name, ClimateService climateService);
+	Parameter findByNameAndClimateService_Id(String name, long serviceId);
 }

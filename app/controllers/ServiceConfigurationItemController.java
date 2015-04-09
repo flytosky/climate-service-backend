@@ -134,15 +134,8 @@ public class ServiceConfigurationItemController extends Controller {
 			return badRequest("Parameter Name is null or empty!");
 		}
 
-		Parameter param = parameterRepository.findByName(parameterName);
-		if (param == null) {
-			System.out.println("Parameter not found with name: "
-					+ parameterName);
-			return notFound("Parameter not found with name: " + parameterName);
-		}
-
-		ServiceConfigurationItem serviceConfigItem = serviceConfigurationItemRepository
-				.findByParameter(param);
+		List<ServiceConfigurationItem> serviceConfigItem = serviceConfigurationItemRepository
+				.findByParameter_Name(parameterName);
 		if (serviceConfigItem == null) {
 			System.out.println("ServiceConfigurationItem not found with name: "
 					+ parameterName);

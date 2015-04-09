@@ -73,12 +73,12 @@ DELETE        /dataset/deleteDataset/id/:id                                     
 
 # Parameter
 GET           /parameter/getAllParameters/json                                                          @controllers.ParameterController.getAllParameters(format: String="json")
-GET           /parameter/getParameter/name/:name/json                                                   @controllers.ParameterController.getParameterByName(name: String, format: String="json")
+GET           /parameter/getParameter/service/:id/name/:name/json                                                   @controllers.ParameterController.getParameterByName(id:Long, name: String, format: String="json")
 GET           /parameter/getParameter/id/:id/json                                                       @controllers.ParameterController.getParameterById(id: Long, format: String="json")
 POST          /parameter/addParameter                                                                   @controllers.ParameterController.addParameter
 PUT           /parameter/updateParameter/id/:id                                                         @controllers.ParameterController.updateParameterById(id: Long)
 PUT           /parameter/updateParameter/name/:oldName                                                  @controllers.ParameterController.updateParameterByName(oldName: String)
-DELETE        /parameter/deleteParameter/name/:name                                                     @controllers.ParameterController.deleteParameterByName(name: String)
+DELETE        /parameter/deleteParameter/service/:id/name/:name                                                     @controllers.ParameterController.deleteParameterByName(id:Long, name: String)
 
 # JournalPublication
 GET           /journalPublication/getAllJournalPublications/json                                        @controllers.JournalPublicationController.getAllJournalPublications(format: String="json")
