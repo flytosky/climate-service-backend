@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -11,6 +12,6 @@ import javax.inject.Singleton;
 @Singleton
 public interface ClimateServiceRepository extends CrudRepository<ClimateService, Long> {
 	List<ClimateService> findAllByName(String name);
-
 	ClimateService findFirstByName(String oldName);
+    List<ClimateService> findByOrderByCreateTimeDesc();
 }

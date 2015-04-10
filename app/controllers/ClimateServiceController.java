@@ -251,4 +251,19 @@ public class ClimateServiceController extends Controller {
 		return ok(result);
 
 	}
+
+    public Result getAllClimateServicesOrderByCreateTime(String format){
+        Iterable<ClimateService> climateServices = climateServiceRepository
+                .findByOrderByCreateTimeDesc();
+        if (climateServices == null) {
+            System.out.println("No climate service found");
+        }
+
+        String result = new String();
+        if (format.equals("json")) {
+            result = new Gson().toJson(climateServices);
+        }
+
+        return ok(result);
+    }
 }
