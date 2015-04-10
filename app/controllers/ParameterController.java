@@ -66,8 +66,8 @@ public class ParameterController extends Controller {
 		}			
     }
     
-    public Result deleteParameterByName(String name) {
-    	Parameter parameter = parameterRepository.findByName(name);
+    public Result deleteParameterByName(long serviceId, String name) {
+    	Parameter parameter = parameterRepository.findByNameAndClimateService_Id(name,serviceId);
     	if (parameter == null) {
     		System.out.println("Parameter not found with name: " + name);
 			return notFound("Parameter not found with name: " + name);
@@ -108,7 +108,7 @@ public class ParameterController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository.findOne(serviceId);
 			
-			Parameter parameter = parameterRepository.findByName(oldName);
+			Parameter parameter = parameterRepository.findByNameAndClimateService_Id(oldName, serviceId);
 			parameter.setClimateService(climateService);
 			parameter.setIndexInService(indexInService);
 			parameter.setName(name);
@@ -171,13 +171,13 @@ public class ParameterController extends Controller {
 		}			
     }
     
-    public Result getParameterByName(String name, String format) {
+    public Result getParameterByName(long serviceId, String name, String format) {
     	if (name == null || name.length() == 0) {
     		System.out.println("Parameter Name is null or empty!");
 			return badRequest("Parameter Name is null or empty!");
     	}
     	
-    	Parameter parameter = parameterRepository.findByName(name);
+    	Parameter parameter = parameterRepository.findByNameAndClimateService_Id(name, serviceId);
     	if (parameter == null) {
     		System.out.println("Parameter not found with name: " + name);
 			return notFound("Parameter not found with name: " + name);

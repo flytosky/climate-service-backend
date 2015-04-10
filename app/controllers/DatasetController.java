@@ -42,7 +42,6 @@ public class DatasetController extends Controller {
 			return badRequest("Dataset not saved, expecting Json data");
     	}
     	String name = json.findPath("name").asText();
-    	String description = json.findPath("description").asText();
     	String agencyId = json.findPath("agencyId").asText();
     	long instrumentId = json.findPath("instrumentId").asLong();
     	String url = json.findPath("url").asText();
@@ -57,6 +56,8 @@ public class DatasetController extends Controller {
     	String variableNameInWebInterface = json.findPath("variableNameInWebInterface").asText();
     	String dataSourceInputParameterToCallScienceApplicationCode = json.findPath("dataSourceInputParameterToCallScienceApplicationCode").asText();
     	String variableNameInputParameterToCallScienceApplicationCode = json.findPath("variableNameInputParameterToCallScienceApplicationCode").asText();
+    	String dataSourceNameinWebInterface = json.findPath("dataSourceNameinWebInterface").asText();
+    	String comment  = json.findPath("comment").asText();
     	Date publishTimeStamp = new Date(publishTimeStampNumber);
     	JsonNode ClimateServices = json.findPath("ServiesId");
     	List<Long> climateServicesId = new ArrayList<Long>();
@@ -69,7 +70,7 @@ public class DatasetController extends Controller {
 			for(int i=0;i<climateServicesId.size();i++) {
 				climateServiceSet.add(climateServiceRepository.findOne(climateServicesId.get(i)));
 			}
-			Dataset dataset = new Dataset(name, description, agencyId, instrument, climateServiceSet, publishTimeStamp, url, physicalVariable, CMIP5VarName, units, gridDimension, source, status, responsiblePerson, variableNameInWebInterface, dataSourceInputParameterToCallScienceApplicationCode, variableNameInputParameterToCallScienceApplicationCode);
+			Dataset dataset = new Dataset(name, dataSourceNameinWebInterface, agencyId, instrument, climateServiceSet, publishTimeStamp, url, physicalVariable, CMIP5VarName, units, gridDimension, dataSourceNameinWebInterface, status, responsiblePerson, variableNameInWebInterface, dataSourceInputParameterToCallScienceApplicationCode, variableNameInputParameterToCallScienceApplicationCode, comment);
 			Dataset savedServiceConfiguration = datasetRepository.save(dataset);
 			System.out.println("Dataset saved: "+ savedServiceConfiguration.getId());
 			return created(new Gson().toJson(dataset.getId()));
@@ -92,7 +93,6 @@ public class DatasetController extends Controller {
 			return badRequest("Dataset Configuration not saved, expecting Json data");
 		}
 		String name = json.findPath("name").asText();
-    	String description = json.findPath("description").asText();
     	String agencyId = json.findPath("agencyId").asText();
     	long instrumentId = json.findPath("instrumentId").asLong();
     	String url = json.findPath("url").asText();
@@ -107,6 +107,8 @@ public class DatasetController extends Controller {
     	String variableNameInWebInterface = json.findPath("variableNameInWebInterface").asText();
     	String dataSourceInputParameterToCallScienceApplicationCode = json.findPath("dataSourceInputParameterToCallScienceApplicationCode").asText();
     	String variableNameInputParameterToCallScienceApplicationCode = json.findPath("variableNameInputParameterToCallScienceApplicationCode").asText();
+    	String dataSourceNameinWebInterface = json.findPath("dataSourceNameinWebInterface").asText();
+    	String comment  = json.findPath("comment").asText();
     	Date publishTimeStamp = new Date(publishTimeStampNumber);
     	JsonNode ClimateServices = json.findPath("ServiesId");
     	List<Long> climateServicesId = new ArrayList<Long>();
@@ -118,7 +120,8 @@ public class DatasetController extends Controller {
 			Dataset dataset = datasetRepository.findOne(id);
 			
 			dataset.setName(name);
-			dataset.setDescription(description);
+			dataset.setComment(comment);
+			dataset.setDataSourceNameinWebInterface(dataSourceNameinWebInterface);
 			dataset.setAgencyId(agencyId);
 			Instrument instrument = instrumentRepository.findOne(instrumentId);
 			dataset.setInstrument(instrument);

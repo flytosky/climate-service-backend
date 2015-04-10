@@ -22,7 +22,7 @@ public class Dataset {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String name;
-	private String description;
+	private String dataSourceNameinWebInterface;
 	private String agencyId;
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "instrumentId", referencedColumnName = "id")
@@ -42,21 +42,23 @@ public class Dataset {
 	private String variableNameInWebInterface;
 	private String dataSourceInputParameterToCallScienceApplicationCode;
 	private String variableNameInputParameterToCallScienceApplicationCode;
+	private String comment;
 
 	public Dataset() {
 	}
-
-	public Dataset(String name, String description, String agencyId,
-			Instrument instrument, List<ClimateService> climateServiceSet,
-			Date publishTimeStamp, String url, String physicalVariable,
-			String cMIP5VarName, String units, String gridDimension,
-			String source, String status, String responsiblePerson,
-			String variableNameInWebInterface,
+	
+	public Dataset(String name, String dataSourceNameinWebInterface,
+			String agencyId, Instrument instrument,
+			List<ClimateService> climateServiceSet, Date publishTimeStamp,
+			String url, String physicalVariable, String cMIP5VarName,
+			String units, String gridDimension, String source, String status,
+			String responsiblePerson, String variableNameInWebInterface,
 			String dataSourceInputParameterToCallScienceApplicationCode,
-			String variableNameInputParameterToCallScienceApplicationCode) {
+			String variableNameInputParameterToCallScienceApplicationCode,
+			String comment) {
 		super();
 		this.name = name;
-		this.description = description;
+		this.dataSourceNameinWebInterface = dataSourceNameinWebInterface;
 		this.agencyId = agencyId;
 		this.instrument = instrument;
 		this.climateServiceSet = climateServiceSet;
@@ -72,6 +74,7 @@ public class Dataset {
 		this.variableNameInWebInterface = variableNameInWebInterface;
 		this.dataSourceInputParameterToCallScienceApplicationCode = dataSourceInputParameterToCallScienceApplicationCode;
 		this.variableNameInputParameterToCallScienceApplicationCode = variableNameInputParameterToCallScienceApplicationCode;
+		this.comment = comment;
 	}
 
 	public long getId() {
@@ -82,8 +85,8 @@ public class Dataset {
 		return name;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDataSourceNameinWebInterface() {
+		return dataSourceNameinWebInterface;
 	}
 
 	public String getAgencyId() {
@@ -146,12 +149,20 @@ public class Dataset {
 		return variableNameInputParameterToCallScienceApplicationCode;
 	}
 
+	public String getComment() {
+		return comment;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDataSourceNameinWebInterface(String dataSourceNameinWebInterface) {
+		this.dataSourceNameinWebInterface = dataSourceNameinWebInterface;
 	}
 
 	public void setAgencyId(String agencyId) {
@@ -216,21 +227,28 @@ public class Dataset {
 		this.variableNameInputParameterToCallScienceApplicationCode = variableNameInputParameterToCallScienceApplicationCode;
 	}
 
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	@Override
 	public String toString() {
-		return "Dataset [id=" + id + ", name=" + name + ", description="
-				+ description + ", agencyId=" + agencyId + ", instrument="
-				+ instrument + ", climateServiceSet=" + climateServiceSet
-				+ ", publishTimeStamp=" + publishTimeStamp + ", url=" + url
-				+ ", physicalVariable=" + physicalVariable + ", CMIP5VarName="
-				+ CMIP5VarName + ", units=" + units + ", gridDimension="
-				+ gridDimension + ", source=" + source + ", status=" + status
-				+ ", responsiblePerson=" + responsiblePerson
-				+ ", variableNameInWebInterface=" + variableNameInWebInterface
+		return "Dataset [id=" + id + ", name=" + name
+				+ ", dataSourceNameinWebInterface="
+				+ dataSourceNameinWebInterface + ", agencyId=" + agencyId
+				+ ", instrument=" + instrument + ", climateServiceSet="
+				+ climateServiceSet + ", publishTimeStamp=" + publishTimeStamp
+				+ ", url=" + url + ", physicalVariable=" + physicalVariable
+				+ ", CMIP5VarName=" + CMIP5VarName + ", units=" + units
+				+ ", gridDimension=" + gridDimension + ", source=" + source
+				+ ", status=" + status + ", responsiblePerson="
+				+ responsiblePerson + ", variableNameInWebInterface="
+				+ variableNameInWebInterface
 				+ ", dataSourceInputParameterToCallScienceApplicationCode="
 				+ dataSourceInputParameterToCallScienceApplicationCode
 				+ ", variableNameInputParameterToCallScienceApplicationCode="
-				+ variableNameInputParameterToCallScienceApplicationCode + "]";
+				+ variableNameInputParameterToCallScienceApplicationCode
+				+ ", comment=" + comment + "]";
 	}
 	
 }
