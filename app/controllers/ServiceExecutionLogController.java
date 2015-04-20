@@ -130,7 +130,6 @@ public class ServiceExecutionLogController extends Controller {
 				}
 			} else {
 				Set<ServiceConfiguration> configurationsSet = null;
-
 				while (iterator.hasNext()) {
 					String parameterName = iterator.next();
 					String value = parameters.findPath(parameterName).asText();
@@ -382,7 +381,7 @@ public class ServiceExecutionLogController extends Controller {
 						userName += purpose.charAt(i);
 					}
 					else break;
-				User newUser = new User(userName,"");
+				User newUser = new User(userName,"", "", "", "", "", "", "", "", "", "");
 				userRepository.save(newUser);
 				log.setUser(newUser);
 				serviceExecutionLogRepository.save(log);
