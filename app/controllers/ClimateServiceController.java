@@ -267,7 +267,7 @@ public class ClimateServiceController extends Controller {
     }
 
     public Result getAllClimateServicesOrderByLatestAccessTime(String format){
-        Iterable<ClimateService> climateServices = serviceEntryRepository.getClimateServiceOrderByLatestAccessTime();
+        Iterable<ClimateService> climateServices = climateServiceRepository.getClimateServiceOrderByLatestAccessTime();
         if (climateServices == null) {
             System.out.println("No climate service found");
         }
@@ -283,7 +283,7 @@ public class ClimateServiceController extends Controller {
     public Result getAllClimateServicesOrderByCount(String format){
 //        Iterable<ClimateService> climateServices = climateServiceRepository
 //                .findByOrderByCreateTimeDesc();
-        Iterable<ClimateService> climateServices = serviceEntryRepository.getClimateServiceOrderByCount();
+        Iterable<ClimateService> climateServices = climateServiceRepository.getClimateServiceOrderByCount();
         if (climateServices == null) {
             System.out.println("No climate service found");
         }
