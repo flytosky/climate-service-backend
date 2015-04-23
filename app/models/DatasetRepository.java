@@ -10,6 +10,6 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface DatasetRepository extends CrudRepository<Dataset, Long> {
-	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndInstrument_Id(String name, String agencyId, String gridDimension, long instrumentId);
-	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLike(String name, String agencyId, String gridDimension);
+	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(String name, String agencyId, String gridDimension, String physicalVariable,long instrumentId);
+	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(String name, String agencyId, String gridDimension, String physicalVariable);
 }

@@ -217,12 +217,20 @@ public class DatasetController extends Controller {
     		else {
     			gridDimension = WILDCARD+gridDimension+WILDCARD;
     		}
+    		String physicalVariable = json.path("physicalVariable").asText();
+    		if (physicalVariable.isEmpty()) {
+    			physicalVariable = WILDCARD;
+    		}
+    		else {
+    			physicalVariable = WILDCARD+physicalVariable+WILDCARD;
+    		}
     		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
     		if (instrumentId==0) {
-    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLike(name, agencyId, gridDimension);
+    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(name, agencyId, gridDimension, physicalVariable);
+    					
     		} else {
-    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndInstrument_Id(name, agencyId, gridDimension, instrumentId);
+    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(name, agencyId, gridDimension, physicalVariable, instrumentId);
     		}
     		result = new Gson().toJson(datasets);
     	} catch (Exception e) {
