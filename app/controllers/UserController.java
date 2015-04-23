@@ -39,11 +39,20 @@ public class UserController extends Controller {
 		}
 
 		// Parse JSON file
-		String firstName = json.findPath("firstName").asText();
-		String lastName = json.findPath("lastName").asText();
+		String firstName = json.path("firstName").asText();
+		String lastName = json.path("lastName").asText();
+		String middleInitial = json.path("middleInitial").asText();
+	    String affiliation = json.path("affiliation").asText();
+	    String title = json.path("title").asText();
+	    String email = json.path("email").asText();
+	    String mailingAddress = json.path("mailingAddress").asText();
+	    String phoneNumber = json.path("phoneNumber").asText();
+	    String faxNumber = json.path("faxNumber").asText();
+	    String researchFields = json.path("researchFields").asText();
+	    String highestDegree = json.path("highestDegree").asText();
 
 		try {
-			User user = new User(firstName, lastName);
+			User user = new User(firstName, lastName, middleInitial, affiliation, title, email, mailingAddress, phoneNumber, faxNumber, researchFields, highestDegree);	
 			userRepository.save(user);
 			System.out.println("User saved: " + user.getId());
 			return created(new Gson().toJson(user.getId()));
@@ -74,14 +83,31 @@ public class UserController extends Controller {
 		}
 
 		// Parse JSON file
-		String firstName = json.findPath("firstName").asText();
-		String lastName = json.findPath("lastName").asText();
-
+		String firstName = json.path("firstName").asText();
+		String lastName = json.path("lastName").asText();
+		String middleInitial = json.path("middleInitial").asText();
+	    String affiliation = json.path("affiliation").asText();
+	    String title = json.path("title").asText();
+	    String email = json.path("email").asText();
+	    String mailingAddress = json.path("mailingAddress").asText();
+	    String phoneNumber = json.path("phoneNumber").asText();
+	    String faxNumber = json.path("faxNumber").asText();
+	    String researchFields = json.path("researchFields").asText();
+	    String highestDegree = json.path("highestDegree").asText();
 		try {
 			User updateUser = userRepository.findOne(id);
 
 			updateUser.setFirstName(firstName);
 			updateUser.setLastName(lastName);
+			updateUser.setAffiliation(affiliation);
+			updateUser.setEmail(email);
+			updateUser.setFaxNumber(faxNumber);
+			updateUser.setHighestDegree(highestDegree);
+			updateUser.setMailingAddress(mailingAddress);
+			updateUser.setMiddleInitial(middleInitial);
+			updateUser.setPhoneNumber(phoneNumber);
+			updateUser.setResearchFields(researchFields);
+			updateUser.setTitle(title);
 
 			System.out.println("User updated: " + updateUser.getFirstName()
 					+ " " + updateUser.getLastName());

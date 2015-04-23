@@ -10,8 +10,12 @@
 GET           /climateService/getClimateService/:name/json                                              @controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
 GET           /climateService/getClimateService/id/:id                                                  @controllers.ClimateServiceController.getClimateServiceById(id: Long)
 GET           /climateService/getAllClimateServices/json                                                @controllers.ClimateServiceController.getAllClimateServices(format: String="json")
-GET           /climateService/getAllMostRecentClimateServices/json                                      @controllers.ClimateServiceController.getAllClimateServicesOrderByCreateTime(format: String="json")
+GET           /climateService/getAllMostRecentClimateServicesByCreateTime/json                          @controllers.ClimateServiceController.getAllClimateServicesOrderByCreateTime(format: String="json")
+GET           /climateService/getAllMostRecentClimateServicesByLatestAccessTime/json                    @controllers.ClimateServiceController.getAllClimateServicesOrderByLatestAccessTime(format: String="json")
+GET           /climateService/getAllMostUsedClimateServices/json                                        @controllers.ClimateServiceController.getAllClimateServicesOrderByCount(format: String="json")
 POST          /climateService/addClimateService                                                         @controllers.ClimateServiceController.addClimateService
+GET           /climateService/getAllServiceEntries/json                                                 @controllers.ClimateServiceController.getAllServiceEntries(format: String="json")
+POST          /climateService/addServiceEntry                                                           @controllers.ClimateServiceController.addServiceEntry
 PUT           /climateService/updateClimateService/id/:id                                               @controllers.ClimateServiceController.updateClimateServiceById(id: Long)
 PUT           /climateService/updateClimateService/name/:oldName                                        @controllers.ClimateServiceController.updateClimateServiceByName(oldName: String)
 DELETE        /climateService/deleteClimateService/id/:id                                               @controllers.ClimateServiceController.deleteClimateServiceById(id: Long)
@@ -78,7 +82,7 @@ GET           /dataset/getDataset/id/:id/json                                   
 POST          /dataset/addDataset                                                                       @controllers.DatasetController.addDataset
 PUT           /dataset/updateDataset/id/:id                                                             @controllers.DatasetController.updateDatasetById(id: Long)
 DELETE        /dataset/deleteDataset/id/:id                                                             @controllers.DatasetController.deleteDataset(id: Long)
-
+POST		  /dataset/queryDataset																		@controllers.DatasetController.queryDatasets
 # Parameter
 GET           /parameter/getAllParameters/json                                                          @controllers.ParameterController.getAllParameters(format: String="json")
 GET           /parameter/getParameter/service/:id/name/:name/json                                                   @controllers.ParameterController.getParameterByName(id:Long, name: String, format: String="json")
