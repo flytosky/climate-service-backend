@@ -51,7 +51,6 @@ public class DatasetController extends Controller {
     	String CMIP5VarName = json.findPath("CMIP5VarName").asText();
     	String units = json.findPath("units").asText();
     	String gridDimension = json.findPath("gridDimension").asText();
-    	String source = json.findPath("source").asText();
     	String status = json.findPath("status").asText();
     	String responsiblePerson = json.findPath("responsiblePerson").asText();
     	String variableNameInWebInterface = json.findPath("variableNameInWebInterface").asText();
