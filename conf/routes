@@ -58,6 +58,13 @@ POST          /datasetLog/addDatasetLog                                         
 PUT           /datasetLog/updateDatasetLog/id/:id                                                       @controllers.DatasetLogController.updateDatasetLogById(id: Long)
 DELETE        /datasetLog/deleteDatasetLog/id/:id                                                       @controllers.DatasetLogController.deleteDatasetLog(id: Long)
 
+# Workflow
+GET           /workflow/getAllWorkflows/json                                                          	@controllers.WorkflowController.getAllWorkflows(format: String="json")
+GET           /workflow/getWorkflowById/id/:id/json                                                     @controllers.WorkflowController.getWorkflowById(id: Long, format: String="json")
+POST          /workflow/addWorkflow                                                                   	@controllers.WorkflowController.addWorkflow
+PUT           /workflow/updateWorkflowById/id/:id                                                       @controllers.WorkflowController.updateWorkflowById(id: Long)
+DELETE        /workflow/deleteWorkflowById/id/:id/                                                     	@controllers.WorkflowController.deleteWorkflowById(id:Long)
+
 # Instrument
 GET           /instrument/getAllInstruments/json                                                        @controllers.InstrumentController.getAllInstruments(format: String="json")
 GET           /instrument/getInstrument/id/:id/json                                                     @controllers.InstrumentController.getInstrument(id: Long, format: String="json")

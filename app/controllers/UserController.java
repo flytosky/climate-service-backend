@@ -9,6 +9,9 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
 
+import org.hibernate.Hibernate;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 
@@ -91,7 +94,6 @@ public class UserController extends Controller {
 			return badRequest("User not updated: " + firstName + " " + lastName);
 		}
 	}
-
 
 	public Result getUser(Long id, String format) {
 		if (id == null) {

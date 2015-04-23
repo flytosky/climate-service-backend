@@ -22,11 +22,10 @@ public class User {
     private String firstName;
     private String lastName;
     
-//    @OneToMany(orphanRemoval=true, mappedBy = "user", cascade={CascadeType.MERGE, CascadeType.REMOVE})
+//    @OneToMany(mappedBy = "user", cascade={CascadeType.ALL})
 //    private Set<ClimateService> climateServices = new HashSet<ClimateService>();
     
     public User() {
-//        Hibernate.initialize(climateServices);
     }
 
     public User(String firstName, String lastName) {
