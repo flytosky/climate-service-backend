@@ -220,9 +220,9 @@ public class DatasetController extends Controller {
     		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
     		if (instrumentId==0) {
-    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikePurposeLike(name, agencyId, gridDimension);
+    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLike(name, agencyId, gridDimension);
     		} else {
-    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikePurposeLikeAndInstrument_Id(name, agencyId, gridDimension, instrumentId);
+    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndInstrument_Id(name, agencyId, gridDimension, instrumentId);
     		}
     		result = new Gson().toJson(datasets);
     	} catch (Exception e) {
