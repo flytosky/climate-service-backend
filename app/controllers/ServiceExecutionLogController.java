@@ -169,6 +169,8 @@ public class ServiceExecutionLogController extends Controller {
 
 		return ok(result);
 	}
+	
+	
 
 	private Set<ServiceConfiguration> intersectServiceConfiguration(Set<ServiceConfiguration> configurationsSet, Set<ServiceConfiguration> tempConfigSet) {
 		if (configurationsSet == null) {
@@ -249,7 +251,6 @@ public class ServiceExecutionLogController extends Controller {
 			return badRequest("ServiceExecutionLog not saved");
 		}
 	}
-
 
 	public Result deleteServiceExecutionLog(Long id) {
 		ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository

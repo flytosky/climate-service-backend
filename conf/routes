@@ -68,6 +68,7 @@ GET           /workflow/getWorkflowById/id/:id/json                             
 POST          /workflow/addWorkflow                                                                   	@controllers.WorkflowController.addWorkflow
 PUT           /workflow/updateWorkflowById/id/:id                                                       @controllers.WorkflowController.updateWorkflowById(id: Long)
 DELETE        /workflow/deleteWorkflowById/id/:id/                                                     	@controllers.WorkflowController.deleteWorkflowById(id:Long)
+POST          /workflow/generateWorkflowJson                                                            @controllers.WorkflowController.generateWorkflowJson
 
 # Instrument
 GET           /instrument/getAllInstruments/json                                                        @controllers.InstrumentController.getAllInstruments(format: String="json")
