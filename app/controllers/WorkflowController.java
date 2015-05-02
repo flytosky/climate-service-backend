@@ -31,6 +31,7 @@ import models.ServiceConfiguration;
 import models.ServiceConfigurationItem;
 import models.ServiceConfigurationItemRepository;
 import models.ServiceConfigurationRepository;
+import models.ServiceEntryRepository;
 import models.ServiceExecutionLog;
 import models.ServiceExecutionLogRepository;
 import models.User;
@@ -53,9 +54,10 @@ public class WorkflowController extends Controller {
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
 	private final DatasetLogRepository datasetLogRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
+	private final ServiceEntryRepository serviceEntryRepository;
 	
 	@Inject
-	public WorkflowController(ClimateServiceRepository climateServiceRepository, UserRepository userRepository, WorkflowRepository workflowRepository, ParameterRepository parameterRepository, ServiceExecutionLogRepository serviceExecutionLogRepository, ServiceConfigurationItemRepository serviceConfigurationItemRepository, DatasetLogRepository datasetLogRepository, ServiceConfigurationRepository serviceConfigurationRepository) {
+	public WorkflowController(ClimateServiceRepository climateServiceRepository, UserRepository userRepository, WorkflowRepository workflowRepository, ParameterRepository parameterRepository, ServiceExecutionLogRepository serviceExecutionLogRepository, ServiceConfigurationItemRepository serviceConfigurationItemRepository, DatasetLogRepository datasetLogRepository, ServiceConfigurationRepository serviceConfigurationRepository, ServiceEntryRepository serviceEntryRepository) {
 		this.climateServiceRepository = climateServiceRepository;
 		this.userRepository = userRepository;
 		this.workflowRepository = workflowRepository;
@@ -64,6 +66,7 @@ public class WorkflowController extends Controller {
 		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.datasetLogRepository = datasetLogRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
+		this.serviceEntryRepository = serviceEntryRepository;
 	}
 	
 	public Result addWorkflow() {
@@ -200,12 +203,13 @@ public class WorkflowController extends Controller {
     }
 	
     public Result generateWorkflowJson() {
-    	List<ServiceExecutionLog> list = queryServiceExecutionLogsAsList();
+    	ServiceExecutionLogController serviceExecutionLogController = new ServiceExecutionLogController(serviceExecutionLogRepository, parameterRepository, serviceConfigurationItemRepository, userRepository, climateServiceRepository, datasetLogRepository, serviceConfigurationRepository, serviceEntryRepository);
+    	List<ServiceExecutionLog> list = serviceExecutionLogController.queryServiceExecutionLogsAsList();
     	String result = VisTrailJson.getVisTrailJson(list);
     	String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
-    	String location = "workflowRepository/" + timeStamp+".log";
+    	String location = "workflowRepository/" + timeStamp+".json";
     	
-    	File theDir = new File("/workflowRepository");
+    	File theDir = new File("workflowRepository");
 
     	// if the directory does not exist, create it
     	if (!theDir.exists()) {
@@ -219,9 +223,12 @@ public class WorkflowController extends Controller {
     	    catch(SecurityException se){
     	        //handle it
     	    }        
-    	    if(create) {    
+    	    if(create) {
     	        System.out.println("DIR created");  
     	    }
+    	}
+    	else {
+    		System.out.println("No");
     	}
     	
     	try {
@@ -238,94 +245,4 @@ public class WorkflowController extends Controller {
 		}
     	return ok(result);
     }
-    
-    public List<ServiceExecutionLog> queryServiceExecutionLogsAsList() {
-		JsonNode json = request().body().asJson();
-		List<ServiceExecutionLog> logs = null;
-		if (json == null) {
-			System.out.println("ServiceExecutionLog cannot be queried, expecting Json data");
-			return logs;
-		}
-
-		try {
-			//Parse JSON file
-			Long userId = json.findPath("userId").asLong();
-			//long datasetLogId = json.findPath("datasetLogId").asLong();
-			String purpose = json.findPath("purpose").asText();
-			if (purpose.isEmpty()) {
-				purpose = WILDCARD;
-			}
-			else {
-				purpose = WILDCARD+purpose+WILDCARD;
-			}
-
-			Date start = new Date(0);
-			Date end = new Date();
-			long executionStartTimeNumber = json.findPath("executionStartTime").asLong();
-			long executionEndTimeNumber = json.findPath("executionEndTime").asLong();
-
-			if (executionStartTimeNumber > 0) {
-				start = new Date(executionStartTimeNumber);
-			}
-			if (executionEndTimeNumber > 0) {
-				end = new Date(executionEndTimeNumber);
-			}
-
-			JsonNode parameters = json.findPath("parameters");
-			Iterator<String> iterator = parameters.fieldNames();
-			if (!iterator.hasNext()) {
-				if (userId != 0) {
-					logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLikeAndUser_Id(start, end, purpose, userId);
-				} else {
-					logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLike(start, end, purpose);
-				}
-			} else {
-				Set<ServiceConfiguration> configurationsSet = null;
-				while (iterator.hasNext()) {
-					String parameterName = iterator.next();
-					String value = parameters.findPath(parameterName).asText();
-					if (value != null && !value.isEmpty()) {
-						List<Parameter> parameterList = parameterRepository.findByName(parameterName);
-						//Find the serviceConfigurationItems that match the parameters
-						//If parameter is not ranged
-						List<ServiceConfigurationItem> serviceConfigurationItem = serviceConfigurationItemRepository.findByParameterInAndValue(parameterList, value);
-						Set<ServiceConfiguration> tempConfigSet = new HashSet<ServiceConfiguration>();
-
-						for (ServiceConfigurationItem items : serviceConfigurationItem) {
-							tempConfigSet.add(items.getServiceConfiguration());
-						}
-
-						configurationsSet = intersectServiceConfiguration(configurationsSet, tempConfigSet);
-					}
-				}
-
-//              DatasetLog datasetLog = datasetLogRepository.findOne(datasetLogId);
-
-				if (configurationsSet == null || configurationsSet.isEmpty()) {
-					// If no parameter matches, just return the empty set
-					logs = new ArrayList<ServiceExecutionLog>();
-				} else {
-					if (userId != 0) {
-						logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLikeAndUser_IdAndServiceConfigurationIn(start, end, purpose, userId, configurationsSet);
-					} else {
-						logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLikeAndServiceConfigurationIn(start, end, purpose, configurationsSet);
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("ServiceExecutionLog cannot be queried, query is corrupt");
-			return logs;
-		}
-
-		return logs;
-	}
-    
-    private Set<ServiceConfiguration> intersectServiceConfiguration(Set<ServiceConfiguration> configurationsSet, Set<ServiceConfiguration> tempConfigSet) {
-		if (configurationsSet == null) {
-			configurationsSet = tempConfigSet;
-		} else {
-			configurationsSet.retainAll(tempConfigSet);
-		}
-		return configurationsSet;
-	}
 }
