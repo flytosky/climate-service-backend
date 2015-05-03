@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import models.User;
 import models.UserRepository;
 import play.mvc.*;
@@ -8,9 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
-
-import org.hibernate.Hibernate;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
@@ -108,11 +108,12 @@ public class UserController extends Controller {
 			updateUser.setPhoneNumber(phoneNumber);
 			updateUser.setResearchFields(researchFields);
 			updateUser.setTitle(title);
-
-			System.out.println("User updated: " + updateUser.getFirstName()
-					+ " " + updateUser.getLastName());
-			return created("User updated: " + updateUser.getFirstName() + " "
-					+ updateUser.getLastName());
+			
+			User savedUser = userRepository.save(updateUser);
+			System.out.println("User updated: " + savedUser.getFirstName()
+					+ " " + savedUser.getLastName());
+			return created("User updated: " + savedUser.getFirstName() + " "
+					+ savedUser.getLastName());
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println("User not updated: " + firstName + " "
@@ -138,6 +139,19 @@ public class UserController extends Controller {
 			result = new Gson().toJson(user);
 		}
 
+		return ok(result);
+	}
+	
+	public Result getAllUsers(String format) {
+		Iterable<User> userIterable = userRepository.findAll();
+		List<User> userList = new ArrayList<User>();
+		for (User user : userIterable) {
+			userList.add(user);
+		}
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(userList);
+		}
 		return ok(result);
 	}
 
