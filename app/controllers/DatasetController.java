@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.Dataset;
+import models.DatasetEntryRepository;
 import models.DatasetRepository;
 import models.Instrument;
 import models.InstrumentRepository;
@@ -28,12 +29,14 @@ public class DatasetController extends Controller {
 	private final ClimateServiceRepository climateServiceRepository;
 	private final InstrumentRepository instrumentRepository;
 	private final DatasetRepository datasetRepository;
+	private final DatasetEntryRepository datasetEntryRepository;
 	
 	@Inject
-	public DatasetController(ClimateServiceRepository climateServiceRepository, InstrumentRepository instrumentRepository, DatasetRepository datasetRepository) {
+	public DatasetController(ClimateServiceRepository climateServiceRepository, InstrumentRepository instrumentRepository, DatasetRepository datasetRepository, DatasetEntryRepository datasetEntryRepository) {
 		this.climateServiceRepository = climateServiceRepository;
 		this.instrumentRepository = instrumentRepository;
 		this.datasetRepository = datasetRepository;
+		this.datasetEntryRepository = datasetEntryRepository;
 	}
 	
 	public Result addDataset() {
