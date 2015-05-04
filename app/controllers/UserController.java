@@ -184,5 +184,36 @@ public class UserController extends Controller {
 			return badRequest("User is not valid");
 		}
 	}
+	
+	public Result deleteUserByUserNameandPassword(String userName, String password) {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("Cannot check user, expecting Json data");
+			return badRequest("Cannot check user, expecting Json data");
+		}
+		try {
+			List<User> users = userRepository.findByUserName(userName);
+			if (users.size()==0) {
+				System.out.println("User is not existed");
+				return badRequest("User is not existed");
+			}
+			User user = users.get(0);
+			if (user.getPassword().equals(password)) {
+				System.out.println("User is deleted: "+user.getId());
+				userRepository.delete(user);
+				return ok("User is deleted");
+			}
+			else {
+				System.out.println("User is not deleted for wrong password");
+				return badRequest("User is not deleted for wrong password");
+			}
+		}
+		catch (PersistenceException pe) {
+			pe.printStackTrace();
+			System.out.println("User is not deleted");
+			return badRequest("User is not deleted");
+		}
+		
+	}
 
 }
