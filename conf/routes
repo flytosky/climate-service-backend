@@ -126,8 +126,8 @@ GET           /users/:id                                                        
 POST          /users/add                                                                                @controllers.UserController.addUser
 PUT           /users/update/:id                                                                         @controllers.UserController.updateUser(id: Long)
 DELETE        /users/delete/:id                                                                         @controllers.UserController.deleteUser(id: Long)
-GET			  /getAllUsers/json																			@controllers.UserController.getAllUsers(format: String="json")
-
+GET			  /users/getAllUsers/json																	@controllers.UserController.getAllUsers(format: String="json")
+POST		  /users/isUserValid																		@controllers.UserController.isUserValid
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                                                             controllers.Assets.at(path="/public", file)

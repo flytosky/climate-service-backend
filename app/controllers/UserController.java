@@ -39,6 +39,8 @@ public class UserController extends Controller {
 		}
 
 		// Parse JSON file
+		String userName = json.path("userName").asText();
+		String password = json.path("password").asText();
 		String firstName = json.path("firstName").asText();
 		String lastName = json.path("lastName").asText();
 		String middleInitial = json.path("middleInitial").asText();
@@ -52,7 +54,11 @@ public class UserController extends Controller {
 	    String highestDegree = json.path("highestDegree").asText();
 
 		try {
-			User user = new User(firstName, lastName, middleInitial, affiliation, title, email, mailingAddress, phoneNumber, faxNumber, researchFields, highestDegree);	
+			if (userRepository.findByUserName(userName).size()>0) {
+				System.out.println("UserName has been used: " + userName);
+				return badRequest("UserName has been used");
+			}
+			User user = new User(userName, password, firstName, lastName, middleInitial, affiliation, title, email, mailingAddress, phoneNumber, faxNumber, researchFields, highestDegree);	
 			userRepository.save(user);
 			System.out.println("User saved: " + user.getId());
 			return created(new Gson().toJson(user.getId()));
@@ -153,6 +159,30 @@ public class UserController extends Controller {
 			result = new Gson().toJson(userList);
 		}
 		return ok(result);
+	}
+	
+	public Result isUserValid() {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("Cannot check user, expecting Json data");
+			return badRequest("Cannot check user, expecting Json data");
+		}
+		String userName = json.path("userName").asText();
+		String password = json.path("password").asText();
+		List<User> users = userRepository.findByUserName(userName);
+		if (users.size()==0) {
+			System.out.println("User is not existed");
+			return badRequest("User is not existed");
+		}
+		User user = users.get(0);
+		if (user.getPassword().equals(password)) {
+			System.out.println("User is valid");
+			return ok("User is valid");
+		}
+		else {
+			System.out.println("User is not valid");
+			return badRequest("User is not valid");
+		}
 	}
 
 }

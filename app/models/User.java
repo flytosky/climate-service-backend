@@ -8,34 +8,38 @@ import javax.persistence.Id;
 @Entity
 public class User {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id;
-    private String firstName;
-    private String lastName;
-    private String middleInitial;
-    private String affiliation;
-    private String title;
-    private String email;
-    private String mailingAddress;
-    private String phoneNumber;
-    private String faxNumber;
-    private String researchFields;
-    private String highestDegree;
-    
-//    @OneToMany(mappedBy = "user", cascade={CascadeType.ALL})
-//    private Set<ClimateService> climateServices = new HashSet<ClimateService>();
-    
-    public User() {
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	private String userName;
+	private String password;
+	private String firstName;
+	private String lastName;
+	private String middleInitial;
+	private String affiliation;
+	private String title;
+	private String email;
+	private String mailingAddress;
+	private String phoneNumber;
+	private String faxNumber;
+	private String researchFields;
+	private String highestDegree;
 
-    
+	// @OneToMany(mappedBy = "user", cascade={CascadeType.ALL})
+	// private Set<ClimateService> climateServices = new
+	// HashSet<ClimateService>();
 
-	public User(String firstName, String lastName, String middleInitial,
-			String affiliation, String title, String email,
-			String mailingAddress, String phoneNumber, String faxNumber,
-			String researchFields, String highestDegree) {
+	public User() {
+	}
+
+	public User(String userName, String password, String firstName,
+			String lastName, String middleInitial, String affiliation,
+			String title, String email, String mailingAddress,
+			String phoneNumber, String faxNumber, String researchFields,
+			String highestDegree) {
 		super();
+		this.userName = userName;
+		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.middleInitial = middleInitial;
@@ -51,6 +55,14 @@ public class User {
 
 	public long getId() {
 		return id;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	public String getFirstName() {
@@ -95,6 +107,14 @@ public class User {
 
 	public String getHighestDegree() {
 		return highestDegree;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setFirstName(String firstName) {
@@ -143,7 +163,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName="
+		return "User [id=" + id + ", userName=" + userName + ", password="
+				+ password + ", firstName=" + firstName + ", lastName="
 				+ lastName + ", middleInitial=" + middleInitial
 				+ ", affiliation=" + affiliation + ", title=" + title
 				+ ", email=" + email + ", mailingAddress=" + mailingAddress
@@ -151,5 +172,6 @@ public class User {
 				+ ", researchFields=" + researchFields + ", highestDegree="
 				+ highestDegree + "]";
 	}
+
 }
 

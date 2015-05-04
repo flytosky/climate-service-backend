@@ -603,7 +603,7 @@ public class ServiceExecutionLogController extends Controller {
 					} else
 						break;
 				User newUser = new User(userName, "", "", "", "", "", "", "",
-						"", "", "");
+						"", "", "", "", "");
 				userRepository.save(newUser);
 				log.setUser(newUser);
 				serviceExecutionLogRepository.save(log);
