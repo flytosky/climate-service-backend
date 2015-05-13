@@ -186,11 +186,6 @@ public class UserController extends Controller {
 	}
 	
 	public Result deleteUserByUserNameandPassword(String userName, String password) {
-		JsonNode json = request().body().asJson();
-		if (json == null) {
-			System.out.println("Cannot check user, expecting Json data");
-			return badRequest("Cannot check user, expecting Json data");
-		}
 		try {
 			List<User> users = userRepository.findByUserName(userName);
 			if (users.size()==0) {
