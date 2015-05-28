@@ -19,7 +19,7 @@ public class ClimateService {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private long rootServiceId;
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	@JoinColumn(name = "creatorId", referencedColumnName = "id")
 	private User user;
 	private String name;

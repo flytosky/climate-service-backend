@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import models.User;
 import models.UserRepository;
 import play.mvc.*;
@@ -36,6 +39,8 @@ public class UserController extends Controller {
 		}
 
 		// Parse JSON file
+		String userName = json.path("userName").asText();
+		String password = json.path("password").asText();
 		String firstName = json.path("firstName").asText();
 		String lastName = json.path("lastName").asText();
 		String middleInitial = json.path("middleInitial").asText();
@@ -49,7 +54,11 @@ public class UserController extends Controller {
 	    String highestDegree = json.path("highestDegree").asText();
 
 		try {
-			User user = new User(firstName, lastName, middleInitial, affiliation, title, email, mailingAddress, phoneNumber, faxNumber, researchFields, highestDegree);	
+			if (userRepository.findByUserName(userName).size()>0) {
+				System.out.println("UserName has been used: " + userName);
+				return badRequest("UserName has been used");
+			}
+			User user = new User(userName, password, firstName, lastName, middleInitial, affiliation, title, email, mailingAddress, phoneNumber, faxNumber, researchFields, highestDegree);	
 			userRepository.save(user);
 			System.out.println("User saved: " + user.getId());
 			return created(new Gson().toJson(user.getId()));
@@ -105,11 +114,12 @@ public class UserController extends Controller {
 			updateUser.setPhoneNumber(phoneNumber);
 			updateUser.setResearchFields(researchFields);
 			updateUser.setTitle(title);
-
-			System.out.println("User updated: " + updateUser.getFirstName()
-					+ " " + updateUser.getLastName());
-			return created("User updated: " + updateUser.getFirstName() + " "
-					+ updateUser.getLastName());
+			
+			User savedUser = userRepository.save(updateUser);
+			System.out.println("User updated: " + savedUser.getFirstName()
+					+ " " + savedUser.getLastName());
+			return created("User updated: " + savedUser.getFirstName() + " "
+					+ savedUser.getLastName());
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			System.out.println("User not updated: " + firstName + " "
@@ -117,7 +127,6 @@ public class UserController extends Controller {
 			return badRequest("User not updated: " + firstName + " " + lastName);
 		}
 	}
-
 
 	public Result getUser(Long id, String format) {
 		if (id == null) {
@@ -137,6 +146,69 @@ public class UserController extends Controller {
 		}
 
 		return ok(result);
+	}
+	
+	public Result getAllUsers(String format) {
+		Iterable<User> userIterable = userRepository.findAll();
+		List<User> userList = new ArrayList<User>();
+		for (User user : userIterable) {
+			userList.add(user);
+		}
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(userList);
+		}
+		return ok(result);
+	}
+	
+	public Result isUserValid() {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("Cannot check user, expecting Json data");
+			return badRequest("Cannot check user, expecting Json data");
+		}
+		String userName = json.path("userName").asText();
+		String password = json.path("password").asText();
+		List<User> users = userRepository.findByUserName(userName);
+		if (users.size()==0) {
+			System.out.println("User is not existed");
+			return badRequest("User is not existed");
+		}
+		User user = users.get(0);
+		if (user.getPassword().equals(password)) {
+			System.out.println("User is valid");
+			return ok("User is valid");
+		}
+		else {
+			System.out.println("User is not valid");
+			return badRequest("User is not valid");
+		}
+	}
+	
+	public Result deleteUserByUserNameandPassword(String userName, String password) {
+		try {
+			List<User> users = userRepository.findByUserName(userName);
+			if (users.size()==0) {
+				System.out.println("User is not existed");
+				return badRequest("User is not existed");
+			}
+			User user = users.get(0);
+			if (user.getPassword().equals(password)) {
+				System.out.println("User is deleted: "+user.getId());
+				userRepository.delete(user);
+				return ok("User is deleted");
+			}
+			else {
+				System.out.println("User is not deleted for wrong password");
+				return badRequest("User is not deleted for wrong password");
+			}
+		}
+		catch (PersistenceException pe) {
+			pe.printStackTrace();
+			System.out.println("User is not deleted");
+			return badRequest("User is not deleted");
+		}
+		
 	}
 
 }

@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.Dataset;
+import models.DatasetEntryRepository;
 import models.DatasetRepository;
 import models.Instrument;
 import models.InstrumentRepository;
@@ -23,16 +24,19 @@ import play.mvc.*;
 @Named
 @Singleton
 public class DatasetController extends Controller {
+	public static final String WILDCARD = "%";
 	
 	private final ClimateServiceRepository climateServiceRepository;
 	private final InstrumentRepository instrumentRepository;
 	private final DatasetRepository datasetRepository;
+	private final DatasetEntryRepository datasetEntryRepository;
 	
 	@Inject
-	public DatasetController(ClimateServiceRepository climateServiceRepository, InstrumentRepository instrumentRepository, DatasetRepository datasetRepository) {
+	public DatasetController(ClimateServiceRepository climateServiceRepository, InstrumentRepository instrumentRepository, DatasetRepository datasetRepository, DatasetEntryRepository datasetEntryRepository) {
 		this.climateServiceRepository = climateServiceRepository;
 		this.instrumentRepository = instrumentRepository;
 		this.datasetRepository = datasetRepository;
+		this.datasetEntryRepository = datasetEntryRepository;
 	}
 	
 	public Result addDataset() {
@@ -50,7 +54,6 @@ public class DatasetController extends Controller {
     	String CMIP5VarName = json.findPath("CMIP5VarName").asText();
     	String units = json.findPath("units").asText();
     	String gridDimension = json.findPath("gridDimension").asText();
-    	String source = json.findPath("source").asText();
     	String status = json.findPath("status").asText();
     	String responsiblePerson = json.findPath("responsiblePerson").asText();
     	String variableNameInWebInterface = json.findPath("variableNameInWebInterface").asText();
@@ -183,6 +186,60 @@ public class DatasetController extends Controller {
     		result = new Gson().toJson(dataset);
     	}
     	
+    	return ok(result);
+    }
+    
+    public Result queryDatasets() {
+    	JsonNode json = request().body().asJson();
+    	if (json == null) {
+    		System.out.println("Datasets cannot be queried, expecting Json data");
+    		return badRequest("Datasets cannot be queried, expecting Json data");
+    	}
+    	String result = new String();
+    	try {
+    		//Parse JSON file
+    		String name = json.path("name").asText();
+    		if (name.isEmpty()) {
+    			name = WILDCARD;
+    		}
+    		else {
+    			name = WILDCARD+name+WILDCARD;
+    		}
+    		String agencyId = json.path("agencyId").asText();
+    		if (agencyId.isEmpty()) {
+    			agencyId = WILDCARD;
+    		}
+    		else {
+    			agencyId = WILDCARD+agencyId+WILDCARD;
+    		}
+    		String gridDimension = json.path("gridDimension").asText();
+    		if (gridDimension.isEmpty()) {
+    			gridDimension = WILDCARD;
+    		}
+    		else {
+    			gridDimension = WILDCARD+gridDimension+WILDCARD;
+    		}
+    		String physicalVariable = json.path("physicalVariable").asText();
+    		if (physicalVariable.isEmpty()) {
+    			physicalVariable = WILDCARD;
+    		}
+    		else {
+    			physicalVariable = WILDCARD+physicalVariable+WILDCARD;
+    		}
+    		long instrumentId = json.path("instrumentId").asLong();
+    		List<Dataset> datasets;
+    		if (instrumentId==0) {
+    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(name, agencyId, gridDimension, physicalVariable);
+    					
+    		} else {
+    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(name, agencyId, gridDimension, physicalVariable, instrumentId);
+    		}
+    		result = new Gson().toJson(datasets);
+    	} catch (Exception e) {
+    		System.out.println("ServiceExecutionLog cannot be queried, query is corrupt");
+    		return badRequest("ServiceExecutionLog cannot be queried, query is corrupt");
+    	}
+
     	return ok(result);
     }
 

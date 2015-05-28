@@ -62,6 +62,14 @@ POST          /datasetLog/addDatasetLog                                         
 PUT           /datasetLog/updateDatasetLog/id/:id                                                       @controllers.DatasetLogController.updateDatasetLogById(id: Long)
 DELETE        /datasetLog/deleteDatasetLog/id/:id                                                       @controllers.DatasetLogController.deleteDatasetLog(id: Long)
 
+# Workflow
+GET           /workflow/getAllWorkflows/json                                                          	@controllers.WorkflowController.getAllWorkflows(format: String="json")
+GET           /workflow/getWorkflowById/id/:id/json                                                     @controllers.WorkflowController.getWorkflowById(id: Long, format: String="json")
+POST          /workflow/addWorkflow                                                                   	@controllers.WorkflowController.addWorkflow
+PUT           /workflow/updateWorkflowById/id/:id                                                       @controllers.WorkflowController.updateWorkflowById(id: Long)
+DELETE        /workflow/deleteWorkflowById/id/:id/                                                     	@controllers.WorkflowController.deleteWorkflowById(id:Long)
+POST          /workflow/generateWorkflowJson                                                            @controllers.WorkflowController.generateWorkflowJson
+
 # Instrument
 GET           /instrument/getAllInstruments/json                                                        @controllers.InstrumentController.getAllInstruments(format: String="json")
 GET           /instrument/getInstrument/id/:id/json                                                     @controllers.InstrumentController.getInstrument(id: Long, format: String="json")
@@ -75,15 +83,15 @@ GET           /dataset/getDataset/id/:id/json                                   
 POST          /dataset/addDataset                                                                       @controllers.DatasetController.addDataset
 PUT           /dataset/updateDataset/id/:id                                                             @controllers.DatasetController.updateDatasetById(id: Long)
 DELETE        /dataset/deleteDataset/id/:id                                                             @controllers.DatasetController.deleteDataset(id: Long)
-
+POST		  /dataset/queryDataset																		@controllers.DatasetController.queryDatasets
 # Parameter
 GET           /parameter/getAllParameters/json                                                          @controllers.ParameterController.getAllParameters(format: String="json")
-GET           /parameter/getParameter/service/:id/name/:name/json                                                   @controllers.ParameterController.getParameterByName(id:Long, name: String, format: String="json")
+GET           /parameter/getParameter/service/:id/name/:name/json                                       @controllers.ParameterController.getParameterByName(id:Long, name: String, format: String="json")
 GET           /parameter/getParameter/id/:id/json                                                       @controllers.ParameterController.getParameterById(id: Long, format: String="json")
 POST          /parameter/addParameter                                                                   @controllers.ParameterController.addParameter
 PUT           /parameter/updateParameter/id/:id                                                         @controllers.ParameterController.updateParameterById(id: Long)
 PUT           /parameter/updateParameter/name/:oldName                                                  @controllers.ParameterController.updateParameterByName(oldName: String)
-DELETE        /parameter/deleteParameter/service/:id/name/:name                                                     @controllers.ParameterController.deleteParameterByName(id:Long, name: String)
+DELETE        /parameter/deleteParameter/service/:id/name/:name                                         @controllers.ParameterController.deleteParameterByName(id:Long, name: String)
 
 # JournalPublication
 GET           /journalPublication/getAllJournalPublications/json                                        @controllers.JournalPublicationController.getAllJournalPublications(format: String="json")
@@ -118,6 +126,8 @@ GET           /users/:id                                                        
 POST          /users/add                                                                                @controllers.UserController.addUser
 PUT           /users/update/:id                                                                         @controllers.UserController.updateUser(id: Long)
 DELETE        /users/delete/:id                                                                         @controllers.UserController.deleteUser(id: Long)
-
+GET			  /users/getAllUsers/json																	@controllers.UserController.getAllUsers(format: String="json")
+POST		  /users/isUserValid																		@controllers.UserController.isUserValid
+DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                                                             controllers.Assets.at(path="/public", file)

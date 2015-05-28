@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 @Named
 @Singleton
 public class ClimateServiceController extends Controller {
+	private final int initialcount = 0;
 
 	// static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssz";
 	private final ClimateServiceRepository climateServiceRepository;
@@ -55,7 +56,6 @@ public class ClimateServiceController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String url = json.findPath("url").asText();
 		String scenario = json.findPath("scenario").asText();
-
 		Date createTime = new Date();
 		SimpleDateFormat format = new SimpleDateFormat(Common.DATE_PATTERN);
 		try {
@@ -72,7 +72,9 @@ public class ClimateServiceController extends Controller {
 					user, name, purpose, url, scenario, createTime, versionNo);
 			ClimateService savedClimateService = climateServiceRepository
 					.save(climateService);
-
+			String registerNote = "ClimateService Name: " + savedClimateService.getName() + ", VersionNo: "+versionNo;
+			ServiceEntry serviceEntry = new ServiceEntry(createTime, versionNo, user, createTime, registerNote, initialcount, savedClimateService);
+			serviceEntryRepository.save(serviceEntry);
 			System.out.println("Climate Service saved: "
 					+ savedClimateService.getName());
 			return created(new Gson().toJson(savedClimateService.getId()));
@@ -128,19 +130,34 @@ public class ClimateServiceController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository
 					.findOne(id);
-
+			User user = userRepository.findOne(creatorId);
+			ServiceEntry serviceEntry = null;
+			if (versionNo.equals(climateService.getVersionNo())) {
+				List<ServiceEntry> serviceEntries = serviceEntryRepository.findByClimateServiceAndVersionNo(climateService, versionNo);
+				if (serviceEntries.size()==0) {
+					String registerNote = "ClimateService Name: " + climateService.getName() + ", VersionNo: "+versionNo;
+					serviceEntry = new ServiceEntry(climateService.getCreateTime(), versionNo, user, climateService.getCreateTime(), registerNote, initialcount, climateService);
+				}
+				else {
+					serviceEntry = serviceEntries.get(0);
+				}
+			}
+			else {
+				String registerNote = "ClimateService Name:" + climateService.getName() + ", VersionNo: "+versionNo;
+				serviceEntry = new ServiceEntry(climateService.getCreateTime(), versionNo, user, climateService.getCreateTime(), registerNote, initialcount, climateService);
+			}
+			climateService.setUser(user);
 			climateService.setName(name);
 			climateService.setPurpose(purpose);
 			climateService.setRootServiceId(rootServiceId);
 			climateService.setScenario(scenario);
 			climateService.setUrl(url);
-			User user = userRepository.findOne(creatorId);
-			climateService.setUser(user);
 			climateService.setVersionNo(versionNo);
-
 			ClimateService savedClimateService = climateServiceRepository
 					.save(climateService);
-
+			serviceEntry.setClimateService(savedClimateService);
+			ServiceEntry savedServiceEntry = serviceEntryRepository.save(serviceEntry);
+			
 			System.out.println("Climate Service updated: "
 					+ savedClimateService.getName());
 			return created("Climate Service updated: "
@@ -178,19 +195,35 @@ public class ClimateServiceController extends Controller {
 		try {
 			ClimateService climateService = climateServiceRepository
 					.findFirstByName(oldName);
-
+			User user = userRepository.findOne(creatorId);
+			ServiceEntry serviceEntry = null;
+			if (versionNo.equals(climateService.getVersionNo())) {
+				List<ServiceEntry> serviceEntries = serviceEntryRepository.findByClimateServiceAndVersionNo(climateService, versionNo);
+				if (serviceEntries.size()==0) {
+					String registerNote = "ClimateService Name: " + climateService.getName() + ", VersionNo: "+versionNo;
+					serviceEntry = new ServiceEntry(climateService.getCreateTime(), versionNo, user, climateService.getCreateTime(), registerNote, initialcount, climateService);
+				}
+				else {
+					serviceEntry = serviceEntries.get(0);
+				}
+			}
+			else {
+				String registerNote = "ClimateService Name: " + climateService.getName() + ", VersionNo: "+versionNo;
+				serviceEntry = new ServiceEntry(climateService.getCreateTime(), versionNo, user, climateService.getCreateTime(), registerNote, initialcount, climateService);
+			}
 			climateService.setName(name);
 			climateService.setPurpose(purpose);
 			climateService.setRootServiceId(rootServiceId);
 			climateService.setScenario(scenario);
 			climateService.setUrl(url);
-			User user = userRepository.findOne(creatorId);
+			
 			climateService.setUser(user);
 			climateService.setVersionNo(versionNo);
 
 			ClimateService savedClimateService = climateServiceRepository
 					.save(climateService);
-
+			serviceEntry.setClimateService(savedClimateService);
+			ServiceEntry savedServiceEntry = serviceEntryRepository.save(serviceEntry);
 			System.out.println("Climate Service updated: "
 					+ savedClimateService.getName());
 			return created("Climate Service updated: "
