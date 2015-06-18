@@ -1,5 +1,10 @@
 package controllers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,12 +12,16 @@ import java.util.List;
 
 import models.*;
 import util.Common;
+import util.Constants;
+import workflow.VisTrailJson;
 import play.mvc.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
@@ -83,6 +92,67 @@ public class ClimateServiceController extends Controller {
 			System.out.println("Climate Service not saved: " + name);
 			return badRequest("Climate Service not saved: " + name);
 		}
+	}
+	
+	public Result savePage() {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("Climate service not saved, expecting Json data");
+			return badRequest("Climate service not saved, expecting Json data");
+		}
+
+		// Parse JSON file
+		String temp = json.findPath("pageString").asText();
+
+		// Remove delete button from preview page
+		String result = temp.replaceAll("<td><button type=\\\\\"button\\\\\" class=\\\\\"btn btn-danger\\\\\" onclick=\\\\\"Javascript:deleteRow\\(this\\)\\\\\">delete</button></td>", "");	
+		
+		result = StringEscapeUtils.unescapeJava(result);
+		result = result.substring(1, result.length() - 1);
+		System.out.println(result);
+		
+		String str1 = Constants.htmlHead;
+		String str2 = Constants.htmlTail;
+		
+		result = str1 + result + str2;
+		
+		String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss")
+				.format(new Date());
+		String location = "climateServicePageRepository/" + timeStamp + ".txt";
+
+		File theDir = new File("climateServicePageRepository");
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+			System.out.println("creating directory: climateServicePageRepository");
+			boolean create = false;
+
+			try {
+				theDir.mkdir();
+				create = true;
+			} catch (SecurityException se) {
+				// handle it
+			}
+			if (create) {
+				System.out.println("DIR created");
+			}
+		} else {
+			System.out.println("No");
+		}
+
+		try {
+			File file = new File(location);
+			BufferedWriter output = new BufferedWriter(new FileWriter(file));
+			output.write(result);
+			output.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ok(result);
 	}
 
 	public Result deleteClimateServiceById(long id) {

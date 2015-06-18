@@ -21,6 +21,9 @@ PUT           /climateService/updateClimateService/name/:oldName                
 DELETE        /climateService/deleteClimateService/id/:id                                               @controllers.ClimateServiceController.deleteClimateServiceById(id: Long)
 DELETE        /climateService/deleteClimateService/name/:name                                           @controllers.ClimateServiceController.deleteClimateServiceByName(name: String)
 
+# Save Climate Service Page
+POST          /climateService/savePage                                                         			@controllers.ClimateServiceController.savePage
+
 # Bug Report
 GET           /bugReport/getBugReport/id/:id                                                            @controllers.BugReportController.getBugReport(id: Long, format: String="json")
 GET           /bugReport/getAllBugReports/json                                                          @controllers.BugReportController.getAllBugReports
