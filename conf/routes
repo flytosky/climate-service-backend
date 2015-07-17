@@ -87,6 +87,7 @@ POST          /dataset/addDataset                                               
 PUT           /dataset/updateDataset/id/:id                                                             @controllers.DatasetController.updateDatasetById(id: Long)
 DELETE        /dataset/deleteDataset/id/:id                                                             @controllers.DatasetController.deleteDataset(id: Long)
 POST		  /dataset/queryDataset																		@controllers.DatasetController.queryDatasets
+
 # Parameter
 GET           /parameter/getAllParameters/json                                                          @controllers.ParameterController.getAllParameters(format: String="json")
 GET           /parameter/getParameter/service/:id/name/:name/json                                                   @controllers.ParameterController.getParameterByName(id:Long, name: String, format: String="json")
@@ -132,5 +133,6 @@ DELETE        /users/delete/:id                                                 
 GET			  /users/getAllUsers/json																	@controllers.UserController.getAllUsers(format: String="json")
 POST		  /users/isUserValid																		@controllers.UserController.isUserValid
 DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                                                             controllers.Assets.at(path="/public", file)

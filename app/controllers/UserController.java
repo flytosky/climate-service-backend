@@ -167,19 +167,13 @@ public class UserController extends Controller {
 			System.out.println("Cannot check user, expecting Json data");
 			return badRequest("Cannot check user, expecting Json data");
 		}
-		String userName = json.path("userName").asText();
+		String email = json.path("email").asText();
 		String password = json.path("password").asText();
-		List<User> users = userRepository.findByUserName(userName);
-		if (users.size()==0) {
-			System.out.println("User is not existed");
-			return badRequest("User is not existed");
-		}
-		User user = users.get(0);
+		User user = userRepository.findByEmail(email);
 		if (user.getPassword().equals(password)) {
 			System.out.println("User is valid");
 			return ok("User is valid");
-		}
-		else {
+		} else {
 			System.out.println("User is not valid");
 			return badRequest("User is not valid");
 		}
