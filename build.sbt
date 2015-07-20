@@ -20,3 +20,5 @@ libraryDependencies ++= Seq(
   "com.google.code.gson" % "gson" % "2.3.1",
   "org.hibernate" % "hibernate-c3p0" % "4.3.7.Final"
 )
+
+
