@@ -554,16 +554,16 @@ public class ServiceExecutionLogController extends Controller {
 			return badRequest("id is negative!");
 		}
 
-		ServiceExecutionLog ServiceExecutionLog = serviceExecutionLogRepository
+		ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository
 				.findOne(id);
-		if (ServiceExecutionLog == null) {
+		if (serviceExecutionLog == null) {
 			System.out.println("ServiceExecutionLog not found with id: " + id);
 			return notFound("ServiceExecutionLog not found with id: " + id);
 		}
 
 		String result = new String();
 		if (format.equals("json")) {
-			result = new Gson().toJson(ServiceExecutionLog);
+			result = new Gson().toJson(serviceExecutionLog);
 		}
 
 		return ok(result);
