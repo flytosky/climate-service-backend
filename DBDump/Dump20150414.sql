@@ -184,6 +184,8 @@ CREATE TABLE `Dataset` (
   `instrumentId` bigint(20) NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
   `dataSourceNameinWebInterface` varchar(255) DEFAULT NULL,
+  `startTime` datetime DEFAULT NULL,
+  `endTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_9x29nf004vryd28iummv5l5r0` (`instrumentId`),
   CONSTRAINT `FK_9x29nf004vryd28iummv5l5r0` FOREIGN KEY (`instrumentId`) REFERENCES `Instrument` (`id`)
@@ -455,6 +457,8 @@ CREATE TABLE `ServiceExecutionLog` (
   `serviceId` bigint(20) NOT NULL,
   `serviceConfigurationId` bigint(20) DEFAULT NULL,
   `userId` bigint(20) NOT NULL,
+  `datasetStartTime` datetime DEFAULT NULL,
+  `datasetEndTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_ly45hkuqs8yyw00iiuyx5hoj4` (`serviceId`),
   KEY `FK_g2n3b4rs0xys2r4r967uvi4jr` (`serviceConfigurationId`),
