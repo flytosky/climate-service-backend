@@ -38,11 +38,16 @@ public class ServiceExecutionLog {
 	private Date executionEndTime;
 	private String plotUrl;
 	private String dataUrl;
+	private Date datasetStartTime;
+	private Date datasetEndTime;
 
-	public ServiceExecutionLog(ClimateService climateService,
-			User user, ServiceConfiguration serviceConfiguration, //DatasetLog datasetLog,
-			String purpose, Date executionStartTime, Date executionEndTime, String dataUrl, String plotUrl) {
-		this.climateService = climateService;
+	public ServiceExecutionLog(
+			ClimateService climateService, User user,
+			ServiceConfiguration serviceConfiguration, // DatasetLog datasetLog,
+			String purpose, Date executionStartTime, Date executionEndTime,
+			String dataUrl, String plotUrl, Date datasetStartTime,
+			Date datasetEndTime) {
+	this.climateService = climateService;
 		this.user = user;
 		this.serviceConfiguration = serviceConfiguration;
 		//this.datasetLog = datasetLog;
@@ -51,6 +56,8 @@ public class ServiceExecutionLog {
 		this.executionEndTime = executionEndTime;
 		this.plotUrl = plotUrl;
 		this.dataUrl = dataUrl;
+		this.datasetStartTime = datasetStartTime;
+		this.datasetEndTime = datasetEndTime;
 	}
 	
 	public ServiceExecutionLog() {
@@ -96,7 +103,15 @@ public class ServiceExecutionLog {
 	public String getDataUrl() {
 		return dataUrl;
 	}
+	
+	public Date getDatasetStartTime() {
+		return datasetStartTime;
+	}
 
+	public Date getDatasetEndTime() {
+		return datasetEndTime;
+	}
+	
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -136,6 +151,14 @@ public class ServiceExecutionLog {
 	public void setDataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
 	}
+	
+	public void setDatasetStartTime(Date datasetStartTime) {
+		this.datasetStartTime = datasetStartTime;
+	}
+
+	public void setDatasetEndTime(Date datasetEndTime) {
+		this.datasetEndTime = datasetEndTime;
+	}
 
 	@Override
 	public String toString() {
@@ -144,8 +167,12 @@ public class ServiceExecutionLog {
 				+ serviceConfiguration + ", purpose=" + purpose
 				+ ", executionStartTime=" + executionStartTime
 				+ ", executionEndTime=" + executionEndTime + ", plotUrl="
-				+ plotUrl + ", dataUrl=" + dataUrl + "]";
+				+ plotUrl + ", dataUrl=" + dataUrl 
+				+ ", datasetStartTime=" + datasetStartTime
+				+ ", datasetEndTime=" + datasetEndTime
+				+ "]";
 	}
+
 	
 //	@Override
 //	public String toString() {
