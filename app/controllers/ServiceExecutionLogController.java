@@ -341,10 +341,6 @@ public class ServiceExecutionLogController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String plotUrl = json.findPath("url").asText();
 		String dataUrl = json.findPath("dataUrl").asText();
-		// String executionStartTimeString =
-		// json.findPath("executionStartTime").asText();
-		// String executionEndTimeString =
-		// json.findPath("executionEndTime").asText();
 		long executionStartTimeNumber = json.findPath("executionStartTime")
 				.asLong();
 		long executionEndTimeNumber = json.findPath("executionEndTime")

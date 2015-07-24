@@ -457,8 +457,6 @@ CREATE TABLE `ServiceExecutionLog` (
   `serviceId` bigint(20) NOT NULL,
   `serviceConfigurationId` bigint(20) DEFAULT NULL,
   `userId` bigint(20) NOT NULL,
-  `datasetStartTime` datetime DEFAULT NULL,
-  `datasetEndTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_ly45hkuqs8yyw00iiuyx5hoj4` (`serviceId`),
   KEY `FK_g2n3b4rs0xys2r4r967uvi4jr` (`serviceConfigurationId`),
