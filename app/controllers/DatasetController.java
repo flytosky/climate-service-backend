@@ -50,6 +50,10 @@ public class DatasetController extends Controller {
     	long instrumentId = json.findPath("instrumentId").asLong();
     	String url = json.findPath("url").asText();
     	long publishTimeStampNumber = json.findPath("publishTimeStamp").asLong();
+    	
+    	long startTimeNumber = json.findPath("dataSetStartTime").asLong();
+    	long endTimeNumber = json.findPath("dataSetEndTime").asLong();
+    	
     	String physicalVariable = json.findPath("physicalVariable").asText();
     	String CMIP5VarName = json.findPath("CMIP5VarName").asText();
     	String units = json.findPath("units").asText();
@@ -62,6 +66,10 @@ public class DatasetController extends Controller {
     	String dataSourceNameinWebInterface = json.findPath("dataSourceNameinWebInterface").asText();
     	String comment  = json.findPath("comment").asText();
     	Date publishTimeStamp = new Date(publishTimeStampNumber);
+    	
+    	Date startTime = new Date(startTimeNumber);
+    	Date endTime = new Date(endTimeNumber);
+    	
     	JsonNode ClimateServices = json.findPath("ServiesId");
     	List<Long> climateServicesId = new ArrayList<Long>();
     	for(int i = 0; i < ClimateServices.size(); i++) {
@@ -73,7 +81,7 @@ public class DatasetController extends Controller {
 			for(int i=0;i<climateServicesId.size();i++) {
 				climateServiceSet.add(climateServiceRepository.findOne(climateServicesId.get(i)));
 			}
-			Dataset dataset = new Dataset(name, dataSourceNameinWebInterface, agencyId, instrument, climateServiceSet, publishTimeStamp, url, physicalVariable, CMIP5VarName, units, gridDimension, dataSourceNameinWebInterface, status, responsiblePerson, variableNameInWebInterface, dataSourceInputParameterToCallScienceApplicationCode, variableNameInputParameterToCallScienceApplicationCode, comment);
+			Dataset dataset = new Dataset(name, dataSourceNameinWebInterface, agencyId, instrument, climateServiceSet, publishTimeStamp, url, physicalVariable, CMIP5VarName, units, gridDimension, dataSourceNameinWebInterface, status, responsiblePerson, variableNameInWebInterface, dataSourceInputParameterToCallScienceApplicationCode, variableNameInputParameterToCallScienceApplicationCode, comment, startTime, endTime);
 			Dataset savedServiceConfiguration = datasetRepository.save(dataset);
 			System.out.println("Dataset saved: "+ savedServiceConfiguration.getId());
 			return created(new Gson().toJson(dataset.getId()));
@@ -100,6 +108,10 @@ public class DatasetController extends Controller {
     	long instrumentId = json.findPath("instrumentId").asLong();
     	String url = json.findPath("url").asText();
     	long publishTimeStampNumber = json.findPath("publishTimeStamp").asLong();
+    	
+    	long startTimeNumber = json.findPath("dataSetStartTime").asLong();
+    	long endTimeNumber = json.findPath("dataSetEndTime").asLong();
+    	
     	String physicalVariable = json.findPath("physicalVariable").asText();
     	String CMIP5VarName = json.findPath("CMIP5VarName").asText();
     	String units = json.findPath("units").asText();
@@ -113,6 +125,10 @@ public class DatasetController extends Controller {
     	String dataSourceNameinWebInterface = json.findPath("dataSourceNameinWebInterface").asText();
     	String comment  = json.findPath("comment").asText();
     	Date publishTimeStamp = new Date(publishTimeStampNumber);
+    	
+    	Date startTime = new Date(startTimeNumber);
+    	Date endTime = new Date(endTimeNumber);
+    	
     	JsonNode ClimateServices = json.findPath("ServiesId");
     	List<Long> climateServicesId = new ArrayList<Long>();
     	for(int i = 0; i < ClimateServices.size(); i++) {
@@ -130,6 +146,10 @@ public class DatasetController extends Controller {
 			dataset.setInstrument(instrument);
 			dataset.setUrl(url);
 			dataset.setPublishTimeStamp(publishTimeStamp);
+			
+			dataset.setStartTime(startTime);
+			dataset.setEndTime(endTime);
+			
 			dataset.setPhysicalVariable(physicalVariable);
 			dataset.setCMIP5VarName(CMIP5VarName);
 			dataset.setUnits(units);
