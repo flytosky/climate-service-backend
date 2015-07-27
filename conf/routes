@@ -43,7 +43,7 @@ GET           /serviceConfiguration/getAllServiceConfigurationsByUserId/:userId/
 # Service Configuration Item
 GET           /serviceConfigurationItem/serviceConfigurationItemById/:id                                @controllers.ServiceConfigurationItemController.getServiceConfigurationItemById(id: Long)
 GET           /serviceConfigurationItem/serviceConfigurationItemByServiceConfig/:serviceConfigId        @controllers.ServiceConfigurationItemController.getServiceConfigurationItemsInServiceConfig(serviceConfigId: Long)
-GET           /serviceConfigurationItem/serviceConfigurationItemByParamName/:param                      @controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterName(param : String)
+GET           /serviceConfigurationItem/serviceConfigurationItemByParamId/:paramId                      @controllers.ServiceConfigurationItemController.getServiceConfigurationItemByParameterId(paramId : Long)
 POST          /serviceConfigurationItem/addServiceConfigurationItem                                     @controllers.ServiceConfigurationItemController.addServiceConfigurationItem
 PUT           /serviceConfigurationItem/updateServiceConfigurationItem/id/:id                           @controllers.ServiceConfigurationItemController.updateServiceConfigurationItemById(id:Long)
 DELETE        /serviceConfigurationItem/deleteServiceConfigurationItemById/:id                          @controllers.ServiceConfigurationItemController.deleteServiceConfigurationItemById(id: Long)

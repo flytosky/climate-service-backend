@@ -128,19 +128,19 @@ public class ServiceConfigurationItemController extends Controller {
 		}
 	}
 
-	public Result getServiceConfigurationItemByParameterName(String parameterName) {
-		if (parameterName == null || parameterName.length() == 0) {
-			System.out.println("Parameter Name is null or empty!");
-			return badRequest("Parameter Name is null or empty!");
+	public Result getServiceConfigurationItemByParameterId(long parameterId) {
+		if (parameterId < 0) {
+			System.out.println("Parameter Id is invalid!");
+			return badRequest("Parameter Id is invalid!");
 		}
 
 		List<ServiceConfigurationItem> serviceConfigItem = serviceConfigurationItemRepository
-				.findByParameter_Name(parameterName);
+				.findByParameter_Id(parameterId);
 		if (serviceConfigItem == null) {
-			System.out.println("ServiceConfigurationItem not found with name: "
-					+ parameterName);
-			return notFound("ServiceConfigurationItem not found with name: "
-					+ parameterName);
+			System.out.println("ServiceConfigurationItem not found with id: "
+					+ parameterId);
+			return notFound("ServiceConfigurationItem not found with id: "
+					+ parameterId);
 		}
 
 		String result = new Gson().toJson(serviceConfigItem);
