@@ -347,6 +347,12 @@ public class ServiceExecutionLogController extends Controller {
 				.asLong();
 		Date executionStartTime = new Date(executionStartTimeNumber);
 		Date executionEndTime = new Date(executionEndTimeNumber);
+		long datasetStudyStartTimeNumber = json.findPath("datasetStudyStartTime")
+				.asLong();
+		long datasetStudyEndTimeNumber = json.findPath("datasetStudyEndTime")
+				.asLong();
+		Date datasetStudyStartTime = new Date(datasetStudyStartTimeNumber);
+		Date datasetStudyEndTime = new Date(datasetStudyEndTimeNumber);
 
 		// If we change the date format later, we can modify here.
 		//
@@ -397,7 +403,8 @@ public class ServiceExecutionLogController extends Controller {
 					climateService, user, difference + "ms");
 			ServiceExecutionLog serviceExecutionLog = new ServiceExecutionLog(
 					climateService, user, serviceConfiguration, purpose,
-					executionStartTime, executionEndTime, dataUrl, plotUrl);
+					executionStartTime, executionEndTime, dataUrl, plotUrl,
+					datasetStudyStartTime, datasetStudyEndTime);
 			ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository
 					.save(serviceExecutionLog);
 			ServiceConfiguration savedServiceConfiguration = savedServiceExecutionLog
