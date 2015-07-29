@@ -17,7 +17,8 @@ public class ClimateServiceTest {
 	private static String TEST_PURPOSE = "test_purpose";
 	private static String TEST_URL = "test_url";
 	private static String TEST_SCENARIO = "test_scenario";
-	private static Date TEST_DATE;
+	private static Date TEST_CREATE_TIME;
+	private static Date TEST_CREATE_TIME1;
 	private static String TEST_VERSIONNO = "test_versionNo";
 	
 	private static ClimateService climateService;
@@ -27,8 +28,10 @@ public class ClimateServiceTest {
 	public void setUp() throws Exception{
 		climateService = new ClimateService();
 		TEST_USER = new User();
-		TEST_DATE = new Date(0);
-		climateService1 = new ClimateService(TEST_ROOT_SERVICE_ID, TEST_USER, TEST_NAME, TEST_PURPOSE, TEST_URL, TEST_SCENARIO, TEST_DATE, TEST_VERSIONNO);
+		TEST_CREATE_TIME = new Date(0);
+		TEST_CREATE_TIME1 = null; 
+		climateService1 = new ClimateService(TEST_ROOT_SERVICE_ID, TEST_USER, TEST_NAME, TEST_PURPOSE, TEST_URL, TEST_SCENARIO, TEST_CREATE_TIME, TEST_VERSIONNO);
+		climateService1 = new ClimateService(TEST_ROOT_SERVICE_ID, TEST_USER, TEST_NAME, TEST_PURPOSE, TEST_URL, TEST_SCENARIO, TEST_CREATE_TIME1, TEST_VERSIONNO);
 	}
 	
 	@Test
@@ -72,8 +75,8 @@ public class ClimateServiceTest {
 	
 	@Test
 	public void testCreateTime(){
-		climateService.setCreateTime(TEST_DATE);
-		assertEquals(TEST_DATE, climateService.getCreateTime());
+		climateService.setCreateTime(TEST_CREATE_TIME);
+		assertEquals(TEST_CREATE_TIME, climateService.getCreateTime());
 	}
 	
 	@Test
