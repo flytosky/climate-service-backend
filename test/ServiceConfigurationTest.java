@@ -49,4 +49,12 @@ public class ServiceConfigurationTest {
 		assertEquals(user, serviceConfiguration.getUser());
 	}
 
+	@Test
+	public void testEquals() {
+		ServiceConfiguration serviceConfiguration1 = new ServiceConfiguration();
+		assertEquals(true, serviceConfiguration.equals(serviceConfiguration1));
+		assertEquals(false, serviceConfiguration.equals(" "));
+		serviceConfiguration1.setId(100);
+		assertEquals(false, serviceConfiguration.equals(serviceConfiguration1));
+	}
 }
