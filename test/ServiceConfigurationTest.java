@@ -10,25 +10,19 @@ import org.junit.Test;
 public class ServiceConfigurationTest {
 
 	private static long TEST_ID = 0;
+	private static String TEST_RUN_TIME = "runTime";
 	private static ClimateService climateService;
 	private static User user;
-	private static String TEST_RUNTIME = "runTime";
 	
-	private ServiceConfiguration serviceConfiguration;
-	private ServiceConfiguration serviceConfiguration1;
+	private static ServiceConfiguration serviceConfiguration;
+	private static ServiceConfiguration serviceConfiguration1;
 	
 	@Before
 	public void setUp() throws Exception{
-		serviceConfiguration = new ServiceConfiguration();
-		climateService = new ClimateService();
 		user = new User();
-		serviceConfiguration1 = new ServiceConfiguration(climateService, user, TEST_RUNTIME);
-	}
-	
-	@Test
-	public void testId() {
-		serviceConfiguration.setId(TEST_ID);
-		assertEquals(TEST_ID, serviceConfiguration.getId());
+		climateService = new ClimateService();
+		serviceConfiguration = new ServiceConfiguration();
+		serviceConfiguration1 = new ServiceConfiguration(climateService, user, TEST_RUN_TIME);
 	}
 	
 	@Test
@@ -38,15 +32,21 @@ public class ServiceConfigurationTest {
 	}
 	
 	@Test
-	public void testUser() {
-		serviceConfiguration.setUser(user);
-		assertEquals(user, serviceConfiguration.getUser());
+	public void testId() {
+		serviceConfiguration.setId(TEST_ID);
+		assertEquals(TEST_ID, serviceConfiguration.getId());
 	}
 	
 	@Test
 	public void testRunTime() {
-		serviceConfiguration.setRunTime(TEST_RUNTIME);
-		assertEquals(TEST_RUNTIME, serviceConfiguration.getRunTime());
+		serviceConfiguration.setRunTime(TEST_RUN_TIME);
+		assertEquals(TEST_RUN_TIME, serviceConfiguration.getRunTime());
+	}
+	
+	@Test
+	public void testUser() {
+		serviceConfiguration.setUser(user);
+		assertEquals(user, serviceConfiguration.getUser());
 	}
 
 }
