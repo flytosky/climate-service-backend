@@ -246,13 +246,26 @@ public class DatasetController extends Controller {
     		else {
     			physicalVariable = WILDCARD+physicalVariable+WILDCARD;
     		}
+    		
+    		Date startTime = new Date();
+			Date endTime = new Date();
+			long startTimeNumber = json.findPath("dataSetStartTime").asLong();
+			long endTimeNumber = json.findPath("dataSetEndTime").asLong();
+    		
+			if (startTimeNumber > 0) {
+				startTime = new Date(startTimeNumber);
+			}
+			if (endTimeNumber > 0) {
+				endTime = new Date(endTimeNumber);
+			}
+    		
     		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
     		if (instrumentId==0) {
-    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(name, agencyId, gridDimension, physicalVariable);
+    			datasets = datasetRepository.findByStartTimeGreaterThanEqualAndEndTimeLessThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(startTime, endTime, name, agencyId, gridDimension, physicalVariable);
     					
     		} else {
-    			datasets = datasetRepository.findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(name, agencyId, gridDimension, physicalVariable, instrumentId);
+    			datasets = datasetRepository.findByStartTimeGreaterThanEqualAndEndTimeLessThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(startTime, endTime, name, agencyId, gridDimension, physicalVariable, instrumentId);
     		}
     		result = new Gson().toJson(datasets);
     	} catch (Exception e) {
