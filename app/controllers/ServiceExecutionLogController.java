@@ -29,6 +29,7 @@ import models.ServiceExecutionLog;
 import models.ServiceExecutionLogRepository;
 import models.User;
 import models.UserRepository;
+import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -580,38 +581,57 @@ public class ServiceExecutionLogController extends Controller {
 	}
 
 	public Result replaceUserWithPurpose() {
-		// Get all execution logs with userid = 1
-		List<ServiceExecutionLog> executionLogs = serviceExecutionLogRepository
-				.findByUser_Id(1);
 
-		if (executionLogs == null || executionLogs.isEmpty()) {
-			System.out.println("No logs need to be updated");
-			return notFound("No logs need to be updated");
-		}
+		//Replace the previous
+		Iterable<ServiceExecutionLog> executionLogs = serviceExecutionLogRepository.findAll();
 
-		// For each log, set its user to a new user with new name
+		HashMap<String, User> uniqueUsers = new HashMap<>();
 		for (ServiceExecutionLog log : executionLogs) {
-			String userName = "";
-			String purpose = log.getPurpose().trim();
-			if (purpose.startsWith("CCS student")) {
-				System.out.println(purpose);
-				// Temporarily
-				userName = purpose.substring(0, 11) + " ";
-				for (int i = 12; i < purpose.length(); i++)
-					if (Character.isDigit(purpose.charAt(i))) {
-						userName += purpose.charAt(i);
-					} else
-						break;
-				User newUser = new User(userName, "", "", "", "", "", "", "",
-						"", "", "", "", "");
-				userRepository.save(newUser);
-				log.setUser(newUser);
-				serviceExecutionLogRepository.save(log);
+			String name = log.getUser().getFirstName();
+			if (name.startsWith("CCS student"))
+			{
+				if (!uniqueUsers.containsKey(name))
+				{
+					uniqueUsers.put(name,log.getUser());
+				}
+				else
+				{
+					log.setUser(uniqueUsers.get(name));
+					serviceExecutionLogRepository.save(log);
+				}
 			}
 		}
 
-		String result = new Gson().toJson(serviceExecutionLogRepository
-				.findAll());
+
+		// Get all execution logs with userid = 1
+//		List<ServiceExecutionLog> executionLogs = serviceExecutionLogRepository.findByUser_Id(1);
+
+//		if(executionLogs == null || executionLogs.isEmpty()){
+//			System.out.println("No logs need to be updated");
+//			return notFound("No logs need to be updated");
+//		}
+
+		// For each log, set its user to a new user with new name
+//		for(ServiceExecutionLog log: executionLogs){
+//			String userName = "";
+//			String purpose = log.getPurpose().trim();
+//			if(purpose.startsWith("CCS student")) {
+//				System.out.println(purpose);
+//				// Temporarily
+//				userName = purpose.substring(0, 11)+" ";
+//				for(int i = 12; i < purpose.length(); i++)
+//					if(Character.isDigit(purpose.charAt(i))){
+//						userName += purpose.charAt(i);
+//					}
+//					else break;
+//				User newUser = new User(userName,"", "", "", "", "", "", "", "", "", "");
+//				userRepository.save(newUser);
+//				log.setUser(newUser);
+//				serviceExecutionLogRepository.save(log);
+//			}
+//		}
+
+		String result = new Gson().toJson(serviceExecutionLogRepository.findAll());
 
 		return ok(result);
 	}
