@@ -60,7 +60,7 @@ public class ClimateServiceController extends Controller {
 
 		// Parse JSON file
 		long rootServiceId = json.findPath("rootServiceId").asLong();
-		long creatorId = json.findPath("creatorId").asLong();
+		String creatorEmail = json.findPath("creatorEmail").asText();
 		String name = json.findPath("name").asText();
 		String purpose = json.findPath("purpose").asText();
 		String url = json.findPath("url").asText();
@@ -76,7 +76,7 @@ public class ClimateServiceController extends Controller {
 		String versionNo = json.findPath("versionNo").asText();
 
 		try {
-			User user = userRepository.findOne(creatorId);
+			User user = userRepository.findByEmail(creatorEmail);
 			ClimateService climateService = new ClimateService(rootServiceId,
 					user, name, purpose, url, scenario, createTime, versionNo);
 			ClimateService savedClimateService = climateServiceRepository
