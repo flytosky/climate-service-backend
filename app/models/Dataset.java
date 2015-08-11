@@ -43,6 +43,9 @@ public class Dataset {
 	private String dataSourceInputParameterToCallScienceApplicationCode;
 	private String variableNameInputParameterToCallScienceApplicationCode;
 	private String comment;
+	private Date startTime;
+	private Date endTime;
+	
 
 	public Dataset() {
 	}
@@ -55,7 +58,7 @@ public class Dataset {
 			String responsiblePerson, String variableNameInWebInterface,
 			String dataSourceInputParameterToCallScienceApplicationCode,
 			String variableNameInputParameterToCallScienceApplicationCode,
-			String comment) {
+			String comment, Date startTime, Date endTime) {
 		super();
 		this.name = name;
 		this.dataSourceNameinWebInterface = dataSourceNameinWebInterface;
@@ -75,6 +78,8 @@ public class Dataset {
 		this.dataSourceInputParameterToCallScienceApplicationCode = dataSourceInputParameterToCallScienceApplicationCode;
 		this.variableNameInputParameterToCallScienceApplicationCode = variableNameInputParameterToCallScienceApplicationCode;
 		this.comment = comment;
+		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 
 	public long getId() {
@@ -152,6 +157,14 @@ public class Dataset {
 	public String getComment() {
 		return comment;
 	}
+	
+	public Date getStartTime() {
+		return startTime;
+	}
+	
+	public Date getEndTime() {
+		return endTime;
+	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -227,6 +240,14 @@ public class Dataset {
 		this.comment = comment;
 	}
 
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
 	@Override
 	public String toString() {
 		return "Dataset [id=" + id + ", name=" + name
@@ -244,7 +265,9 @@ public class Dataset {
 				+ dataSourceInputParameterToCallScienceApplicationCode
 				+ ", variableNameInputParameterToCallScienceApplicationCode="
 				+ variableNameInputParameterToCallScienceApplicationCode
-				+ ", comment=" + comment + "]";
+				+ ", comment=" + comment 
+				+ ", startTime=" + startTime + ", endTime=" + endTime
+				+"]";
 	}
 	
 }

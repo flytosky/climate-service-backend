@@ -342,39 +342,41 @@ public class ServiceExecutionLogController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String plotUrl = json.findPath("url").asText();
 		String dataUrl = json.findPath("dataUrl").asText();
-		// String executionStartTimeString =
-		// json.findPath("executionStartTime").asText();
-		// String executionEndTimeString =
-		// json.findPath("executionEndTime").asText();
 		long executionStartTimeNumber = json.findPath("executionStartTime")
 				.asLong();
 		long executionEndTimeNumber = json.findPath("executionEndTime")
 				.asLong();
 		Date executionStartTime = new Date(executionStartTimeNumber);
 		Date executionEndTime = new Date(executionEndTimeNumber);
+		String datasetStudyStartTimeNumber = json.findPath("datasetStudyStartTime")
+				.asText();
+		String datasetStudyEndTimeNumber = json.findPath("datasetStudyEndTime")
+				.asText();
+		Date datasetStudyStartTime = new Date();
+		Date datasetStudyEndTime = new Date();
 
 		// If we change the date format later, we can modify here.
 		//
-		// SimpleDateFormat simpleDateFormat = new
-		// SimpleDateFormat(util.Common.DATE_PATTERN);
-		//
-		// try {
-		// executionStartTime =
-		// simpleDateFormat.parse(executionStartTimeString);
-		// } catch (ParseException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// System.out.println("Wrong Date Format :" + executionStartTimeString);
-		// return badRequest("Wrong Date Format :" + executionStartTimeString);
-		// }
-		// try {
-		// executionEndTime = simpleDateFormat.parse(executionEndTimeString);
-		// } catch (ParseException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// System.out.println("Wrong Date Format :" + executionEndTimeString);
-		// return badRequest("Wrong Date Format :" + executionEndTimeString);
-		// }
+		 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATASET_DATE_PATTERN);
+
+		 try {
+			 datasetStudyStartTime = simpleDateFormat.parse(datasetStudyStartTimeNumber);
+			 datasetStudyEndTime = simpleDateFormat.parse(datasetStudyEndTimeNumber);
+		 
+		 } catch (ParseException e) {
+		 // TODO Auto-generated catch block
+		 e.printStackTrace();
+		 System.out.println("Wrong Date Format :" + datasetStudyStartTime + " " +datasetStudyEndTime);
+		 return badRequest("Wrong Date Format :" + datasetStudyStartTime + " " +datasetStudyEndTime);
+		 }
+//		 try {
+//		 executionEndTime = simpleDateFormat.parse(executionEndTimeString);
+//		 } catch (ParseException e) {
+//		 // TODO Auto-generated catch block
+//		 e.printStackTrace();
+//		 System.out.println("Wrong Date Format :" + executionEndTimeString);
+//		 return badRequest("Wrong Date Format :" + executionEndTimeString);
+//		 }
 
 		try {
 			User user = userRepository.findOne(userId);
@@ -402,7 +404,8 @@ public class ServiceExecutionLogController extends Controller {
 					climateService, user, difference + "ms");
 			ServiceExecutionLog serviceExecutionLog = new ServiceExecutionLog(
 					climateService, user, serviceConfiguration, purpose,
-					executionStartTime, executionEndTime, dataUrl, plotUrl);
+					executionStartTime, executionEndTime, dataUrl, plotUrl,
+					datasetStudyStartTime, datasetStudyEndTime);
 			ServiceExecutionLog savedServiceExecutionLog = serviceExecutionLogRepository
 					.save(serviceExecutionLog);
 			ServiceConfiguration savedServiceConfiguration = savedServiceExecutionLog

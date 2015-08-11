@@ -1,94 +1,60 @@
+import static org.junit.Assert.*;
+import models.ClimateService;
+import models.ServiceConfiguration;
+import models.User;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.node.NullNode;
-import netscape.javascript.JSObject;
-
-
+import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
-import play.mvc.*;
-import play.test.*;
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
+public class ServiceConfigurationTest {
 
-
-public class ServiceConfigurationTest extends WithApplication {
-	@Override
-	protected FakeApplication provideFakeApplication() {
-		FakeApplication fakeAppWithMemoryDb = fakeApplication(inMemoryDatabase("test"));
-		return fakeAppWithMemoryDb;
-	};
+	private static long TEST_ID = 0;
+	private static String TEST_RUN_TIME = "runTime";
+	private static ClimateService climateService;
+	private static User user;
 	
-//	@Test
-//	public void testBadRoute() {
-//	    Result result = route(fakeRequest(GET, "/xx/Kiki"));
-//	    assertThat(result).isNull();
-//	}
+	private static ServiceConfiguration serviceConfiguration;
+	private static ServiceConfiguration serviceConfiguration1;
+	
+	@Before
+	public void setUp() throws Exception{
+		user = new User();
+		climateService = new ClimateService();
+		serviceConfiguration = new ServiceConfiguration();
+		serviceConfiguration1 = new ServiceConfiguration(climateService, user, TEST_RUN_TIME);
+	}
 	
 	@Test
-	public void testUser(){
-		Gson gson = new Gson();
-		ObjectMapper mapper = new ObjectMapper();		
-		
-		//Create a new user. /users/add returns the newly created user id as a Long
-		JsonNode postJson = mapper.createObjectNode();
-		try {
-			postJson = mapper.readTree("{\"firstName\":\"John\",\"lastName\":\"Watson\"}");
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Result userCreation = route(fakeRequest(POST, "/users/add").withJsonBody(postJson));
-		System.out.println("REQUEST User create");
-		System.out.println(postJson);
-		assertThat(userCreation).isNotNull();
-		System.out.println("RESULT");
-		System.out.println(userCreation);
-		long userID = gson.fromJson(contentAsString(userCreation), Long.class);
-
-		JsonNode postJson2 = mapper.createObjectNode();
-		//Create a new Climate Service 
-		try {
-			postJson = mapper.readTree("{\"creatorId\":\""+userID+"\",\"name\":\"NightVale\"}");
-			postJson2 = mapper.readTree("{\"creatorId\":\""+userID+"\",\"name\":\"testName\",\"purpose\":\"For testing\",\"url\":\"http://einstein.sv.cmu.edu:9008/forTesting\",\"scenario\":\"Used only for testing\",\"versionNo\":\"1\",\"rootServiceId\":\"1\"}]");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("REQUEST Service Create ");
-		System.out.println(postJson2);
+	public void testClimateService() {
+		serviceConfiguration.setClimateservice(climateService);
+		assertEquals(climateService, serviceConfiguration.getClimateservice());
+	}
 	
-		Result serviceCreation = route(fakeRequest(POST, "/climate/addClimateService").withJsonBody(postJson));
-		
-		System.out.println("RESULT");
-		System.out.println(contentAsString(serviceCreation));
-		
-		Result serviceCreation2 = route(fakeRequest(POST, "/climate/addClimateService").withJsonBody(postJson2));
-		System.out.println("RESULT Service Create2");
-		System.out.println(contentAsString(serviceCreation2));
-		
-		long serviceID = gson.fromJson(contentAsString(serviceCreation2), Long.class);
-			
-		Result serviceGetname = route(fakeRequest(GET, "/climate/getClimateService/NightVale/json"));
-		System.out.println("RESULT get service by name");
-		System.out.println(contentAsString(serviceGetname));
-		
-		Result serviceGetAll = route(fakeRequest(GET, "/climate/getAllClimateServices/json"));
-		System.out.println("RESULT get service (all)");
-		System.out.println(contentAsString(serviceGetAll));
+	@Test
+	public void testId() {
+		serviceConfiguration.setId(TEST_ID);
+		assertEquals(TEST_ID, serviceConfiguration.getId());
+	}
+	
+	@Test
+	public void testRunTime() {
+		serviceConfiguration.setRunTime(TEST_RUN_TIME);
+		assertEquals(TEST_RUN_TIME, serviceConfiguration.getRunTime());
+	}
+	
+	@Test
+	public void testUser() {
+		serviceConfiguration.setUser(user);
+		assertEquals(user, serviceConfiguration.getUser());
+	}
 
-		Result serviceGetId = route(fakeRequest(GET, "/climate/getClimateService/id/"+serviceID));
-		System.out.println("RESULT get service by name");
-		System.out.println(contentAsString(serviceGetId));
-		
+	@Test
+	public void testEquals() {
+		ServiceConfiguration serviceConfiguration1 = new ServiceConfiguration();
+		assertEquals(true, serviceConfiguration.equals(serviceConfiguration1));
+		assertEquals(false, serviceConfiguration.equals(" "));
+		serviceConfiguration1.setId(100);
+		assertEquals(false, serviceConfiguration.equals(serviceConfiguration1));
 	}
 }

@@ -38,11 +38,17 @@ public class ServiceExecutionLog {
 	private Date executionEndTime;
 	private String plotUrl;
 	private String dataUrl;
+	private Date datasetStudyStartTime;
+	private Date datasetStudyEndTime;
+	
 
-	public ServiceExecutionLog(ClimateService climateService,
-			User user, ServiceConfiguration serviceConfiguration, //DatasetLog datasetLog,
-			String purpose, Date executionStartTime, Date executionEndTime, String dataUrl, String plotUrl) {
-		this.climateService = climateService;
+	public ServiceExecutionLog(
+			ClimateService climateService, User user,
+			ServiceConfiguration serviceConfiguration, // DatasetLog datasetLog,
+			String purpose, Date executionStartTime, Date executionEndTime,
+			String dataUrl, String plotUrl,
+			Date datasetStudyStartTime, Date datasetStudyEndTime) {
+	this.climateService = climateService;
 		this.user = user;
 		this.serviceConfiguration = serviceConfiguration;
 		//this.datasetLog = datasetLog;
@@ -51,6 +57,8 @@ public class ServiceExecutionLog {
 		this.executionEndTime = executionEndTime;
 		this.plotUrl = plotUrl;
 		this.dataUrl = dataUrl;
+		this.datasetStudyStartTime = datasetStudyStartTime;
+		this.datasetStudyEndTime = datasetStudyEndTime;
 	}
 	
 	public ServiceExecutionLog() {
@@ -96,7 +104,15 @@ public class ServiceExecutionLog {
 	public String getDataUrl() {
 		return dataUrl;
 	}
-
+	
+	public Date getDatasetStudyStartTime() {
+		return datasetStudyStartTime;
+	}
+	
+	public Date getDatasetStudyEndTime() {
+		return datasetStudyEndTime;
+	}
+	
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -136,6 +152,14 @@ public class ServiceExecutionLog {
 	public void setDataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
 	}
+	
+	public void setDatasetStudyStartTime(Date datasetStudyStartTime) {
+		this.datasetStudyStartTime = datasetStudyStartTime;
+	}
+
+	public void setDatasetStudyEndTime(Date datasetStudyEndTime) {
+		this.datasetStudyEndTime  = datasetStudyEndTime;
+	}
 
 	@Override
 	public String toString() {
@@ -144,8 +168,12 @@ public class ServiceExecutionLog {
 				+ serviceConfiguration + ", purpose=" + purpose
 				+ ", executionStartTime=" + executionStartTime
 				+ ", executionEndTime=" + executionEndTime + ", plotUrl="
-				+ plotUrl + ", dataUrl=" + dataUrl + "]";
+				+ plotUrl + ", dataUrl=" + dataUrl 
+				+ ", datasetStudyStartTime=" + datasetStudyStartTime
+				+ ", datasetStudyEndTime=" + datasetStudyEndTime
+				+ "]";
 	}
+
 	
 //	@Override
 //	public String toString() {
