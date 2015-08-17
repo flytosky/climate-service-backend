@@ -583,27 +583,27 @@ public class ServiceExecutionLogController extends Controller {
 		return ok(result);
 	}
 
-	public Result replaceUserWithPurpose() {
-
-		//Replace the previous
-		Iterable<ServiceExecutionLog> executionLogs = serviceExecutionLogRepository.findAll();
-
-		HashMap<String, User> uniqueUsers = new HashMap<>();
-		for (ServiceExecutionLog log : executionLogs) {
-			String name = log.getUser().getFirstName();
-			if (name.startsWith("CCS student"))
-			{
-				if (!uniqueUsers.containsKey(name))
-				{
-					uniqueUsers.put(name,log.getUser());
-				}
-				else
-				{
-					log.setUser(uniqueUsers.get(name));
-					serviceExecutionLogRepository.save(log);
-				}
-			}
-		}
+//	public Result replaceUserWithPurpose() {
+//
+//		//Replace the previous
+//		Iterable<ServiceExecutionLog> executionLogs = serviceExecutionLogRepository.findAll();
+//
+//		HashMap<String, User> uniqueUsers = new HashMap<>();
+//		for (ServiceExecutionLog log : executionLogs) {
+//			String name = log.getUser().getFirstName();
+//			if (name.startsWith("CCS student"))
+//			{
+//				if (!uniqueUsers.containsKey(name))
+//				{
+//					uniqueUsers.put(name,log.getUser());
+//				}
+//				else
+//				{
+//					log.setUser(uniqueUsers.get(name));
+//					serviceExecutionLogRepository.save(log);
+//				}
+//			}
+//		}
 
 
 		// Get all execution logs with userid = 1
@@ -633,10 +633,10 @@ public class ServiceExecutionLogController extends Controller {
 //				serviceExecutionLogRepository.save(log);
 //			}
 //		}
-
-		String result = new Gson().toJson(serviceExecutionLogRepository.findAll());
-
-		return ok(result);
-	}
+//
+//		String result = new Gson().toJson(serviceExecutionLogRepository.findAll());
+//
+//		return ok(result);
+//	}
 
 }

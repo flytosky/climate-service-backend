@@ -56,7 +56,7 @@ POST          /serviceExecutionLog/queryServiceExecutionLogs                    
 PUT           /serviceExecutionLog/updateServiceExecutionLogs/:id                                       @controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
 DELETE        /serviceExecutionLog/deleteServiceExecutionLogs/:id                                       @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
 # Temp: replace service log
-GET           /serviceExecutionLog/replaceUser                                                          @controllers.ServiceExecutionLogController.replaceUserWithPurpose()
+#GET           /serviceExecutionLog/replaceUser                                                          @controllers.ServiceExecutionLogController.replaceUserWithPurpose()
 
 # DatasetLog
 GET           /datasetLog/getAllDatasetLogs/json                                                        @controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
