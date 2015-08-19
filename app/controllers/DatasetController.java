@@ -252,7 +252,7 @@ public class DatasetController extends Controller {
 			long startTimeNumber = json.findPath("dataSetStartTime").asLong();
 			long endTimeNumber = json.findPath("dataSetEndTime").asLong();
     		
-			if (startTimeNumber > 0) {
+			if (startTimeNumber > 0 ) {
 				startTime = new Date(startTimeNumber);
 			}
 			if (endTimeNumber > 0) {
@@ -262,10 +262,10 @@ public class DatasetController extends Controller {
     		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
     		if (instrumentId==0) {
-    			datasets = datasetRepository.findByStartTimeGreaterThanEqualAndEndTimeLessThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(startTime, endTime, name, agencyId, gridDimension, physicalVariable);
+    			datasets = datasetRepository.findByStartTimeLessThanEqualAndEndTimeGreaterThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(startTime, endTime, name, agencyId, gridDimension, physicalVariable);
     					
     		} else {
-    			datasets = datasetRepository.findByStartTimeGreaterThanEqualAndEndTimeLessThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(startTime, endTime, name, agencyId, gridDimension, physicalVariable, instrumentId);
+    			datasets = datasetRepository.findByStartTimeLessThanEqualAndEndTimeGreaterThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(startTime, endTime, name, agencyId, gridDimension, physicalVariable, instrumentId);
     		}
     		result = new Gson().toJson(datasets);
     	} catch (Exception e) {
