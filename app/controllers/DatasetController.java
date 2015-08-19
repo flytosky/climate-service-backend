@@ -247,8 +247,8 @@ public class DatasetController extends Controller {
     			physicalVariable = WILDCARD+physicalVariable+WILDCARD;
     		}
     		
-    		Date startTime = new Date(0);
-			Date endTime = new Date();
+    		Date startTime = new Date();
+			Date endTime = new Date(0);
 			long startTimeNumber = json.findPath("dataSetStartTime").asLong();
 			long endTimeNumber = json.findPath("dataSetEndTime").asLong();
     		
