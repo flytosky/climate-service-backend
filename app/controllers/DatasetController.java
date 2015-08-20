@@ -247,8 +247,8 @@ public class DatasetController extends Controller {
     			physicalVariable = WILDCARD+physicalVariable+WILDCARD;
     		}
     		
-    		Date startTime = new Date();
-			Date endTime = new Date(0);
+    		Date startTime = new Date(0);
+			Date endTime = new Date();
 			long startTimeNumber = json.findPath("dataSetStartTime").asLong();
 			long endTimeNumber = json.findPath("dataSetEndTime").asLong();
     		
@@ -262,10 +262,10 @@ public class DatasetController extends Controller {
     		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
     		if (instrumentId==0) {
-    			datasets = datasetRepository.findByStartTimeLessThanEqualAndEndTimeGreaterThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(startTime, endTime, name, agencyId, gridDimension, physicalVariable);
+    			datasets = datasetRepository.findDataset(name, agencyId, gridDimension, physicalVariable, startTime, endTime);
     					
     		} else {
-    			datasets = datasetRepository.findByStartTimeLessThanEqualAndEndTimeGreaterThanEqualAndNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(startTime, endTime, name, agencyId, gridDimension, physicalVariable, instrumentId);
+    			datasets = datasetRepository.findDatasetWithInstrument_Id(name, agencyId, gridDimension, physicalVariable, instrumentId, startTime, endTime);
     		}
     		result = new Gson().toJson(datasets);
     	} catch (Exception e) {
