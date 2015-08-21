@@ -342,12 +342,28 @@ public class ServiceExecutionLogController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String plotUrl = json.findPath("url").asText();
 		String dataUrl = json.findPath("dataUrl").asText();
+
+		SimpleDateFormat formatter = new SimpleDateFormat(util.Common.DATE_PATTERN);
+		formatter.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+		
 		long executionStartTimeNumber = json.findPath("executionStartTime")
 				.asLong();
 		long executionEndTimeNumber = json.findPath("executionEndTime")
 				.asLong();
-		Date executionStartTime = new Date(executionStartTimeNumber);
-		Date executionEndTime = new Date(executionEndTimeNumber);
+		String executionStartTimeStr = formatter.format(new Date(executionStartTimeNumber));
+		String executionEndTimeStr = formatter.format(new Date(executionEndTimeNumber));
+		
+		Date executionStartTime = new Date();
+		Date executionEndTime = new Date();;
+		try {
+			executionStartTime = formatter.parse(executionStartTimeStr);
+			executionEndTime = formatter.parse(executionEndTimeStr);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
 		String datasetStudyStartTimeNumber = json.findPath("datasetStudyStartTime")
 				.asText();
 		String datasetStudyEndTimeNumber = json.findPath("datasetStudyEndTime")
@@ -358,7 +374,7 @@ public class ServiceExecutionLogController extends Controller {
 		// If we change the date format later, we can modify here.
 		//
 		 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(util.Common.DATASET_DATE_PATTERN);
-
+		 
 		 try {
 			 datasetStudyStartTime = simpleDateFormat.parse(datasetStudyStartTimeNumber);
 			 datasetStudyEndTime = simpleDateFormat.parse(datasetStudyEndTimeNumber);
