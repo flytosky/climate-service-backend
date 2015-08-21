@@ -593,7 +593,7 @@ public class ServiceExecutionLogController extends Controller {
 		String result = new String();
 
 		if (format.equals("json")) {
-			result = new Gson().toJson(serviceExecutionLogRepository.findAll());
+			result = new Gson().toJson(serviceExecutionLogRepository.findAllByOrderByExecutionStartTimeDesc());
 		}
 
 		return ok(result);

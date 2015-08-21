@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.springframework.data.repository.CrudRepository;
 
+import com.google.gson.JsonElement;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -33,5 +35,5 @@ public interface ServiceExecutionLogRepository extends CrudRepository<ServiceExe
 
     List<ServiceExecutionLog> findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLike(Date start, Date end, String purpose);
 
-
+    List<ServiceExecutionLog> findAllByOrderByExecutionStartTimeDesc();
 }
