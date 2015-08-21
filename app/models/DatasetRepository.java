@@ -19,10 +19,10 @@ public interface DatasetRepository extends CrudRepository<Dataset, Long> {
 	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndStartTimeLessThanEqualOrEndTimeGreaterThanEqual(String name, String agencyId, String gridDimension, String physicalVariable, Date startTime, Date endTime);
 	
 	//New Dataset Search 
-	@Query(value = "select d.* from Dataset d where d.name like ?1 and d.agencyId like ?2 and d.gridDimension like ?3 and d.physicalVariable like ?4 and d.instrumentId = ?5 and ((d.startTime between ?6 and ?7) or (d.endTime between ?6 and ?7))", nativeQuery = true)
+	@Query(value = "select d.* from Dataset d where d.name like ?1 and d.agencyId like ?2 and d.gridDimension like ?3 and d.physicalVariable like ?4 and d.instrumentId = ?5 and ((d.startTime between ?6 and ?7) or (d.endTime between ?6 and ?7) or (d.startTime <= ?6 and d.endTime >= ?7))", nativeQuery = true)
 	List<Dataset> findDatasetWithInstrument_Id(String name, String agencyId, String gridDimension, String physicalVariable, long instrumentId, Date startTime, Date endTime);
 	
-	@Query(value = "select d.* from Dataset d where d.name like ?1 and d.agencyId like ?2 and d.gridDimension like ?3 and d.physicalVariable like ?4 and ((d.startTime between ?5 and ?6) or (d.endTime between ?5 and ?6))", nativeQuery = true)
+	@Query(value = "select d.* from Dataset d where d.name like ?1 and d.agencyId like ?2 and d.gridDimension like ?3 and d.physicalVariable like ?4 and ((d.startTime between ?5 and ?6) or (d.endTime between ?5 and ?6) or (d.startTime <= ?5 and d.endTime >= ?6))", nativeQuery = true)
 	List<Dataset> findDataset(String name, String agencyId, String gridDimension, String physicalVariable, Date startTime, Date endTime);
 	
 }
