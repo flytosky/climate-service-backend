@@ -252,12 +252,14 @@ public class DatasetController extends Controller {
 			long startTimeNumber = json.findPath("dataSetStartTime").asLong();
 			long endTimeNumber = json.findPath("dataSetEndTime").asLong();
     		
-			if (startTimeNumber > 0 ) {
+			if (startTimeNumber >= 0 ) {
 				startTime = new Date(startTimeNumber);
 			}
-			if (endTimeNumber > 0) {
+			if (endTimeNumber >= 0) {
 				endTime = new Date(endTimeNumber);
 			}
+			
+			System.out.println(name + ";" + agencyId + ";" + gridDimension + ";" + physicalVariable + ";" + startTimeNumber + ";" + endTimeNumber + ";" + startTime + ";" + endTime);
     		
     		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
