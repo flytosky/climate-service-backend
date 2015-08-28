@@ -259,15 +259,20 @@ public class DatasetController extends Controller {
 				endTime = new Date(endTimeNumber);
 			}
 			
-			System.out.println(name + ";" + agencyId + ";" + gridDimension + ";" + physicalVariable + ";" + startTimeNumber + ";" + endTimeNumber + ";" + startTime + ";" + endTime);
+			String source = json.path("instrument").asText();
+			if (source.isEmpty()) {
+				source = WILDCARD;
+    		}
+			else {
+				source = WILDCARD+source+WILDCARD;
+			}
     		
-    		long instrumentId = json.path("instrumentId").asLong();
     		List<Dataset> datasets;
-    		if (instrumentId==0) {
+    		if (source.isEmpty()) {
     			datasets = datasetRepository.findDataset(name, agencyId, gridDimension, physicalVariable, startTime, endTime);
     					
     		} else {
-    			datasets = datasetRepository.findDatasetWithInstrument_Id(name, agencyId, gridDimension, physicalVariable, instrumentId, startTime, endTime);
+    			datasets = datasetRepository.findDatasetWithInstrument(name, agencyId, gridDimension, physicalVariable, source, startTime, endTime);
     		}
     		result = new Gson().toJson(datasets);
     	} catch (Exception e) {
