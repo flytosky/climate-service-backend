@@ -204,5 +204,17 @@ public class UserController extends Controller {
 		}
 		
 	}
-
+	
+	public Result isEmailExisted(){
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("Cannot check email, expecting Json data");
+			return badRequest("Cannot check email, expecting Json data");
+		}
+		String email = json.path("email").asText();
+		if (userRepository.findByEmail(email) != null) {
+			return badRequest("Email already existed");
+		}
+		return ok("Email is valid");
+	}
 }
