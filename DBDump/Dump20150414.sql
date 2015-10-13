@@ -245,17 +245,22 @@ CREATE TABLE `DatasetLog` (
   `dataUrl` varchar(255) DEFAULT NULL,
   `dataSetId` bigint(20) NOT NULL,
   `serviceExecutionLogId` bigint(20) NOT NULL,
+  `userId` bigint(20) NOT NULL,
+  `datasetStudyEndTime` datetime DEFAULT NULL,
+  `datasetStudyStartTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_94re6mmagml0joq8obi5j3tnp` (`instrumentId`),
   KEY `FK_o19ihe0nm8mbtcc48gr9hi6pv` (`originalDataSetId`),
   KEY `FK_nqntvi90gyn1roc6s6xkq3w6h` (`outputDataSetId`),
   KEY `FK_8qcp27u950bwk18esghybcm6y` (`dataSetId`),
   KEY `FK_kecu7ieo2f0q07l5t8bf5dwjr` (`serviceExecutionLogId`),
+  KEY `FK_DatasetLog_User_userId` (`userId`),
   CONSTRAINT `FK_8qcp27u950bwk18esghybcm6y` FOREIGN KEY (`dataSetId`) REFERENCES `Dataset` (`id`),
   CONSTRAINT `FK_94re6mmagml0joq8obi5j3tnp` FOREIGN KEY (`instrumentId`) REFERENCES `Instrument` (`id`),
   CONSTRAINT `FK_kecu7ieo2f0q07l5t8bf5dwjr` FOREIGN KEY (`serviceExecutionLogId`) REFERENCES `ServiceExecutionLog` (`id`),
   CONSTRAINT `FK_nqntvi90gyn1roc6s6xkq3w6h` FOREIGN KEY (`outputDataSetId`) REFERENCES `Dataset` (`id`),
-  CONSTRAINT `FK_o19ihe0nm8mbtcc48gr9hi6pv` FOREIGN KEY (`originalDataSetId`) REFERENCES `Dataset` (`id`)
+  CONSTRAINT `FK_o19ihe0nm8mbtcc48gr9hi6pv` FOREIGN KEY (`originalDataSetId`) REFERENCES `Dataset` (`id`),
+  CONSTRAINT `FK_DatasetLog_User_userId` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

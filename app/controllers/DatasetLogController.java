@@ -1,5 +1,9 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -14,6 +18,8 @@ import models.DatasetLogRepository;
 import models.DatasetRepository;
 import models.ServiceExecutionLog;
 import models.ServiceExecutionLogRepository;
+import models.User;
+import models.UserRepository;
 import play.mvc.*;
 
 @Named
@@ -23,14 +29,17 @@ public class DatasetLogController extends Controller {
 	private final DatasetLogRepository datasetLogRepository;
 	private final DatasetRepository datasetRepository;
 	private final ServiceExecutionLogRepository serviceExecutionLogRepository;
+	private final UserRepository userRepository;
 	
 	@Inject
 	public DatasetLogController(DatasetRepository datasetRepository, 
 			DatasetLogRepository datasetLogRepository,
-			ServiceExecutionLogRepository serviceExecutionLogRepository) {
+			ServiceExecutionLogRepository serviceExecutionLogRepository,
+			UserRepository userRepository) {
 		this.datasetLogRepository = datasetLogRepository;
 		this.datasetRepository = datasetRepository;
 		this.serviceExecutionLogRepository = serviceExecutionLogRepository;
+		this.userRepository = userRepository;
 	}
 	
 	public Result addDatasetLog() {
@@ -46,13 +55,42 @@ public class DatasetLogController extends Controller {
     	long outputDatasetId = json.findPath("outputDatasetId").asLong();
     	long serviceExecutionLogId = json.findPath("serviceExecutionLogId").asLong();
     	long datasetId = json.findPath("datasetId").asLong();
+    	long userId = json.findPath("userId").asLong();
+    	String datasetStudyStartTimeNumber = json.findPath("datasetStudyStartTime")
+				.asText();
+		String datasetStudyEndTimeNumber = json.findPath("datasetStudyEndTime")
+				.asText();
+		Date datasetStudyStartTime = new Date();
+		Date datasetStudyEndTime = new Date();
+		
+		// If we change the date format later, we can modify here.
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				util.Common.DATASET_DATE_PATTERN);
+
+		try {
+			datasetStudyStartTime = simpleDateFormat
+					.parse(datasetStudyStartTimeNumber);
+			datasetStudyEndTime = simpleDateFormat
+					.parse(datasetStudyEndTimeNumber);
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Wrong Date Format :" + datasetStudyStartTime
+					+ " " + datasetStudyEndTime);
+			return badRequest("Wrong Date Format :" + datasetStudyStartTime
+					+ " " + datasetStudyEndTime);
+		}
     	
     	try {
 			Dataset originalDataset = datasetRepository.findOne(originalDatasetId);
 			Dataset outputDataset = datasetRepository.findOne(outputDatasetId);
 			Dataset dataset = datasetRepository.findOne(datasetId);
 			ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository.findOne(serviceExecutionLogId);
-			DatasetLog datasetLog = new DatasetLog(serviceExecutionLog, dataset, plotUrl, dataUrl, originalDataset, outputDataset);
+			User user = userRepository.findOne(userId);
+			DatasetLog datasetLog = new DatasetLog(serviceExecutionLog,
+					dataset, user, plotUrl, dataUrl, originalDataset,
+					outputDataset, datasetStudyStartTime, datasetStudyEndTime);
 			DatasetLog saveddatasetLog = datasetLogRepository.save(datasetLog);
 			System.out.println("DatasetLog saved: "+ saveddatasetLog.getId());
 			return created(new Gson().toJson(datasetLog.getId()));
@@ -77,6 +115,32 @@ public class DatasetLogController extends Controller {
     	long outputDatasetId = json.findPath("outputDatasetId").asLong();
     	long serviceExecutionLogId = json.findPath("serviceExecutionLogId").asLong();
     	long datasetId = json.findPath("datasetId").asLong();
+    	long userId = json.findPath("userId").asLong();
+    	String datasetStudyStartTimeNumber = json.findPath("datasetStudyStartTime")
+				.asText();
+		String datasetStudyEndTimeNumber = json.findPath("datasetStudyEndTime")
+				.asText();
+		Date datasetStudyStartTime = new Date();
+		Date datasetStudyEndTime = new Date();
+		
+		// If we change the date format later, we can modify here.
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				util.Common.DATASET_DATE_PATTERN);
+
+		try {
+			datasetStudyStartTime = simpleDateFormat
+					.parse(datasetStudyStartTimeNumber);
+			datasetStudyEndTime = simpleDateFormat
+					.parse(datasetStudyEndTimeNumber);
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Wrong Date Format :" + datasetStudyStartTime
+					+ " " + datasetStudyEndTime);
+			return badRequest("Wrong Date Format :" + datasetStudyStartTime
+					+ " " + datasetStudyEndTime);
+		}
 
 		try {
 			Dataset originalDataset = datasetRepository.findOne(originalDatasetId);
@@ -84,12 +148,16 @@ public class DatasetLogController extends Controller {
 			Dataset dataset = datasetRepository.findOne(datasetId);
 			ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository.findOne(serviceExecutionLogId);
 			DatasetLog datasetLog = datasetLogRepository.findOne(id);
+			User user = userRepository.findOne(userId);
+			datasetLog.setUser(user);
 			datasetLog.setDataSet(dataset);
 			datasetLog.setDataUrl(dataUrl);
 			datasetLog.setOriginalDataset(originalDataset);
 			datasetLog.setOutputDataset(outputDataset);
 			datasetLog.setPlotUrl(plotUrl);
 			datasetLog.setServiceExecutionLog(serviceExecutionLog);
+			datasetLog.setDatasetStudyStartTime(datasetStudyStartTime);
+			datasetLog.setDatasetStudyEndTime(datasetStudyEndTime);
 			DatasetLog savedDatasetLog = datasetLogRepository.save(datasetLog);
 			
 			System.out.println("DatasetLog updated: "+ savedDatasetLog.getId());
