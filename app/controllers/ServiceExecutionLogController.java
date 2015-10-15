@@ -14,6 +14,7 @@ import models.ClimateServiceRepository;
 import models.Dataset;
 import models.DatasetEntry;
 import models.DatasetEntryRepository;
+import models.DatasetLog;
 //import models.DatasetLog;
 import models.DatasetLogRepository;
 import models.DatasetRepository;
@@ -29,7 +30,6 @@ import models.ServiceExecutionLog;
 import models.ServiceExecutionLogRepository;
 import models.User;
 import models.UserRepository;
-import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -52,7 +52,7 @@ public class ServiceExecutionLogController extends Controller {
 	private final ClimateServiceRepository climateServiceRepository;
 	private final ParameterRepository parameterRepository;
 	private final ServiceConfigurationItemRepository serviceConfigurationItemRepository;
-	// private final DatasetLogRepository datasetLogRepository;
+	private final DatasetLogRepository datasetLogRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 
 	// We are using constructor injection to receive a repository to support our
@@ -74,7 +74,7 @@ public class ServiceExecutionLogController extends Controller {
 		this.userRepository = userRepository;
 		this.serviceConfigurationItemRepository = serviceConfigurationItemRepository;
 		this.climateServiceRepository = climateServiceRepository;
-		// this.datasetLogRepository = datasetLogRepository;
+		this.datasetLogRepository = datasetLogRepository;
 		this.serviceConfigurationRepository = serviceConfigurationRepository;
 		this.serviceEntryRepository = serviceEntryRepository;
 		this.datasetEntryRepository = datasetEntryRepository;
@@ -342,6 +342,8 @@ public class ServiceExecutionLogController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String plotUrl = json.findPath("url").asText();
 		String dataUrl = json.findPath("dataUrl").asText();
+		JsonNode datasetArray = json.get("datasets");
+		System.out.println(datasetArray);
 
 		SimpleDateFormat formatter = new SimpleDateFormat(util.Common.DATE_PATTERN);
 		formatter.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
@@ -385,14 +387,6 @@ public class ServiceExecutionLogController extends Controller {
 		 System.out.println("Wrong Date Format :" + datasetStudyStartTime + " " +datasetStudyEndTime);
 		 return badRequest("Wrong Date Format :" + datasetStudyStartTime + " " +datasetStudyEndTime);
 		 }
-//		 try {
-//		 executionEndTime = simpleDateFormat.parse(executionEndTimeString);
-//		 } catch (ParseException e) {
-//		 // TODO Auto-generated catch block
-//		 e.printStackTrace();
-//		 System.out.println("Wrong Date Format :" + executionEndTimeString);
-//		 return badRequest("Wrong Date Format :" + executionEndTimeString);
-//		 }
 
 		try {
 			User user = userRepository.findOne(userId);
@@ -472,6 +466,22 @@ public class ServiceExecutionLogController extends Controller {
 					.save(serviceEntry);
 			System.out.println("ServiceExecutionLog saved: "
 					+ savedServiceEntry.getId());
+			
+			//Save DatasetLog
+			if (datasetArray.isArray()) {
+				for (JsonNode datasetNode : datasetArray) {
+					String source = datasetNode.get("source").asText();
+					String variable = datasetNode.get("variable").asText();
+					Dataset dataset = datasetRepository.findByDataSourceAndCMIP5VarName(source, variable).get(0);
+					DatasetLog datasetLog = new DatasetLog(savedServiceExecutionLog,
+							dataset, user, plotUrl, dataUrl, dataset,
+							dataset, datasetStudyStartTime, datasetStudyEndTime);
+					DatasetLog savedDatasetLog = datasetLogRepository.save(datasetLog);
+					System.out.println(dataset.toString());
+					System.out.print("DatasetLog saved:" + savedDatasetLog.getId());
+				}
+			}
+			
 			return created(new Gson().toJson(savedServiceExecutionLog.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
