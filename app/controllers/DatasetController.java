@@ -295,15 +295,79 @@ public class DatasetController extends Controller {
     	}
     }
     
-    public Result getMostKPopularDatasets(int k) {
-    	try {
-    		Iterable<Dataset> datasets = datasetRepository.getClimateServiceOrderByCount(k);
-    		String result = new String();
-    		result = new Gson().toJson(datasets);
-    		return ok(result);
-    		
-    	}catch (Exception e) {
-    		return badRequest("Dataset not found");
+    public Result getMostKPopularDatasets() {
+    	JsonNode json = request().body().asJson();
+    	if (json == null) {
+    		System.out.println("Datasets cannot be queried, expecting Json data");
+    		return badRequest("Datasets cannot be queried, expecting Json data");
     	}
+    	String result = new String();
+    	try {
+    		//Parse JSON file
+    		String name = json.path("name").asText();
+    		if (name.isEmpty()) {
+    			name = WILDCARD;
+    		}
+    		else {
+    			name = WILDCARD+name+WILDCARD;
+    		}
+    		String agencyId = json.path("agencyId").asText();
+    		if (agencyId.isEmpty()) {
+    			agencyId = WILDCARD;
+    		}
+    		else {
+    			agencyId = WILDCARD+agencyId+WILDCARD;
+    		}
+    		String gridDimension = json.path("gridDimension").asText();
+    		if (gridDimension.isEmpty()) {
+    			gridDimension = WILDCARD;
+    		}
+    		else {
+    			gridDimension = WILDCARD+gridDimension+WILDCARD;
+    		}
+    		String physicalVariable = json.path("physicalVariable").asText();
+    		if (physicalVariable.isEmpty()) {
+    			physicalVariable = WILDCARD;
+    		}
+    		else {
+    			physicalVariable = WILDCARD+physicalVariable+WILDCARD;
+    		}
+    		int k = Integer.parseInt(json.path("k").asText()); // get k value
+    		
+    		Date startTime = new Date(0);
+			Date endTime = new Date();
+			long startTimeNumber = json.findPath("dataSetStartTime").asLong();
+			long endTimeNumber = json.findPath("dataSetEndTime").asLong();
+    		
+			if (startTimeNumber >= 0 ) {
+				startTime = new Date(startTimeNumber);
+			}
+			if (endTimeNumber >= 0) {
+				endTime = new Date(endTimeNumber);
+			}
+			
+			String source = json.path("instrument").asText();
+			if (source.isEmpty()) {
+				source = WILDCARD;
+    		}
+			else {
+				source = WILDCARD+source+WILDCARD;
+			}
+    		
+    		List<Dataset> datasets;
+    		if (source.isEmpty()) {
+    			datasets = datasetRepository.getClimateServiceOrderByCount(name, agencyId, gridDimension, physicalVariable, startTime, endTime, k);
+    					
+    		} else {
+    			datasets = datasetRepository.getClimateServiceOrderByCountWithInstrument(name, agencyId, gridDimension, physicalVariable, source, startTime, endTime, k);
+    		}
+    		result = new Gson().toJson(datasets);
+    	} catch (Exception e) {
+    		System.out.println("ServiceExecutionLog cannot be queried, query is corrupt");
+    		return badRequest("ServiceExecutionLog cannot be queried, query is corrupt");
+    	}
+    	System.out.println("************" + result);
+
+    	return ok(result);
     }
 }

@@ -87,7 +87,7 @@ POST          /dataset/addDataset                                               
 PUT           /dataset/updateDataset/id/:id                                                             @controllers.DatasetController.updateDatasetById(id: Long)
 DELETE        /dataset/deleteDataset/id/:id                                                             @controllers.DatasetController.deleteDataset(id: Long)
 POST		  /dataset/queryDataset																		@controllers.DatasetController.queryDatasets
-GET			  /dataset/getMostKPopularDatasets/:k														@controllers.DatasetController.getMostKPopularDatasets(k: Integer)
+POST		  /dataset/getMostKPopularDatasets															@controllers.DatasetController.getMostKPopularDatasets
 
 # Parameter
 GET           /parameter/getAllParameters/json                                                          @controllers.ParameterController.getAllParameters(format: String="json")
