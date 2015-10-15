@@ -300,7 +300,6 @@ public class DatasetController extends Controller {
     		Iterable<Dataset> datasets = datasetRepository.getClimateServiceOrderByCount(k);
     		String result = new String();
     		result = new Gson().toJson(datasets);
-    		System.out.println("*******" + result);
     		return ok(result);
     		
     	}catch (Exception e) {
