@@ -12,6 +12,10 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface DatasetRepository extends CrudRepository<Dataset, Long> {
+	
+	@Query(value = "select d.* from Dataset d where (d.dataSourceInputParameterToCallScienceApplicationCode = ?1 and d.CMIP5VarName = ?2)", nativeQuery = true)
+	List<Dataset> findByDataSourceAndCMIP5VarName(String source, String variable);
+	
 	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLikeAndInstrument_Id(String name, String agencyId, String gridDimension, String physicalVariable,long instrumentId);
 	List<Dataset> findByNameLikeAndAgencyIdLikeAndGridDimensionLikeAndPhysicalVariableLike(String name, String agencyId, String gridDimension, String physicalVariable);
 	List<Dataset> findByvariableNameInWebInterface(String variableNameInWebInterface);
