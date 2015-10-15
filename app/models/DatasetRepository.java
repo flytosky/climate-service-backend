@@ -28,4 +28,7 @@ public interface DatasetRepository extends CrudRepository<Dataset, Long> {
 	@Query(value = "select d.* from Dataset d where ((d.name like ?1) and (d.agencyId like ?2) and (d.gridDimension like ?3) and (d.physicalVariable like ?4) and (d.source like ?5)) and ((d.startTime between ?6 and ?7) or (d.endTime between ?6 and ?7) or (d.startTime <= ?6 and d.endTime >= ?7))", nativeQuery = true)
 	List<Dataset> findDatasetWithInstrument(String name, String agencyId, String gridDimension, String physicalVariable, String source, Date startTime, Date endTime);
 	
+	@Query(value = "select d.* from Dataset d, DatasetEntry s where d.id=s.datasetId group by s.datasetId order by sum(s.count) desc limit ?1", nativeQuery = true)
+	List<Dataset> getClimateServiceOrderByCount(int k);
+	
 }
