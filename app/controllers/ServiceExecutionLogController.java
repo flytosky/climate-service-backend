@@ -342,7 +342,7 @@ public class ServiceExecutionLogController extends Controller {
 		String purpose = json.findPath("purpose").asText();
 		String plotUrl = json.findPath("url").asText();
 		String dataUrl = json.findPath("dataUrl").asText();
-		String url = null;
+		String url = json.findPath("urlLink").asText();
 		JsonNode datasetArray = json.get("datasets");
 
 		SimpleDateFormat formatter = new SimpleDateFormat(util.Common.DATE_PATTERN);
