@@ -248,7 +248,6 @@ CREATE TABLE `DatasetLog` (
   `userId` bigint(20) NOT NULL,
   `datasetStudyEndTime` datetime DEFAULT NULL,
   `datasetStudyStartTime` datetime DEFAULT NULL,
-  `url` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_94re6mmagml0joq8obi5j3tnp` (`instrumentId`),
   KEY `FK_o19ihe0nm8mbtcc48gr9hi6pv` (`originalDataSetId`),
