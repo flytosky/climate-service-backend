@@ -186,6 +186,7 @@ CREATE TABLE `Dataset` (
   `dataSourceNameinWebInterface` varchar(255) DEFAULT NULL,
   `startTime` datetime DEFAULT NULL,
   `endTime` datetime DEFAULT NULL,
+  `agencyURL` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_9x29nf004vryd28iummv5l5r0` (`instrumentId`),
   CONSTRAINT `FK_9x29nf004vryd28iummv5l5r0` FOREIGN KEY (`instrumentId`) REFERENCES `Instrument` (`id`)
@@ -285,6 +286,7 @@ CREATE TABLE `Instrument` (
   `description` varchar(255) DEFAULT NULL,
   `launchDate` datetime DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `instrumentURL` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
