@@ -204,6 +204,35 @@ INSERT INTO `Dataset` VALUES (1,'ot','NOAA','NOAA_ARGO','3D','ARGO Ocean Tempera
 UNLOCK TABLES;
 
 --
+-- Table structure for table `DatasetAndUser`
+--
+
+DROP TABLE IF EXISTS `DatasetAndUser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DatasetAndUser` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
+  `datasetId` bigint(20) NOT NULL,
+  `count` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_User_DatasetAndUser` (`userId`),
+  KEY `FK_Dataset_DatasetAndUser` (`datasetId`),
+  CONSTRAINT `FK_User_DatasetAndUser` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
+  CONSTRAINT `FK_Dataset_DatasetAndUser` FOREIGN KEY (`datasetId`) REFERENCES `Dataset` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `DatasetAndUser`
+--
+
+LOCK TABLES `DatasetAndUser` WRITE;
+/*!40000 ALTER TABLE `DatasetAndUser` DISABLE KEYS */;
+/*!40000 ALTER TABLE `DatasetAndUser` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `DatasetAndService`
 --
 
