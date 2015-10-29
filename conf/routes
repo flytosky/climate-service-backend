@@ -138,7 +138,8 @@ POST		  /users/isEmailExisted																		@controllers.UserController.isEma
 DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
 
 # Analytics
-GET			  /analytics/getAllDatasetAndUserWithCount/json											@controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
+GET			  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
+GET			  /analytics/getAllServiceAndUserWithCount/json											    @controllers.AnalyticsController.getAllServiceAndUserWithCount(format: String="json")
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                                                             controllers.Assets.at(path="/public", file)

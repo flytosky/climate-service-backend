@@ -11,6 +11,8 @@ import javax.inject.Singleton;
 
 import models.DatasetAndUser;
 import models.DatasetAndUserRepository;
+import models.ServiceAndUser;
+import models.ServiceAndUserRepository;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -20,9 +22,13 @@ import com.google.gson.Gson;
 @Singleton
 public class AnalyticsController extends Controller{
 	private final DatasetAndUserRepository datasetAndUserRepository;
+	private final ServiceAndUserRepository serviceAndUserRepository;
+	
 	@Inject
-	public AnalyticsController(DatasetAndUserRepository datasetAndUserRepository) {
+	public AnalyticsController(DatasetAndUserRepository datasetAndUserRepository, 
+			ServiceAndUserRepository serviceAndUserRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
+		this.serviceAndUserRepository = serviceAndUserRepository;
 	}
 	
 	public Result getAllDatasetAndUserWithCount(String format) {
@@ -45,6 +51,29 @@ public class AnalyticsController extends Controller{
 			return ok(result);
 		} catch (Exception e) {
 			return badRequest("DatasetLog not found");
+		}
+	}
+	
+	public Result getAllServiceAndUserWithCount(String format) {
+
+		try {
+			Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository.findAll();
+
+			if (serviceAndUsers == null) {
+				System.out.println("User and Service: cannot be found!");
+				return notFound("User and Service: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatServiceAndUser(serviceAndUsers);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("Service and user not found");
 		}
 	}
 
@@ -94,7 +123,54 @@ public class AnalyticsController extends Controller{
 
 		return map("nodes", nodes, "edges", rels);
 	}
+	
+	private Map<String, Object> jsonFormatServiceAndUser(Iterable<ServiceAndUser> userServices) {
 
+		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+
+		int i = 1;
+		for (ServiceAndUser userService : userServices) {
+			int source = 0;
+			int target = 0;
+			// Check whether the current user has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("title")
+						.equals(userService.getUser().getUserName())) {
+					source = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (source == 0) {
+				nodes.add(map6("id", i, "title", userService.getUser()
+						.getUserName(), "label", "user", "cluster", "1",
+						"value", 1, "group", "user"));
+				source = i;
+				i++;
+			}
+			// Check whether the current dataset has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("title")
+						.equals(userService.getClimateService().getName())) {
+					target = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (target == 0) {
+				nodes.add(map6("id", i, "title", userService.getClimateService()
+						.getName(), "label", "service", "cluster", "3",
+						"value", 2, "group", "service"));
+				target = i;
+				i++;
+			}
+
+			rels.add(map3("from", source, "to", target, "title", "USE"));
+
+		}
+
+		return map("nodes", nodes, "edges", rels);
+	}
+	
 	private Map<String, Object> map(String key1, Object value1, String key2,
 			Object value2) {
 		Map<String, Object> result = new HashMap<String, Object>(2);
