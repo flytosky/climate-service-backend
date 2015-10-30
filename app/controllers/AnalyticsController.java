@@ -11,6 +11,8 @@ import javax.inject.Singleton;
 
 import models.DatasetAndUser;
 import models.DatasetAndUserRepository;
+import models.ServiceAndDataset;
+import models.ServiceAndDatasetRepository;
 import models.ServiceAndUser;
 import models.ServiceAndUserRepository;
 import play.mvc.Controller;
@@ -21,14 +23,42 @@ import com.google.gson.Gson;
 @Named
 @Singleton
 public class AnalyticsController extends Controller{
+	
 	private final DatasetAndUserRepository datasetAndUserRepository;
 	private final ServiceAndUserRepository serviceAndUserRepository;
+	private final ServiceAndDatasetRepository serviceAndDatasetRepository;
+	
 	
 	@Inject
 	public AnalyticsController(DatasetAndUserRepository datasetAndUserRepository, 
-			ServiceAndUserRepository serviceAndUserRepository) {
+			ServiceAndUserRepository serviceAndUserRepository, 
+			ServiceAndDatasetRepository serviceAndDatasetRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
 		this.serviceAndUserRepository = serviceAndUserRepository;
+		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
+	}
+	
+	public Result getAllServiceAndDatasetWithCount(String format) {
+
+		try {
+			Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository.findAll();
+
+			if (datasetAndServices == null) {
+				System.out.println("Dataset and Service: cannot be found!");
+				return notFound("Dataset and Service: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatSerivceAndDataset(datasetAndServices);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("Service and Dataset not found");
+		}
 	}
 	
 	public Result getAllDatasetAndUserWithCount(String format) {
@@ -118,6 +148,53 @@ public class AnalyticsController extends Controller{
 			}
 
 			rels.add(map3("from", source, "to", target, "title", "USE"));
+
+		}
+
+		return map("nodes", nodes, "edges", rels);
+	}
+	
+	private Map<String, Object> jsonFormatSerivceAndDataset(Iterable<ServiceAndDataset> serviceDatasets) {
+
+		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+
+		int i = 1;
+		for (ServiceAndDataset serviceDataset : serviceDatasets) {
+			int source = 0;
+			int target = 0;
+			// Check whether the current user has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("title")
+						.equals(serviceDataset.getClimateService().getName())) {
+					source = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (source == 0) {
+				nodes.add(map6("id", i, "title", serviceDataset.getClimateService()
+						.getName(), "label", "service", "cluster", "3",
+						"value", 1, "group", "service"));
+				source = i;
+				i++;
+			}
+			// Check whether the current dataset has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("title")
+						.equals(serviceDataset.getDataset().getName())) {
+					target = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (target == 0) {
+				nodes.add(map6("id", i, "title", serviceDataset.getDataset()
+						.getName(), "label", "dataset", "cluster", "2",
+						"value", 2, "group", "dataset"));
+				target = i;
+				i++;
+			}
+
+			rels.add(map3("from", source, "to", target, "title", "Utilize"));
 
 		}
 
