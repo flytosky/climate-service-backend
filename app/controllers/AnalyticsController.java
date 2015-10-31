@@ -126,7 +126,8 @@ public class AnalyticsController extends Controller{
 			}
 			if (source == 0) {
 				nodes.add(map6("id", i, "title", userDataset.getUser()
-						.getUserName(), "label", "user", "cluster", "1",
+						.getUserName(), "label", userDataset.getUser()
+						.getUserName(), "cluster", "1",
 						"value", 1, "group", "user"));
 				source = i;
 				i++;
@@ -141,7 +142,8 @@ public class AnalyticsController extends Controller{
 			}
 			if (target == 0) {
 				nodes.add(map6("id", i, "title", userDataset.getDataset()
-						.getName(), "label", "dataset", "cluster", "2",
+						.getName(), "label", userDataset.getDataset()
+						.getName(), "cluster", "2",
 						"value", 2, "group", "dataset"));
 				target = i;
 				i++;
@@ -173,7 +175,8 @@ public class AnalyticsController extends Controller{
 			}
 			if (source == 0) {
 				nodes.add(map6("id", i, "title", serviceDataset.getClimateService()
-						.getName(), "label", "service", "cluster", "3",
+						.getName(), "label", serviceDataset.getClimateService()
+						.getName(), "cluster", "3",
 						"value", 1, "group", "service"));
 				source = i;
 				i++;
@@ -188,7 +191,8 @@ public class AnalyticsController extends Controller{
 			}
 			if (target == 0) {
 				nodes.add(map6("id", i, "title", serviceDataset.getDataset()
-						.getName(), "label", "dataset", "cluster", "2",
+						.getName(), "label", serviceDataset.getDataset()
+						.getName(), "cluster", "2",
 						"value", 2, "group", "dataset"));
 				target = i;
 				i++;
@@ -220,7 +224,8 @@ public class AnalyticsController extends Controller{
 			}
 			if (source == 0) {
 				nodes.add(map6("id", i, "title", userService.getUser()
-						.getUserName(), "label", "user", "cluster", "1",
+						.getUserName(), "label", userService.getUser()
+						.getUserName(), "cluster", "1",
 						"value", 1, "group", "user"));
 				source = i;
 				i++;
@@ -235,7 +240,8 @@ public class AnalyticsController extends Controller{
 			}
 			if (target == 0) {
 				nodes.add(map6("id", i, "title", userService.getClimateService()
-						.getName(), "label", "service", "cluster", "3",
+						.getName(), "label", userService.getClimateService()
+						.getName(), "cluster", "3",
 						"value", 2, "group", "service"));
 				target = i;
 				i++;
