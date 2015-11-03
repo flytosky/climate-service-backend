@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.ejml.simple.SimpleMatrix;
+
 import models.DatasetAndUser;
 import models.DatasetAndUserRepository;
 import models.ServiceAndDataset;
@@ -18,6 +20,7 @@ import models.ServiceAndUserRepository;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 
 @Named
@@ -36,6 +39,28 @@ public class AnalyticsController extends Controller{
 		this.datasetAndUserRepository = datasetAndUserRepository;
 		this.serviceAndUserRepository = serviceAndUserRepository;
 		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
+	}
+	
+	public SimpleMatrix process() {
+		return null;
+	}
+	
+	public Result getRelationalKnowledgeGraph() {
+		JsonNode json = request().body().asJson();
+		
+		if (json == null) {
+			System.out
+					.println("Cannot find relational knowledge graph, expecting Json data");
+			return badRequest("Cannot find relational knowledge graph, expecting Json data");
+		}
+		String param1 = json.findPath("param1").asText();
+		String param2 = json.findPath("param2").asText();
+		String param3 = json.findPath("param3").asText();
+		long count1 = 0, count2 = 0, count3 = 0;
+		if(param1.equals("User")) {
+		}
+		
+		return null;
 	}
 	
 	public Result getAllServiceAndDatasetWithCount(String format) {
