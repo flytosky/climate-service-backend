@@ -73,7 +73,7 @@ public class AnalyticsController extends Controller{
 				return notFound("Dataset and Service: cannot be found!");
 			}  
 
-			Map<String, Object> map = jsonFormatSerivceAndDataset(datasetAndServices);
+			Map<String, Object> map = jsonFormatServiceAndDataset(datasetAndServices);
 
 			String result = new String();
 			if (format.equals("json")) {
@@ -96,7 +96,7 @@ public class AnalyticsController extends Controller{
 				return notFound("User and Dataset: cannot be found!");
 			}  
 
-			Map<String, Object> map = jsonFormat(datasetAndUsers);
+			Map<String, Object> map = jsonFormatUserAndDataset(datasetAndUsers);
 
 			String result = new String();
 			if (format.equals("json")) {
@@ -131,8 +131,32 @@ public class AnalyticsController extends Controller{
 			return badRequest("Service and user not found");
 		}
 	}
+	
+//	public Result getOneUserWithAllDatasetAndCount(String name, String format) {
+//
+//		try {
+//			User user = 
+//			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository.findByUser(name);
+//
+//			if (datasetAndUsers == null) {
+//				System.out.println("User and Dataset: cannot be found!");
+//				return notFound("User and Dataset: cannot be found!");
+//			}  
+//
+//			Map<String, Object> map = jsonFormat(datasetAndUsers);
+//
+//			String result = new String();
+//			if (format.equals("json")) {
+//				result = new Gson().toJson(map);
+//			}
+//
+//			return ok(result);
+//		} catch (Exception e) {
+//			return badRequest("DatasetLog not found");
+//		}
+//	}
 
-	private Map<String, Object> jsonFormat(Iterable<DatasetAndUser> userDatasets) {
+	private Map<String, Object> jsonFormatUserAndDataset(Iterable<DatasetAndUser> userDatasets) {
 
 		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
@@ -143,33 +167,36 @@ public class AnalyticsController extends Controller{
 			int target = 0;
 			// Check whether the current user has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("title")
-						.equals(userDataset.getUser().getUserName())) {
+				if (nodes.get(j).get("userId")
+						.equals(userDataset.getUser().getId())) {
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (source == 0) {
-				nodes.add(map6("id", i, "title", userDataset.getUser()
-						.getUserName(), "label", userDataset.getUser()
+				String realName = userDataset.getUser().getFirstName() + " " + 
+						userDataset.getUser().getMiddleInitial() + " " + 
+						userDataset.getUser().getLastName();
+				nodes.add(map7("id", i, "title", realName, 
+						"label", userDataset.getUser()
 						.getUserName(), "cluster", "1",
-						"value", 1, "group", "user"));
+						"value", 1, "group", "user", "userId", userDataset.getUser().getId()));
 				source = i;
 				i++;
 			}
 			// Check whether the current dataset has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("title")
-						.equals(userDataset.getDataset().getName())) {
+				if (nodes.get(j).get("datasetId")
+						.equals(userDataset.getDataset().getId())) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (target == 0) {
-				nodes.add(map6("id", i, "title", userDataset.getDataset()
+				nodes.add(map7("id", i, "title", userDataset.getDataset()
 						.getName(), "label", userDataset.getDataset()
 						.getName(), "cluster", "2",
-						"value", 2, "group", "dataset"));
+						"value", 2, "group", "dataset", "datasetId", userDataset.getDataset().getId()));
 				target = i;
 				i++;
 			}
@@ -181,7 +208,7 @@ public class AnalyticsController extends Controller{
 		return map("nodes", nodes, "edges", rels);
 	}
 	
-	private Map<String, Object> jsonFormatSerivceAndDataset(Iterable<ServiceAndDataset> serviceDatasets) {
+	private Map<String, Object> jsonFormatServiceAndDataset(Iterable<ServiceAndDataset> serviceDatasets) {
 
 		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
@@ -190,35 +217,35 @@ public class AnalyticsController extends Controller{
 		for (ServiceAndDataset serviceDataset : serviceDatasets) {
 			int source = 0;
 			int target = 0;
-			// Check whether the current user has already existed
+			// Check whether the current service has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("title")
-						.equals(serviceDataset.getClimateService().getName())) {
+				if (nodes.get(j).get("serviceId")
+						.equals(serviceDataset.getClimateService().getId())) {
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (source == 0) {
-				nodes.add(map6("id", i, "title", serviceDataset.getClimateService()
+				nodes.add(map7("id", i, "title", serviceDataset.getClimateService()
 						.getName(), "label", serviceDataset.getClimateService()
 						.getName(), "cluster", "3",
-						"value", 1, "group", "service"));
+						"value", 1, "group", "service", "serviceId", serviceDataset.getClimateService().getId()));
 				source = i;
 				i++;
 			}
 			// Check whether the current dataset has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("title")
-						.equals(serviceDataset.getDataset().getName())) {
+				if (nodes.get(j).get("datasetId")
+						.equals(serviceDataset.getDataset().getId())) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (target == 0) {
-				nodes.add(map6("id", i, "title", serviceDataset.getDataset()
+				nodes.add(map7("id", i, "title", serviceDataset.getDataset()
 						.getName(), "label", serviceDataset.getDataset()
 						.getName(), "cluster", "2",
-						"value", 2, "group", "dataset"));
+						"value", 2, "group", "dataset", "datasetId", serviceDataset.getDataset().getId()));
 				target = i;
 				i++;
 			}
@@ -241,33 +268,36 @@ public class AnalyticsController extends Controller{
 			int target = 0;
 			// Check whether the current user has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("title")
-						.equals(userService.getUser().getUserName())) {
+				if (nodes.get(j).get("userId")
+						.equals(userService.getUser().getId())) {
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (source == 0) {
-				nodes.add(map6("id", i, "title", userService.getUser()
-						.getUserName(), "label", userService.getUser()
+				String realName = userService.getUser().getFirstName() + " " + 
+						userService.getUser().getMiddleInitial() + " " + 
+						userService.getUser().getLastName();
+				nodes.add(map7("id", i, "title", realName, 
+						"label", userService.getUser()
 						.getUserName(), "cluster", "1",
-						"value", 1, "group", "user"));
+						"value", 1, "group", "user", "userId", userService.getUser().getId()));
 				source = i;
 				i++;
 			}
-			// Check whether the current dataset has already existed
+			// Check whether the current service has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("title")
-						.equals(userService.getClimateService().getName())) {
+				if (nodes.get(j).get("serviceId")
+						.equals(userService.getClimateService().getId())) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (target == 0) {
-				nodes.add(map6("id", i, "title", userService.getClimateService()
+				nodes.add(map7("id", i, "title", userService.getClimateService()
 						.getName(), "label", userService.getClimateService()
 						.getName(), "cluster", "3",
-						"value", 2, "group", "service"));
+						"value", 2, "group", "service", "serviceId", userService.getClimateService().getId()));
 				target = i;
 				i++;
 			}
@@ -296,10 +326,10 @@ public class AnalyticsController extends Controller{
 		return result;
 	}
 
-	private Map<String, Object> map6(String key1, Object value1, String key2,
+	private Map<String, Object> map7(String key1, Object value1, String key2,
 			Object value2, String key3, Object value3, String key4,
 			Object value4, String key5, Object value5, String key6,
-			Object value6) {
+			Object value6, String key7, Object value7) {
 		Map<String, Object> result = new HashMap<String, Object>(6);
 		result.put(key1, value1);
 		result.put(key2, value2);
@@ -307,6 +337,7 @@ public class AnalyticsController extends Controller{
 		result.put(key4, value4);
 		result.put(key5, value5);
 		result.put(key6, value6);
+		result.put(key7, value7);
 		return result;
 	}
 }
