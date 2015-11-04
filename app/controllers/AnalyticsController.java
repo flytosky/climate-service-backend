@@ -11,7 +11,9 @@ import javax.inject.Singleton;
 
 import org.ejml.simple.SimpleMatrix;
 
+import models.ClimateService;
 import models.ClimateServiceRepository;
+import models.Dataset;
 import models.DatasetAndUser;
 import models.DatasetAndUserRepository;
 import models.DatasetRepository;
@@ -165,7 +167,103 @@ public class AnalyticsController extends Controller{
 
 			return ok(result);
 		} catch (Exception e) {
-			return badRequest("DatasetLog not found");
+			return badRequest("User and Dataset not found");
+		}
+	}
+	
+	public Result getOneDatasetWithAllDatasetAndCount(long datasetId, String format) {
+
+		try {
+			Dataset dataset = datasetRepository.findOne(datasetId);
+			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository.findByDataset(dataset);
+
+			if (datasetAndUsers == null) {
+				System.out.println("User and Dataset: cannot be found!");
+				return notFound("User and Dataset: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatUserAndDataset(datasetAndUsers);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("User and Dataset not found");
+		}
+	}
+	
+	public Result getOneUserWithAllServiceAndCount(long userId, String format) {
+
+		try {
+			User user = userRepository.findOne(userId);
+			Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository.findByUser(user);
+
+			if (serviceAndUsers == null) {
+				System.out.println("User and Service: cannot be found!");
+				return notFound("User and Service: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatServiceAndUser(serviceAndUsers);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("User and Service not found");
+		}
+	}
+	
+	public Result getOneServiceWithAllUserAndCount(long serviceId, String format) {
+
+		try {
+			ClimateService service = serviceRepository.findOne(serviceId);
+			Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository.findByClimateService(service);
+
+			if (serviceAndUsers == null) {
+				System.out.println("User and Service: cannot be found!");
+				return notFound("User and Service: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatServiceAndUser(serviceAndUsers);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("User and Service not found");
+		}
+	}
+	
+	public Result getOneServiceWithAllDatasetAndCount(long serviceId, String format) {
+
+		try {
+			ClimateService service = serviceRepository.findOne(serviceId);
+			Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository.findByClimateService(service);
+
+			if (datasetAndServices == null) {
+				System.out.println("Dataset and Service: cannot be found!");
+				return notFound("Dataset and Service: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatServiceAndDataset(datasetAndServices);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("Dataset and Service not found");
 		}
 	}
 

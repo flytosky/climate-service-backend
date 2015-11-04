@@ -13,4 +13,5 @@ public interface DatasetAndUserRepository extends CrudRepository<DatasetAndUser,
 	
 	List<DatasetAndUser> findByUserAndDataset(User user, Dataset dataset);
 	List<DatasetAndUser> findByUser(User user);
+	List<DatasetAndUser> findByDataset(Dataset dataset);
 }
