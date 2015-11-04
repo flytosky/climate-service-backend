@@ -266,6 +266,30 @@ public class AnalyticsController extends Controller{
 			return badRequest("Dataset and Service not found");
 		}
 	}
+	
+	public Result getOneDatasetWithAllServiceAndCount(long datasetId, String format) {
+
+		try {
+			Dataset dataset = datasetRepository.findOne(datasetId);
+			Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository.findByDataset(dataset);
+
+			if (datasetAndServices == null) {
+				System.out.println("Dataset and Service: cannot be found!");
+				return notFound("Dataset and Service: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatServiceAndDataset(datasetAndServices);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("Dataset and Service not found");
+		}
+	}
 
 	private Map<String, Object> jsonFormatUserAndDataset(Iterable<DatasetAndUser> userDatasets) {
 

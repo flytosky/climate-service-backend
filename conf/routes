@@ -147,6 +147,7 @@ GET			  /analytics/getOneDatasetWithAllDatasetAndCountByDatasetId/:id/json						
 GET			  /analytics/getOneUserWithAllServiceAndCountByUserId/:id/json								@controllers.AnalyticsController.getOneUserWithAllServiceAndCount(id: Long, format: String="json")
 GET			  /analytics/getOneServiceWithAllUserAndCountByServiceId/:id/json							@controllers.AnalyticsController.getOneServiceWithAllUserAndCount(id: Long, format: String="json")
 GET			  /analytics/getOneServiceWithAllDatasetAndCountByServiceId/:id/json						@controllers.AnalyticsController.getOneServiceWithAllDatasetAndCount(id: Long, format: String="json")
+GET			  /analytics/getOneDatasetWithAllServiceAndCountByDatasetId/:id/json						@controllers.AnalyticsController.getOneDatasetWithAllServiceAndCount(id: Long, format: String="json")
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                                                             controllers.Assets.at(path="/public", file)
