@@ -11,12 +11,16 @@ import javax.inject.Singleton;
 
 import org.ejml.simple.SimpleMatrix;
 
+import models.ClimateServiceRepository;
 import models.DatasetAndUser;
 import models.DatasetAndUserRepository;
+import models.DatasetRepository;
 import models.ServiceAndDataset;
 import models.ServiceAndDatasetRepository;
 import models.ServiceAndUser;
 import models.ServiceAndUserRepository;
+import models.User;
+import models.UserRepository;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -30,38 +34,47 @@ public class AnalyticsController extends Controller{
 	private final DatasetAndUserRepository datasetAndUserRepository;
 	private final ServiceAndUserRepository serviceAndUserRepository;
 	private final ServiceAndDatasetRepository serviceAndDatasetRepository;
+	private final UserRepository userRepository;
+	private final DatasetRepository datasetRepository;
+	private final ClimateServiceRepository serviceRepository;
 	
 	
 	@Inject
-	public AnalyticsController(DatasetAndUserRepository datasetAndUserRepository, 
-			ServiceAndUserRepository serviceAndUserRepository, 
-			ServiceAndDatasetRepository serviceAndDatasetRepository) {
+	public AnalyticsController(
+			DatasetAndUserRepository datasetAndUserRepository,
+			ServiceAndUserRepository serviceAndUserRepository,
+			ServiceAndDatasetRepository serviceAndDatasetRepository,
+			UserRepository userRepository, DatasetRepository datasetRepository,
+			ClimateServiceRepository serviceRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
 		this.serviceAndUserRepository = serviceAndUserRepository;
 		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
+		this.userRepository = userRepository;
+		this.datasetRepository = datasetRepository;
+		this.serviceRepository = serviceRepository;
 	}
 	
 	public SimpleMatrix process() {
 		return null;
 	}
 	
-	public Result getRelationalKnowledgeGraph() {
-		JsonNode json = request().body().asJson();
-		
-		if (json == null) {
-			System.out
-					.println("Cannot find relational knowledge graph, expecting Json data");
-			return badRequest("Cannot find relational knowledge graph, expecting Json data");
-		}
-		String param1 = json.findPath("param1").asText();
-		String param2 = json.findPath("param2").asText();
-		String param3 = json.findPath("param3").asText();
-		long count1 = 0, count2 = 0, count3 = 0;
-		if(param1.equals("User")) {
-		}
-		
-		return null;
-	}
+//	public Result getRelationalKnowledgeGraph() {
+//		JsonNode json = request().body().asJson();
+//		
+//		if (json == null) {
+//			System.out
+//					.println("Cannot find relational knowledge graph, expecting Json data");
+//			return badRequest("Cannot find relational knowledge graph, expecting Json data");
+//		}
+//		String param1 = json.findPath("param1").asText();
+//		String param2 = json.findPath("param2").asText();
+//		String param3 = json.findPath("param3").asText();
+//		long count1 = 0, count2 = 0, count3 = 0;
+//		if(param1.equals("User")) {
+//		}
+//		
+//		return null;
+//	}
 	
 	public Result getAllServiceAndDatasetWithCount(String format) {
 
@@ -132,29 +145,29 @@ public class AnalyticsController extends Controller{
 		}
 	}
 	
-//	public Result getOneUserWithAllDatasetAndCount(String name, String format) {
-//
-//		try {
-//			User user = 
-//			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository.findByUser(name);
-//
-//			if (datasetAndUsers == null) {
-//				System.out.println("User and Dataset: cannot be found!");
-//				return notFound("User and Dataset: cannot be found!");
-//			}  
-//
-//			Map<String, Object> map = jsonFormat(datasetAndUsers);
-//
-//			String result = new String();
-//			if (format.equals("json")) {
-//				result = new Gson().toJson(map);
-//			}
-//
-//			return ok(result);
-//		} catch (Exception e) {
-//			return badRequest("DatasetLog not found");
-//		}
-//	}
+	public Result getOneUserWithAllDatasetAndCount(long userId, String format) {
+
+		try {
+			User user = userRepository.findOne(userId);
+			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository.findByUser(user);
+
+			if (datasetAndUsers == null) {
+				System.out.println("User and Dataset: cannot be found!");
+				return notFound("User and Dataset: cannot be found!");
+			}  
+
+			Map<String, Object> map = jsonFormatUserAndDataset(datasetAndUsers);
+
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest("DatasetLog not found");
+		}
+	}
 
 	private Map<String, Object> jsonFormatUserAndDataset(Iterable<DatasetAndUser> userDatasets) {
 

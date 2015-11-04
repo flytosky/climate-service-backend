@@ -142,6 +142,7 @@ DELETE		  /users/delete/userName/:userName/password/:password										@controll
 GET			  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
 GET			  /analytics/getAllServiceAndUserWithCount/json											    @controllers.AnalyticsController.getAllServiceAndUserWithCount(format: String="json")
 GET			  /analytics/getAllServiceAndDatasetWithCount/json											@controllers.AnalyticsController.getAllServiceAndDatasetWithCount(format: String="json")
+GET			  /analytics/getOneUserWithAllDatasetAndCountByUserId/:id/json									@controllers.AnalyticsController.getOneUserWithAllDatasetAndCount(id: Long, format: String="json")
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                                                             controllers.Assets.at(path="/public", file)

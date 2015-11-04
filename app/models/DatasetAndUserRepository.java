@@ -12,4 +12,5 @@ import javax.inject.Singleton;
 public interface DatasetAndUserRepository extends CrudRepository<DatasetAndUser, Long> {
 	
 	List<DatasetAndUser> findByUserAndDataset(User user, Dataset dataset);
+	List<DatasetAndUser> findByUser(User user);
 }
