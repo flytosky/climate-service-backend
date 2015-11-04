@@ -142,8 +142,7 @@ public class AnalyticsController extends Controller{
 			int target = 0;
 			// Check whether the current user has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("userId")
-						.equals(userDataset.getUser().getId())) {
+				if ((long)nodes.get(j).get("userId") == userDataset.getUser().getId()) {
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -161,8 +160,7 @@ public class AnalyticsController extends Controller{
 			}
 			// Check whether the current dataset has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("datasetId")
-						.equals(userDataset.getDataset().getId())) {
+				if ((long)nodes.get(j).get("datasetId") == userDataset.getDataset().getId()) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -194,8 +192,7 @@ public class AnalyticsController extends Controller{
 			int target = 0;
 			// Check whether the current service has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("serviceId")
-						.equals(serviceDataset.getClimateService().getId())) {
+				if ((long)nodes.get(j).get("serviceId") == serviceDataset.getClimateService().getId()) {
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -210,8 +207,7 @@ public class AnalyticsController extends Controller{
 			}
 			// Check whether the current dataset has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("datasetId")
-						.equals(serviceDataset.getDataset().getId())) {
+				if ((long)nodes.get(j).get("datasetId") == serviceDataset.getDataset().getId()) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -243,8 +239,7 @@ public class AnalyticsController extends Controller{
 			int target = 0;
 			// Check whether the current user has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("userId")
-						.equals(userService.getUser().getId())) {
+				if ((long)nodes.get(j).get("userId") == userService.getUser().getId()) {
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -262,8 +257,7 @@ public class AnalyticsController extends Controller{
 			}
 			// Check whether the current service has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("serviceId")
-						.equals(userService.getClimateService().getId())) {
+				if ((long)nodes.get(j).get("serviceId") == userService.getClimateService().getId()) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
