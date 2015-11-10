@@ -9,9 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.ejml.simple.SimpleBase;
-import org.ejml.simple.SimpleMatrix;
-
 import models.ClimateService;
 import models.ClimateServiceRepository;
 import models.Dataset;
@@ -55,10 +52,6 @@ public class AnalyticsController extends Controller {
 		this.userRepository = userRepository;
 		this.datasetRepository = datasetRepository;
 		this.serviceRepository = serviceRepository;
-	}
-
-	public SimpleMatrix process() {
-		return null;
 	}
 
 	public long getResultCount(String param) {
