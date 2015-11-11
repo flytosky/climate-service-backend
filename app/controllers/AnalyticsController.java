@@ -351,6 +351,7 @@ public class AnalyticsController extends Controller {
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
 
 		int i = 1;
+		int edgeId = 1;
 		for (DatasetAndUser userDataset : userDatasets) {
 			int source = 0;
 			int target = 0;
@@ -392,8 +393,9 @@ public class AnalyticsController extends Controller {
 				target = i;
 				i++;
 			}
-			rels.add(map3("from", source, "to", target, "title", "USE"));
-
+			rels.add(map5("from", source, "to", target, "title", "USE",
+					"edgeId", edgeId, "weight", userDataset.getCount()));
+			edgeId++;
 		}
 
 		return map("nodes", nodes, "edges", rels);
@@ -573,6 +575,18 @@ public class AnalyticsController extends Controller {
 		result.put(key1, value1);
 		result.put(key2, value2);
 		result.put(key3, value3);
+		return result;
+	}
+	
+	private Map<String, Object> map5(String key1, Object value1, String key2,
+			Object value2, String key3, Object value3, String key4, Object value4,
+			String key5, Object value5) {
+		Map<String, Object> result = new HashMap<String, Object>(3);
+		result.put(key1, value1);
+		result.put(key2, value2);
+		result.put(key3, value3);
+		result.put(key4, value4);
+		result.put(key5, value5);
 		return result;
 	}
 
