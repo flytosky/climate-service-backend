@@ -71,28 +71,21 @@ public class AnalyticsController extends Controller {
 		}
 		return count;
 	}
-
-	public Result getRelationalKnowledgeGraph(String format) {
-		JsonNode json = request().body().asJson();
-
-		if (json == null) {
-			System.out
-					.println("Cannot find relational knowledge graph, expecting Json data");
-			return badRequest("Cannot find relational knowledge graph, expecting Json data");
-		}
-		String param1 = json.findPath("param1").asText();
-		String param2 = json.findPath("param2").asText();
-		String param3 = json.findPath("param3").asText();
-		int count1 = (int) getResultCount(param1), count2 = (int) getResultCount(param2), count3 = (int) getResultCount(param3);
-
-		int[][] relations = new int[count1][count3];
-		try {
+	
+	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3) {
+		String option = param1 + param2 + param3;
+		Map<String, Object> map = new HashMap<>();
+		int[][] relations = null;
+		int count1 = (int) getResultCount(param1), count3 = (int) getResultCount(param3);
+		
+		switch (option) {
+		case "UserUserDataset": {
+			relations = new int[count1][count3];
 			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
 					.findAll();
 
 			if (datasetAndUsers == null) {
 				System.out.println("User and Dataset: cannot be found!");
-				return notFound("User and Dataset: cannot be found!");
 			}
 
 			for (DatasetAndUser one : datasetAndUsers) {
@@ -106,7 +99,152 @@ public class AnalyticsController extends Controller {
 			Matrix m3 = m1.times(m2);
 			int[][] res = m3.getArray();
 
-			Map<String, Object> map = jsonFormatUserAndUser(res);
+			map = jsonFormatForMatrix(res, "user");
+			break;
+		}
+		case "UserUserService": {
+			relations = new int[count1][count3];
+			Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
+					.findAll();
+
+			if (serviceAndUsers == null) {
+				System.out.println("User and Service: cannot be found!");
+			}
+
+			for (ServiceAndUser one : serviceAndUsers) {
+				int i = (int) one.getUser().getId() - 1;
+				int j = (int) one.getClimateService().getId() - 1;
+				relations[i][j] = (int) one.getCount();
+			}
+
+			Matrix m1 = new Matrix(relations);
+			Matrix m2 = m1.transpose();
+			Matrix m3 = m1.times(m2);
+			int[][] res = m3.getArray();
+
+			map = jsonFormatForMatrix(res, "user");
+			break;
+		}
+		case "DatasetDatasetUser": {
+			relations = new int[count1][count3];
+			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
+					.findAll();
+
+			if (datasetAndUsers == null) {
+				System.out.println("User and Dataset: cannot be found!");
+			}
+
+			for (DatasetAndUser one : datasetAndUsers) {
+				int i = (int) one.getDataset().getId() - 1;
+				int j = (int) one.getUser().getId() - 1;
+				relations[i][j] = (int) one.getCount();
+			}
+
+			Matrix m1 = new Matrix(relations);
+			Matrix m2 = m1.transpose();
+			Matrix m3 = m1.times(m2);
+			int[][] res = m3.getArray();
+
+			map = jsonFormatForMatrix(res, "dataset");
+			break;
+		}
+		case "DatasetDatasetService": {
+			relations = new int[count1][count3];
+			Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
+					.findAll();
+
+			if (datasetAndServices == null) {
+				System.out.println("Dataset and Service: cannot be found!");
+			}
+
+			for (ServiceAndDataset one : datasetAndServices) {
+				int i = (int) one.getDataset().getId() - 1;
+				int j = (int) one.getClimateService().getId() - 1;
+				relations[i][j] = (int) one.getCount();
+			}
+
+			Matrix m1 = new Matrix(relations);
+			Matrix m2 = m1.transpose();
+			Matrix m3 = m1.times(m2);
+			int[][] res = m3.getArray();
+
+			map = jsonFormatForMatrix(res, "dataset");
+			break;
+		}
+		case "ServiceServiceUser": {
+			relations = new int[count1][count3];
+			Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
+					.findAll();
+
+			if (serviceAndUsers == null) {
+				System.out.println("User and Service: cannot be found!");
+			}
+
+			for (ServiceAndUser one : serviceAndUsers) {
+				int i = (int) one.getClimateService().getId() - 1;
+				int j = (int) one.getUser().getId() - 1;
+				relations[i][j] = (int) one.getCount();
+			}
+
+			Matrix m1 = new Matrix(relations);
+			Matrix m2 = m1.transpose();
+			Matrix m3 = m1.times(m2);
+			int[][] res = m3.getArray();
+
+			map = jsonFormatForMatrix(res, "service");
+			break;
+		}
+		case "ServiceServiceDataset": {
+			relations = new int[count1][count3];
+			Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
+					.findAll();
+
+			if (datasetAndServices == null) {
+				System.out.println("Dataset and Service: cannot be found!");
+			}
+
+			for (ServiceAndDataset one : datasetAndServices) {
+				int i = (int) one.getClimateService().getId() - 1;
+				int j = (int) one.getDataset().getId() - 1;
+				relations[i][j] = (int) one.getCount();
+			}
+
+			Matrix m1 = new Matrix(relations);
+			Matrix m2 = m1.transpose();
+			Matrix m3 = m1.times(m2);
+			int[][] res = m3.getArray();
+
+			map = jsonFormatForMatrix(res, "service");
+			break;
+		}
+		case "UserDatasetService":
+			map = getAllDatasetAndUserWithCount();
+			break;
+		case "UserServiceDataset":
+			map = getAllServiceAndUserWithCount();
+			break;
+		case "DatasetServiceUser":
+			map = getAllServiceAndDatasetWithCount();
+			break;
+		default:
+			break;
+		}
+		return map;
+	}
+
+	public Result getRelationalKnowledgeGraph(String format) {
+		JsonNode json = request().body().asJson();
+
+		if (json == null) {
+			System.out.println("Cannot find relational knowledge graph, expecting Json data");
+			return badRequest("Cannot find relational knowledge graph, expecting Json data");
+		}
+		String param1 = json.findPath("param1").asText();
+		String param2 = json.findPath("param2").asText();
+		String param3 = json.findPath("param3").asText();
+		
+		try {
+			Map<String, Object> map = generateRelationalMap(param1, param2, param3);
 			
 			String result = new String();
 			if (format.equals("json")) {
@@ -114,81 +252,49 @@ public class AnalyticsController extends Controller {
 			}
 			return ok(result);
 		} catch (Exception e) {
-			return badRequest("User Relationship not found");
+			return badRequest("Relationship not found");
 		}
 
 	}
 
-	public Result getAllServiceAndDatasetWithCount(String format) {
+	public Map<String, Object> getAllServiceAndDatasetWithCount() {
 
-		try {
-			Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
-					.findAll();
+		Iterable<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
+				.findAll();
 
-			if (datasetAndServices == null) {
-				System.out.println("Dataset and Service: cannot be found!");
-				return notFound("Dataset and Service: cannot be found!");
-			}
-
-			Map<String, Object> map = jsonFormatServiceAndDataset(datasetAndServices);
-
-			String result = new String();
-			if (format.equals("json")) {
-				result = new Gson().toJson(map);
-			}
-
-			return ok(result);
-		} catch (Exception e) {
-			return badRequest("Service and Dataset not found");
+		if (datasetAndServices == null) {
+			System.out.println("Dataset and Service: cannot be found!");
 		}
+
+		Map<String, Object> map = jsonFormatServiceAndDataset(datasetAndServices);
+		return map;
+
 	}
 
-	public Result getAllDatasetAndUserWithCount(String format) {
+	public Map<String, Object> getAllDatasetAndUserWithCount() {
 
-		try {
-			Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
-					.findAll();
+		Iterable<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
+				.findAll();
 
-			if (datasetAndUsers == null) {
-				System.out.println("User and Dataset: cannot be found!");
-				return notFound("User and Dataset: cannot be found!");
-			}
-
-			Map<String, Object> map = jsonFormatUserAndDataset(datasetAndUsers);
-
-			String result = new String();
-			if (format.equals("json")) {
-				result = new Gson().toJson(map);
-			}
-
-			return ok(result);
-		} catch (Exception e) {
-			return badRequest("DatasetLog not found");
+		if (datasetAndUsers == null) {
+			System.out.println("User and Dataset: cannot be found!");
 		}
+
+		Map<String, Object> map = jsonFormatUserAndDataset(datasetAndUsers);
+		return map;
 	}
 
-	public Result getAllServiceAndUserWithCount(String format) {
+	public Map<String, Object> getAllServiceAndUserWithCount() {
 
-		try {
-			Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
-					.findAll();
+		Iterable<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
+				.findAll();
 
-			if (serviceAndUsers == null) {
-				System.out.println("User and Service: cannot be found!");
-				return notFound("User and Service: cannot be found!");
-			}
-
-			Map<String, Object> map = jsonFormatServiceAndUser(serviceAndUsers);
-
-			String result = new String();
-			if (format.equals("json")) {
-				result = new Gson().toJson(map);
-			}
-
-			return ok(result);
-		} catch (Exception e) {
-			return badRequest("Service and user not found");
+		if (serviceAndUsers == null) {
+			System.out.println("User and Service: cannot be found!");
 		}
+
+		Map<String, Object> map = jsonFormatServiceAndUser(serviceAndUsers);
+		return map;
 	}
 
 	public Result getOneUserWithAllDatasetAndCount(long userId, String format) {
@@ -508,46 +614,64 @@ public class AnalyticsController extends Controller {
 
 		return map("nodes", nodes, "edges", rels);
 	}
+	
+	public String findTitleName(String param, long id) {
+		String title = "";
+		switch (param) {
+			case "user":
+				title = userRepository.findOne(id).getUserName();
+				break;
+			case "dataset":
+				title = datasetRepository.findOne(id).getName();
+				break;
+			case "service":
+				title = serviceRepository.findOne(id).getName();
+				break;
+			default:
+				break;
+		}
+		return title;
+	}
 
-	private Map<String, Object> jsonFormatUserAndUser(int[][] users) {
+	private Map<String, Object> jsonFormatForMatrix(int[][] matrix, String param) {
 
 		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
 
 		int i = 1;
-		for (int m = 0; m < users.length; m++) {
-			for (int n = m + 1; n < users[0].length; n++) {
-				if (users[m][n] > 0) {
+		for (int m = 0; m < matrix.length; m++) {
+			for (int n = m + 1; n < matrix[0].length; n++) {
+				if (matrix[m][n] > 0) {
 					int source = 0;
 					int target = 0;
 					// Check whether the current user has already existed
 					for (int j = 0; j < nodes.size(); j++) {
-						if (nodes.get(j).get("group").equals("user")
-								&& (long) nodes.get(j).get("userId") == (long)m + 1) {
+						if (nodes.get(j).get("group").equals(param)
+								&& (long) nodes.get(j).get(param + "Id") == (long)m + 1) {
 							source = (int) nodes.get(j).get("id");
 							break;
 						}
 					}
 					if (source == 0) {
-						String userName = userRepository.findOne((long)m+1).getUserName();
-						nodes.add(map7("id", i, "title", userName, "label",
-								userName, "cluster", "1", "value", 1, "group",
-								"user", "userId", (long)m + 1));
+						String name = findTitleName(param, (long)m+1);
+						nodes.add(map7("id", i, "title", name, "label",
+								name, "cluster", "1", "value", 1, "group",
+								param, param + "Id", (long)m + 1));
 						source = i;
 						i++;
 					}
 					for (int j = 0; j < nodes.size(); j++) {
-						if (nodes.get(j).get("group").equals("user")
-								&& (long) nodes.get(j).get("userId") == (long)n + 1) {
+						if (nodes.get(j).get("group").equals(param)
+								&& (long) nodes.get(j).get(param + "Id") == (long)n + 1) {
 							target = (int) nodes.get(j).get("id");
 							break;
 						}
 					}
 					if (target == 0) {
-						String userName = userRepository.findOne((long)n+1).getUserName();;
-						nodes.add(map7("id", i, "title", userName, "label",
-								userName, "cluster", "1", "value", 1, "group",
-								"user", "userId", (long)n + 1));
+						String name = findTitleName(param, (long)n+1);
+						nodes.add(map7("id", i, "title", name, "label",
+								name, "cluster", "1", "value", 1, "group",
+								param, param + "Id", (long)n + 1));
 						target = i;
 						i++;
 					}
