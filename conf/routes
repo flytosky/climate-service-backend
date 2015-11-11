@@ -139,9 +139,9 @@ POST		  /users/isEmailExisted																		@controllers.UserController.isEma
 DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
 
 # Analytics
-GET			  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
-GET			  /analytics/getAllServiceAndUserWithCount/json											    @controllers.AnalyticsController.getAllServiceAndUserWithCount(format: String="json")
-GET			  /analytics/getAllServiceAndDatasetWithCount/json											@controllers.AnalyticsController.getAllServiceAndDatasetWithCount(format: String="json")
+#GET			  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
+#GET			  /analytics/getAllServiceAndUserWithCount/json											    @controllers.AnalyticsController.getAllServiceAndUserWithCount(format: String="json")
+#GET			  /analytics/getAllServiceAndDatasetWithCount/json											@controllers.AnalyticsController.getAllServiceAndDatasetWithCount(format: String="json")
 GET			  /analytics/getOneUserWithAllDatasetAndCountByUserId/:id/json								@controllers.AnalyticsController.getOneUserWithAllDatasetAndCount(id: Long, format: String="json")
 GET			  /analytics/getOneDatasetWithAllDatasetAndCountByDatasetId/:id/json						@controllers.AnalyticsController.getOneDatasetWithAllDatasetAndCount(id: Long, format: String="json")
 GET			  /analytics/getOneUserWithAllServiceAndCountByUserId/:id/json								@controllers.AnalyticsController.getOneUserWithAllServiceAndCount(id: Long, format: String="json")
