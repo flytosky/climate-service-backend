@@ -60,7 +60,7 @@ public class GraphAlgorithmController extends Controller {
 		this.serviceRepository = serviceRepository;
 	}
 	
-	public Result getShortestPath(long source, long target, String format) {
+	public Result getShortestPath(int source, int target, String format) {
 		
 		try {
 			Iterable<DatasetAndUser> userDatasets = datasetAndUserRepository
@@ -71,7 +71,7 @@ public class GraphAlgorithmController extends Controller {
 				return notFound("User and Dataset: cannot be found!");
 			}
 
-			WeightedGraph<Long, DefaultWeightedEdge> graph = createGraph(userDatasets);
+			WeightedGraph<Integer, DefaultWeightedEdge> graph = createGraph(userDatasets);
 			List<DefaultWeightedEdge> path =
 	                DijkstraShortestPath.findPathBetween(graph, source, target);
 			String result = new String();
@@ -81,13 +81,13 @@ public class GraphAlgorithmController extends Controller {
 
 			return ok(result);
 		} catch (Exception e) {
-			return badRequest("User and Dataset: not found!");
+			return badRequest(e.getMessage());
 		}
 	}
 	
-	public WeightedGraph<Long, DefaultWeightedEdge> createGraph(Iterable<DatasetAndUser> userDatasets) {
-		WeightedGraph<Long, DefaultWeightedEdge> g =
-	            new SimpleWeightedGraph<Long, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+	public WeightedGraph<Integer, DefaultWeightedEdge> createGraph(Iterable<DatasetAndUser> userDatasets) {
+		WeightedGraph<Integer, DefaultWeightedEdge> g =
+	            new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		
 		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
@@ -95,8 +95,8 @@ public class GraphAlgorithmController extends Controller {
 		int i = 1;
 		long edgeId = 1;
 		for (DatasetAndUser userDataset : userDatasets) {
-			long source = 0;
-			long target = 0;
+			int source = 0;
+			int target = 0;
 			// Check whether the current user has already existed
 			for (int j = 0; j < nodes.size(); j++) {
 				if (nodes.get(j).get("group").equals("user")
@@ -134,6 +134,7 @@ public class GraphAlgorithmController extends Controller {
 						"value", 2, "group", "dataset", "datasetId",
 						userDataset.getDataset().getId()));
 				target = i;
+				g.addVertex(target);
 				i++;
 			}
 			rels.add(HashMapUtil.map5("from", source, "to", target, "title", "USE",
@@ -142,7 +143,7 @@ public class GraphAlgorithmController extends Controller {
 			g.setEdgeWeight(g.getEdge(source, target), userDataset.getCount());
 			edgeId++;
 		}
-		
+		System.out.println(nodes.toString() + "\n" + rels.toString());
 		return g;
 	}
 
