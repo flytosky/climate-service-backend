@@ -500,7 +500,7 @@ public class AnalyticsController extends Controller {
 				i++;
 			}
 			rels.add(map5("from", source, "to", target, "title", "USE",
-					"edgeId", edgeId, "weight", userDataset.getCount()));
+					"id", edgeId, "weight", userDataset.getCount()));
 			edgeId++;
 		}
 
@@ -556,7 +556,7 @@ public class AnalyticsController extends Controller {
 			}
 
 			rels.add(map5("from", source, "to", target, "title", "Utilize",
-					"edgeId", edgeId, "weight", serviceDataset.getCount()));
+					"id", edgeId, "weight", serviceDataset.getCount()));
 			edgeId++;
 		}
 
@@ -614,7 +614,7 @@ public class AnalyticsController extends Controller {
 			}
 
 			rels.add(map5("from", source, "to", target, "title", "USE",
-					"edgeId", edgeId, "weight", userService.getCount()));
+					"id", edgeId, "weight", userService.getCount()));
 			edgeId ++;
 		}
 
@@ -683,7 +683,7 @@ public class AnalyticsController extends Controller {
 						i++;
 					}
 					rels.add(map5("from", source, "to", target, "title", "RELATE",
-							"edgeId", edgeId, "weight", matrix[m][n]));
+							"id", edgeId, "weight", matrix[m][n]));
 					edgeId ++;
 				}
 			}

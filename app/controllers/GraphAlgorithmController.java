@@ -74,6 +74,9 @@ public class GraphAlgorithmController extends Controller {
 			WeightedGraph<Integer, DefaultWeightedEdge> graph = createGraph(userDatasets);
 			List<DefaultWeightedEdge> path =
 	                DijkstraShortestPath.findPathBetween(graph, source, target);
+			for(DefaultWeightedEdge p : path) {
+				
+			}
 			String result = new String();
 			if (format.equals("json")) {
 				result = new Gson().toJson(path);
@@ -138,7 +141,7 @@ public class GraphAlgorithmController extends Controller {
 				i++;
 			}
 			rels.add(HashMapUtil.map5("from", source, "to", target, "title", "USE",
-					"edgeId", edgeId, "weight", userDataset.getCount()));
+					"id", edgeId, "weight", userDataset.getCount()));
 			g.addEdge(source, target);
 			g.setEdgeWeight(g.getEdge(source, target), userDataset.getCount());
 			edgeId++;
