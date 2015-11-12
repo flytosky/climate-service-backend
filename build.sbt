@@ -24,8 +24,3 @@ libraryDependencies ++= Seq(
   "com.googlecode.efficient-java-matrix-library" % "ejml" % "0.23",
   "org.jgrapht" % "jgrapht-jdk1.5" % "0.7.3"
 )
-
-
-
-
-fork in run := true

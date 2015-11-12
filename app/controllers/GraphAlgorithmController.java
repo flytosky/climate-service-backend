@@ -143,7 +143,6 @@ public class GraphAlgorithmController extends Controller {
 			g.setEdgeWeight(g.getEdge(source, target), userDataset.getCount());
 			edgeId++;
 		}
-		System.out.println(nodes.toString() + "\n" + rels.toString());
 		return g;
 	}
 

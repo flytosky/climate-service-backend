@@ -514,6 +514,7 @@ public class AnalyticsController extends Controller {
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
 
 		int i = 1;
+		int edgeId = 1;
 		for (ServiceAndDataset serviceDataset : serviceDatasets) {
 			int source = 0;
 			int target = 0;
@@ -554,8 +555,9 @@ public class AnalyticsController extends Controller {
 				i++;
 			}
 
-			rels.add(map3("from", source, "to", target, "title", "Utilize"));
-
+			rels.add(map5("from", source, "to", target, "title", "Utilize",
+					"edgeId", edgeId, "weight", serviceDataset.getCount()));
+			edgeId++;
 		}
 
 		return map("nodes", nodes, "edges", rels);
@@ -568,6 +570,7 @@ public class AnalyticsController extends Controller {
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
 
 		int i = 1;
+		int edgeId = 1;
 		for (ServiceAndUser userService : userServices) {
 			int source = 0;
 			int target = 0;
@@ -610,8 +613,9 @@ public class AnalyticsController extends Controller {
 				i++;
 			}
 
-			rels.add(map3("from", source, "to", target, "title", "USE"));
-
+			rels.add(map5("from", source, "to", target, "title", "USE",
+					"edgeId", edgeId, "weight", userService.getCount()));
+			edgeId ++;
 		}
 
 		return map("nodes", nodes, "edges", rels);
@@ -641,6 +645,7 @@ public class AnalyticsController extends Controller {
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
 
 		int i = 1;
+		int edgeId = 1;
 		for (int m = 0; m < matrix.length; m++) {
 			for (int n = m + 1; n < matrix[0].length; n++) {
 				if (matrix[m][n] > 0) {
@@ -677,7 +682,9 @@ public class AnalyticsController extends Controller {
 						target = i;
 						i++;
 					}
-					rels.add(map3("from", source, "to", target, "title", "RELATE"));
+					rels.add(map5("from", source, "to", target, "title", "RELATE",
+							"edgeId", edgeId, "weight", matrix[m][n]));
+					edgeId ++;
 				}
 			}
 		}
