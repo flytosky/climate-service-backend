@@ -322,7 +322,7 @@ public class AnalyticsController extends Controller {
 		}
 	}
 
-	public Result getOneDatasetWithAllDatasetAndCount(long datasetId,
+	public Result getOneDatasetWithAllUserAndCount(long datasetId,
 			String format) {
 
 		try {
