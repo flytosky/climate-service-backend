@@ -585,7 +585,6 @@ public class AnalyticsController extends Controller {
 			}
 			if (source == 0) {
 				String realName = userService.getUser().getFirstName() + " "
-						+ userService.getUser().getMiddleInitial() + " "
 						+ userService.getUser().getLastName();
 				nodes.add(map7("id", i, "title", realName, "label", userService
 						.getUser().getUserName(), "cluster", "1", "value", 1,
