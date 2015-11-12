@@ -4,6 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HashMapUtil {
+	
+	public static Map<String, Object> map(String key1, Object value1, String key2,
+			Object value2) {
+		Map<String, Object> result = new HashMap<String, Object>(2);
+		result.put(key1, value1);
+		result.put(key2, value2);
+		return result;
+	}
+	
 	public static Map<String, Object> map5(String key1, Object value1, String key2,
 			Object value2, String key3, Object value3, String key4, Object value4,
 			String key5, Object value5) {

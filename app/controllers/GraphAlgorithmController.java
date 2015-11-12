@@ -70,16 +70,35 @@ public class GraphAlgorithmController extends Controller {
 				System.out.println("User and Dataset: cannot be found!");
 				return notFound("User and Dataset: cannot be found!");
 			}
-
-			WeightedGraph<Integer, DefaultWeightedEdge> graph = createGraph(userDatasets);
+			List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+			WeightedGraph<Integer, DefaultWeightedEdge> graph = createGraph(userDatasets, nodes, rels);
+			Map<String, Object> map = new HashMap<>();
+			
+			List<Map<String, Object>> node = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> rel = new ArrayList<Map<String, Object>>();
+			
 			List<DefaultWeightedEdge> path =
 	                DijkstraShortestPath.findPathBetween(graph, source, target);
 			for(DefaultWeightedEdge p : path) {
-				
+				int v1 = graph.getEdgeSource(p);
+				int v2 = graph.getEdgeTarget(p);
+				if(!node.contains(nodes.get(v1-1)))
+					node.add(nodes.get(v1-1));
+				if(!node.contains(nodes.get(v2-1)))
+					node.add(nodes.get(v2-1));
+				for(Map<String, Object> one : rels) {
+					if((int)one.get("from") == v1 && (int)one.get("to") == v2) {
+						rel.add(one);
+					}
+				}
 			}
+			
+			map = HashMapUtil.map("nodes", node, "edges", rel);
+			
 			String result = new String();
 			if (format.equals("json")) {
-				result = new Gson().toJson(path);
+				result = new Gson().toJson(map);
 			}
 
 			return ok(result);
@@ -88,12 +107,10 @@ public class GraphAlgorithmController extends Controller {
 		}
 	}
 	
-	public WeightedGraph<Integer, DefaultWeightedEdge> createGraph(Iterable<DatasetAndUser> userDatasets) {
+	public WeightedGraph<Integer, DefaultWeightedEdge> createGraph(Iterable<DatasetAndUser> userDatasets,
+			List<Map<String, Object>> nodes, List<Map<String, Object>> rels) {
 		WeightedGraph<Integer, DefaultWeightedEdge> g =
 	            new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
-		
-		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
-		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
 
 		int i = 1;
 		long edgeId = 1;
