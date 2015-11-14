@@ -9,8 +9,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.DijkstraShortestPath;
+import org.jgrapht.alg.KShortestPaths;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -99,6 +101,55 @@ public class GraphAlgorithmController extends Controller {
 			String result = new String();
 			if (format.equals("json")) {
 				result = new Gson().toJson(map);
+			}
+
+			return ok(result);
+		} catch (Exception e) {
+			return badRequest(e.getMessage());
+		}
+	}
+	
+public Result getKShortestPath(int source, int target, int k, String format) {
+		
+		try {
+			Iterable<DatasetAndUser> userDatasets = datasetAndUserRepository
+					.findAll();
+
+			if (userDatasets == null) {
+				System.out.println("User and Dataset: cannot be found!");
+				return notFound("User and Dataset: cannot be found!");
+			}
+			List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+			WeightedGraph<Integer, DefaultWeightedEdge> graph = createGraph(userDatasets, nodes, rels);
+			// return this map list
+			List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+
+			KShortestPaths kPaths = new KShortestPaths(graph, source, k);
+			List<GraphPath> paths = kPaths.getPaths(target);
+	        
+			for(GraphPath p : paths) {
+				List<Map<String, Object>> node = new ArrayList<Map<String, Object>>();
+				List<Map<String, Object>> rel = new ArrayList<Map<String, Object>>();
+				for (Object edge : p.getEdgeList()) {
+					int v1 = graph.getEdgeSource((DefaultWeightedEdge)edge);
+					int v2 = graph.getEdgeTarget((DefaultWeightedEdge)edge);
+					if(!node.contains(nodes.get(v1-1)))
+						node.add(nodes.get(v1-1));
+					if(!node.contains(nodes.get(v2-1)))
+						node.add(nodes.get(v2-1));
+					for (Map<String, Object> one : rels) {
+						if((int)one.get("from") == v1 && (int)one.get("to") == v2) {
+							rel.add(one);
+						}
+					}
+				}
+				mapList.add(HashMapUtil.map("nodes", node, "edges", rel));
+			}
+		
+			String result = new String();
+			if (format.equals("json")) {
+				result = new Gson().toJson(mapList);
 			}
 
 			return ok(result);
