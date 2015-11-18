@@ -480,7 +480,8 @@ public class ServiceExecutionLogController extends Controller {
 					Dataset dataset = datasetRepository.findByDataSourceAndCMIP5VarName(source, variable).get(0);
 					DatasetLog datasetLog = new DatasetLog(savedServiceExecutionLog,
 							dataset, user, plotUrl, dataUrl, dataset,
-							dataset, datasetStudyStartTime, datasetStudyEndTime);
+							dataset, executionStartTime, executionEndTime,
+							datasetStudyStartTime, datasetStudyEndTime);
 					DatasetLog savedDatasetLog = datasetLogRepository.save(datasetLog);
 					System.out.print("DatasetLog saved:" + savedDatasetLog.getId());
 					
