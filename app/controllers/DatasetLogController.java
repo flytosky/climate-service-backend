@@ -2,7 +2,12 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -86,10 +91,13 @@ public class DatasetLogController extends Controller {
 			Dataset outputDataset = datasetRepository.findOne(outputDatasetId);
 			Dataset dataset = datasetRepository.findOne(datasetId);
 			ServiceExecutionLog serviceExecutionLog = serviceExecutionLogRepository.findOne(serviceExecutionLogId);
+			Date serviceExecutionStartTime = serviceExecutionLog.getExecutionStartTime();		
+			Date serviceExecutionEndTime = serviceExecutionLog.getExecutionEndTime();
 			User user = userRepository.findOne(userId);
 			DatasetLog datasetLog = new DatasetLog(serviceExecutionLog,
 					dataset, user, plotUrl, dataUrl, originalDataset,
-					outputDataset, datasetStudyStartTime, datasetStudyEndTime);
+					outputDataset, serviceExecutionStartTime, serviceExecutionEndTime,
+					datasetStudyStartTime, datasetStudyEndTime);
 			DatasetLog saveddatasetLog = datasetLogRepository.save(datasetLog);
 			System.out.println("DatasetLog saved: "+ saveddatasetLog.getId());
 			return created(new Gson().toJson(datasetLog.getId()));
@@ -205,6 +213,46 @@ public class DatasetLogController extends Controller {
     	} catch (Exception e) {
     		return badRequest("DatasetLog not found");
     	}
+    }
+    
+    public List<Dataset> queryDatasets() {
+    	JsonNode json = request().body().asJson();
+		Set<Dataset> datasets = new HashSet<Dataset>();
+		if (json == null) {
+			System.out.println("Dataset cannot be queried, expecting Json data");
+			return new ArrayList<Dataset>(datasets);
+		}
+
+		try {
+			// Parse JSON file
+			Long userId = json.findPath("userId").asLong();
+
+			Date start = new Date(0);
+			Date end = new Date();
+			long executionStartTimeNumber = json.findPath("executionStartTime")
+					.asLong();
+			long executionEndTimeNumber = json.findPath("executionEndTime")
+					.asLong();
+
+			if (executionStartTimeNumber > 0) {
+				start = new Date(executionStartTimeNumber);
+			}
+			if (executionEndTimeNumber > 0) {
+				end = new Date(executionEndTimeNumber);
+			}
+			
+			List<DatasetLog> datasetLogs = datasetLogRepository.
+					findByServiceExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
+			
+			for (DatasetLog datasetLog : datasetLogs) {
+				datasets.add(datasetLog.getDataset());
+			}
+		} catch (Exception e) {
+			System.out.println("Dataset cannot be queried, query is corrupt");
+			return new ArrayList<Dataset>(datasets);
+		}
+		
+		return new ArrayList<Dataset>(datasets);
     }
 	
 }

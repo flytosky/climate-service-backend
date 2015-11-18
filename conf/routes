@@ -64,6 +64,7 @@ DELETE        /serviceExecutionLog/deleteServiceExecutionLogs/:id               
 GET           /datasetLog/getAllDatasetLogs/json                                                        @controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
 GET           /datasetLog/getDatasetLog/id/:id/json                                                     @controllers.DatasetLogController.getDatasetLog(id: Long, format: String="json")
 POST          /datasetLog/addDatasetLog                                                                 @controllers.DatasetLogController.addDatasetLog
+POST		  /datasetLog/queryDatasets																	@controllers.DatasetLogController.queryDatasets
 PUT           /datasetLog/updateDatasetLog/id/:id                                                       @controllers.DatasetLogController.updateDatasetLogById(id: Long)
 DELETE        /datasetLog/deleteDatasetLog/id/:id                                                       @controllers.DatasetLogController.deleteDatasetLog(id: Long)
 
@@ -139,9 +140,9 @@ POST		  /users/isEmailExisted																		@controllers.UserController.isEma
 DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
 
 # Analytics
-#GET			  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
-#GET			  /analytics/getAllServiceAndUserWithCount/json											    @controllers.AnalyticsController.getAllServiceAndUserWithCount(format: String="json")
-#GET			  /analytics/getAllServiceAndDatasetWithCount/json											@controllers.AnalyticsController.getAllServiceAndDatasetWithCount(format: String="json")
+#GET		  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")
+#GET		  /analytics/getAllServiceAndUserWithCount/json											    @controllers.AnalyticsController.getAllServiceAndUserWithCount(format: String="json")
+#GET		  /analytics/getAllServiceAndDatasetWithCount/json											@controllers.AnalyticsController.getAllServiceAndDatasetWithCount(format: String="json")
 GET			  /analytics/getOneUserWithAllDatasetAndCountByUserId/:id/json								@controllers.AnalyticsController.getOneUserWithAllDatasetAndCount(id: Long, format: String="json")
 GET			  /analytics/getOneDatasetWithAllUserAndCountByDatasetId/:id/json							@controllers.AnalyticsController.getOneDatasetWithAllUserAndCount(id: Long, format: String="json")
 GET			  /analytics/getOneUserWithAllServiceAndCountByUserId/:id/json								@controllers.AnalyticsController.getOneUserWithAllServiceAndCount(id: Long, format: String="json")
