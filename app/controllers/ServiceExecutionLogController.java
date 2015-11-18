@@ -486,7 +486,7 @@ public class ServiceExecutionLogController extends Controller {
 					
 					List<DatasetAndUser> datasetAndUsers = datasetAndUserRepository.findByUserAndDataset(user, dataset);
 					if(datasetAndUsers.size() == 0) {
-						DatasetAndUser datasetAndUser = new DatasetAndUser(user, dataset, 0);
+						DatasetAndUser datasetAndUser = new DatasetAndUser(user, dataset, 1);
 						datasetAndUserRepository.save(datasetAndUser);
 					}
 					else {
