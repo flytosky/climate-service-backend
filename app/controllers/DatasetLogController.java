@@ -215,12 +215,14 @@ public class DatasetLogController extends Controller {
     	}
     }
     
-    public List<Dataset> queryDatasets() {
+    public Result queryDatasets() {
     	JsonNode json = request().body().asJson();
 		Set<Dataset> datasets = new HashSet<Dataset>();
+		
 		if (json == null) {
 			System.out.println("Dataset cannot be queried, expecting Json data");
-			return new ArrayList<Dataset>(datasets);
+			String result = new Gson().toJson(new ArrayList<Dataset>(datasets));
+			return ok(result);
 		}
 
 		try {
@@ -242,17 +244,19 @@ public class DatasetLogController extends Controller {
 			}
 			
 			List<DatasetLog> datasetLogs = datasetLogRepository.
-					findByServiceExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
+					findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
 			
 			for (DatasetLog datasetLog : datasetLogs) {
 				datasets.add(datasetLog.getDataset());
 			}
 		} catch (Exception e) {
 			System.out.println("Dataset cannot be queried, query is corrupt");
-			return new ArrayList<Dataset>(datasets);
+			String result = new Gson().toJson(new ArrayList<Dataset>(datasets));
+			return ok(result);
 		}
 		
-		return new ArrayList<Dataset>(datasets);
+		String result = new Gson().toJson(new ArrayList<Dataset>(datasets));
+		return ok(result);
     }
 	
 }

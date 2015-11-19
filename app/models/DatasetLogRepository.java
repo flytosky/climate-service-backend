@@ -12,6 +12,6 @@ import javax.inject.Singleton;
 @Singleton
 public interface DatasetLogRepository extends CrudRepository<DatasetLog, Long> {
 	
-    List<DatasetLog> findByServiceExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndUser_Id(Date start, Date end, long userId);
+    List<DatasetLog> findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(Date serviceExecutionStartTime, Date serviceExecutionEndTime, long userId);
 
 }

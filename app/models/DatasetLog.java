@@ -38,7 +38,7 @@ public class DatasetLog {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date serviceExecutionStartTime;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date serviceExectuionEndTime;
+	private Date serviceExecutionEndTime;
 	
 	private Date datasetStudyStartTime;
 	private Date datasetStudyEndTime;
@@ -50,7 +50,7 @@ public class DatasetLog {
 	public DatasetLog(ServiceExecutionLog serviceExecutionLog,
 			Dataset dataset, User user, String plotUrl, String dataUrl,
 			Dataset originalDataset, Dataset outputDataset,
-			Date serviceExecutionStartTime, Date serviceExectuionEndTime,
+			Date serviceExecutionStartTime, Date serviceExecutionEndTime,
 			Date datasetStudyStartTime, Date datasetStudyEndTime) {
 		super();
 		this.serviceExecutionLog = serviceExecutionLog;
@@ -61,7 +61,7 @@ public class DatasetLog {
 		this.originalDataset = originalDataset;
 		this.outputDataset = outputDataset;
 		this.serviceExecutionStartTime = serviceExecutionStartTime;
-		this.serviceExectuionEndTime = serviceExectuionEndTime;
+		this.serviceExecutionEndTime = serviceExecutionEndTime;
 		this.datasetStudyStartTime = datasetStudyStartTime;
 		this.datasetStudyEndTime = datasetStudyEndTime;
 	}
@@ -138,12 +138,12 @@ public class DatasetLog {
 		this.serviceExecutionStartTime = serviceExecutionStartTime;
 	}
 
-	public Date getServiceExectuionEndTime() {
-		return serviceExectuionEndTime;
+	public Date getServiceExecutionEndTime() {
+		return serviceExecutionEndTime;
 	}
 
-	public void setServiceExectuionEndTime(Date serviceExectuionEndTime) {
-		this.serviceExectuionEndTime = serviceExectuionEndTime;
+	public void setServiceExecutionEndTime(Date serviceExecutionEndTime) {
+		this.serviceExecutionEndTime = serviceExecutionEndTime;
 	}
 	
 	public Date getDatasetStudyStartTime() {
@@ -169,8 +169,8 @@ public class DatasetLog {
 				+ user + ", plotUrl=" + plotUrl + ", dataUrl=" + dataUrl
 				+ ", originalDataset=" + originalDataset + ", outputDataset="
 				+ outputDataset + ", serviceExecutionStartTime="
-				+ serviceExecutionStartTime + ", serviceExectuionEndTime="
-				+ serviceExectuionEndTime + ", datasetStudyStartTime="
+				+ serviceExecutionStartTime + ", serviceExecutionEndTime="
+				+ serviceExecutionEndTime + ", datasetStudyStartTime="
 				+ datasetStudyStartTime + ", datasetStudyEndTime="
 				+ datasetStudyEndTime + "]";
 	}
