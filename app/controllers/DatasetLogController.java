@@ -250,9 +250,9 @@ public class DatasetLogController extends Controller {
 			
 			List<DatasetLog> datasetLogs = datasetLogRepository.
 					findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
-			for (DatasetLog datasetLog : datasetLogs) {
-				datasets.add(datasetLog.getDataset());
-			}
+//			for (DatasetLog datasetLog : datasetLogs) {
+//				datasets.add(datasetLog.getDataset());
+//			}
 			map = jsonFormatUserAndDataset(datasetLogs);
 		} catch (Exception e) {
 			System.out.println("Dataset cannot be queried, query is corrupt");
@@ -308,6 +308,115 @@ public class DatasetLogController extends Controller {
 				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset()
 						.getName(), "label",
 						userDataset.getDataset().getName(), "cluster", "2",
+						"value", 2, "group", "dataset", "datasetId",
+						userDataset.getDataset().getId()));
+				target = i;
+				i++;
+			}
+			rels.add(HashMapUtil.map5("from", source, "to", target, "title", "USE",
+					"id", edgeId, "weight", 0));
+			edgeId++;
+		}
+
+		return HashMapUtil.map("nodes", nodes, "edges", rels);
+	}
+    
+    public Result queryVariables() {
+    	JsonNode json = request().body().asJson();
+		Set<Dataset> datasets = new HashSet<Dataset>();
+		Set<String> variables = new HashSet<String>();
+		Map<String, Object> map = new HashMap<>();
+		
+		if (json == null) {
+			System.out.println("Dataset cannot be queried, expecting Json data");
+			String result = new Gson().toJson(map);
+			return ok(result);
+		}
+
+		try {
+			// Parse JSON file
+			Long userId = json.findPath("userId").asLong();
+
+			Date start = new Date(0);
+			Date end = new Date();
+			long executionStartTimeNumber = json.findPath("executionStartTime")
+					.asLong();
+			long executionEndTimeNumber = json.findPath("executionEndTime")
+					.asLong();
+
+			if (executionStartTimeNumber > 0) {
+				start = new Date(executionStartTimeNumber);
+			}
+			if (executionEndTimeNumber > 0) {
+				end = new Date(executionEndTimeNumber);
+			}
+			
+			List<DatasetLog> datasetLogs = datasetLogRepository.
+					findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
+			
+//			for (DatasetLog datasetLog : datasetLogs) {
+//				datasets.add(datasetLog.getDataset());
+//			}
+//			
+//			for (Dataset dataset : datasets) {
+//				variables.add(dataset.getPhysicalVariable());
+//			}
+			map = jsonFormatUserAndVariable(datasetLogs);
+			
+		} catch (Exception e) {
+			System.out.println("Dataset cannot be queried, query is corrupt");
+			String result = new Gson().toJson(map);
+			return ok(result);
+		}
+		
+		String result = new Gson().toJson(new ArrayList<String>(variables));
+		return ok(result);
+    }
+    
+    private Map<String, Object> jsonFormatUserAndVariable (
+			Iterable<DatasetLog> userDatasets) {
+
+		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+
+		int i = 1;
+		int edgeId = 1;
+		for (DatasetLog userDataset : userDatasets) {
+			int source = 0;
+			int target = 0;
+			// Check whether the current user has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("group").equals("user")
+						&& (long) nodes.get(j).get("userId") == userDataset
+								.getUser().getId()) {
+					source = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (source == 0) {
+				String realName = userDataset.getUser().getFirstName() + " "
+						+ userDataset.getUser().getLastName();
+				nodes.add(HashMapUtil.map7("id", i, "title", realName, "label", userDataset
+						.getUser().getUserName(), "cluster", "1", "value", 1,
+						"group", "user", "userId", userDataset.getUser()
+								.getId()));
+
+				source = i;
+				i++;
+			}
+			// Check whether the current dataset has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("group").equals("dataset")
+						&& (long) nodes.get(j).get("datasetId") == userDataset
+								.getDataset().getId()) {
+					target = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (target == 0) {
+				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset()
+						.getName(), "label",
+						userDataset.getDataset().getPhysicalVariable(), "cluster", "2",
 						"value", 2, "group", "dataset", "datasetId",
 						userDataset.getDataset().getId()));
 				target = i;
