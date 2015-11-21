@@ -353,14 +353,7 @@ public class DatasetLogController extends Controller {
 			
 			List<DatasetLog> datasetLogs = datasetLogRepository.
 					findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
-			
-//			for (DatasetLog datasetLog : datasetLogs) {
-//				datasets.add(datasetLog.getDataset());
-//			}
-//			
-//			for (Dataset dataset : datasets) {
-//				variables.add(dataset.getPhysicalVariable());
-//			}
+
 			map = jsonFormatUserAndVariable(datasetLogs);
 			
 		} catch (Exception e) {
