@@ -5,14 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,10 +24,9 @@ import models.DatasetAndUserRepository;
 import models.DatasetEntryRepository;
 import models.DatasetLogRepository;
 import models.DatasetRepository;
-import models.Parameter;
 import models.ParameterRepository;
-import models.ServiceConfiguration;
-import models.ServiceConfigurationItem;
+import models.ServiceAndDatasetRepository;
+import models.ServiceAndUserRepository;
 import models.ServiceConfigurationItemRepository;
 import models.ServiceConfigurationRepository;
 import models.ServiceEntryRepository;
@@ -61,6 +56,8 @@ public class WorkflowController extends Controller {
 	private final DatasetEntryRepository datasetEntryRepository;
 	private final DatasetRepository datasetRepository;
 	private final DatasetAndUserRepository datasetAndUserRepository;
+	private final ServiceAndUserRepository serviceAndUserRepository;
+	private final ServiceAndDatasetRepository serviceAndDatasetRepository;
 
 	@Inject
 	public WorkflowController(
@@ -75,7 +72,9 @@ public class WorkflowController extends Controller {
 			ServiceEntryRepository serviceEntryRepository,
 			DatasetEntryRepository datasetEntryRepository,
 			DatasetRepository datasetRepository,
-			DatasetAndUserRepository datasetAndUserRepository) {
+			DatasetAndUserRepository datasetAndUserRepository,
+			ServiceAndUserRepository serviceAndUserRepository,
+			ServiceAndDatasetRepository serviceAndDatasetRepository) {
 		this.climateServiceRepository = climateServiceRepository;
 		this.userRepository = userRepository;
 		this.workflowRepository = workflowRepository;
@@ -88,6 +87,8 @@ public class WorkflowController extends Controller {
 		this.datasetEntryRepository = datasetEntryRepository;
 		this.datasetRepository = datasetRepository;
 		this.datasetAndUserRepository = datasetAndUserRepository;
+		this.serviceAndUserRepository = serviceAndUserRepository;
+		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
 	}
 
 	public Result addWorkflow() {
@@ -231,7 +232,8 @@ public class WorkflowController extends Controller {
 				serviceConfigurationItemRepository, userRepository,
 				climateServiceRepository, datasetLogRepository,
 				serviceConfigurationRepository, serviceEntryRepository,
-				datasetEntryRepository, datasetRepository, datasetAndUserRepository);
+				datasetEntryRepository, datasetRepository, datasetAndUserRepository,
+				serviceAndUserRepository, serviceAndDatasetRepository);
 		List<ServiceExecutionLog> list = serviceExecutionLogController
 				.queryServiceExecutionLogsAsList();
 		String result = VisTrailJson.getVisTrailJson(list);

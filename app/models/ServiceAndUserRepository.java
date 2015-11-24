@@ -15,5 +15,6 @@ public interface ServiceAndUserRepository extends CrudRepository<ServiceAndUser,
 	List<ServiceAndUser> findByUser(User user);
 	List<ServiceAndUser> findByClimateService(ClimateService service);
 	List<ServiceAndUser> findAll(Sort sort);
+	List<ServiceAndUser> findByUserAndClimateService(User user, ClimateService climateService);
 }
 

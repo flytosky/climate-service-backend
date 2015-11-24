@@ -15,5 +15,6 @@ public interface ServiceAndDatasetRepository extends CrudRepository<ServiceAndDa
 	List<ServiceAndDataset> findByClimateService(ClimateService service);
 	List<ServiceAndDataset> findByDataset(Dataset dataset);
 	List<ServiceAndDataset> findAll(Sort sort);
+	List<ServiceAndDataset> findByClimateServiceAndDataset(ClimateService climateService, Dataset dataset);
 }
 
