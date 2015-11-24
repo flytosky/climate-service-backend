@@ -324,7 +324,6 @@ public class DatasetLogController extends Controller {
     public Result queryVariables() {
     	JsonNode json = request().body().asJson();
 		Set<Dataset> datasets = new HashSet<Dataset>();
-		Set<String> variables = new HashSet<String>();
 		Map<String, Object> map = new HashMap<>();
 		
 		if (json == null) {
@@ -335,7 +334,7 @@ public class DatasetLogController extends Controller {
 
 		try {
 			// Parse JSON file
-			Long userId = json.findPath("userId").asLong();
+			Long userId = json.findPath("id").asLong();
 
 			Date start = new Date(0);
 			Date end = new Date();
@@ -343,7 +342,7 @@ public class DatasetLogController extends Controller {
 					.asLong();
 			long executionEndTimeNumber = json.findPath("executionEndTime")
 					.asLong();
-
+			
 			if (executionStartTimeNumber > 0) {
 				start = new Date(executionStartTimeNumber);
 			}
@@ -355,16 +354,16 @@ public class DatasetLogController extends Controller {
 					findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(start, end, userId);
 
 			map = jsonFormatUserAndVariable(datasetLogs);
-			
 		} catch (Exception e) {
 			System.out.println("Dataset cannot be queried, query is corrupt");
 			String result = new Gson().toJson(map);
 			return ok(result);
 		}
 		
-		String result = new Gson().toJson(new ArrayList<String>(variables));
+		String result = new Gson().toJson(map);
 		return ok(result);
     }
+
     
     private Map<String, Object> jsonFormatUserAndVariable (
 			Iterable<DatasetLog> userDatasets) {
@@ -399,19 +398,17 @@ public class DatasetLogController extends Controller {
 			}
 			// Check whether the current dataset has already existed
 			for (int j = 0; j < nodes.size(); j++) {
-				if (nodes.get(j).get("group").equals("dataset")
-						&& (long) nodes.get(j).get("datasetId") == userDataset
-								.getDataset().getId()) {
+				if (nodes.get(j).get("group").equals("variable")
+						&& nodes.get(j).get("label").equals(userDataset
+								.getDataset().getPhysicalVariable())) {
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
 			}
 			if (target == 0) {
-				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset()
-						.getName(), "label",
+				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset().getPhysicalVariable(), "label",
 						userDataset.getDataset().getPhysicalVariable(), "cluster", "2",
-						"value", 2, "group", "dataset", "datasetId",
-						userDataset.getDataset().getId()));
+						"value", 2, "group", "variable", "variableId", i));
 				target = i;
 				i++;
 			}

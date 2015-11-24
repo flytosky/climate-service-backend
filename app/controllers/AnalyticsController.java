@@ -75,7 +75,7 @@ public class AnalyticsController extends Controller {
 		return count;
 	}
 	
-	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3) {
+	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3, String choice) {
 		String option = param1 + param2 + param3;
 		Map<String, Object> map = new HashMap<>();
 		int[][] relations = null;
@@ -221,13 +221,13 @@ public class AnalyticsController extends Controller {
 			break;
 		}
 		case "UserDatasetService":
-			map = getAllDatasetAndUserWithCount();
+			map = getAllDatasetAndUserWithCount(choice);
 			break;
 		case "UserServiceDataset":
 			map = getAllServiceAndUserWithCount();
 			break;
 		case "DatasetServiceUser":
-			map = getAllServiceAndDatasetWithCount();
+			map = getAllServiceAndDatasetWithCount(choice);
 			break;
 		default:
 			break;
@@ -245,9 +245,10 @@ public class AnalyticsController extends Controller {
 		String param1 = json.findPath("param1").asText();
 		String param2 = json.findPath("param2").asText();
 		String param3 = json.findPath("param3").asText();
+		String choice = json.findPath("choice").asText();
 		
 		try {
-			Map<String, Object> map = generateRelationalMap(param1, param2, param3);
+			Map<String, Object> map = generateRelationalMap(param1, param2, param3, choice);
 			
 			String result = new String();
 			if (format.equals("json")) {
@@ -260,7 +261,7 @@ public class AnalyticsController extends Controller {
 
 	}
 
-	public Map<String, Object> getAllServiceAndDatasetWithCount() {
+	public Map<String, Object> getAllServiceAndDatasetWithCount(String choice) {
 
 		List<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
 				.findAll(sortByCountDesc());
@@ -269,12 +270,17 @@ public class AnalyticsController extends Controller {
 			System.out.println("Dataset and Service: cannot be found!");
 		}
 		
-		Map<String, Object> map = jsonFormatServiceAndDataset(datasetAndServices);
+		Map<String, Object> map = null;
+		if(choice.equals("datasetNameW")) {
+			map = jsonFormatServiceAndDataset(datasetAndServices);
+		}else {
+			map = jsonFormatServiceAndVariable(datasetAndServices);
+		}
 		return map;
 
 	}
 
-	public Map<String, Object> getAllDatasetAndUserWithCount() {
+	public Map<String, Object> getAllDatasetAndUserWithCount(String choice) {
 
 		List<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
 				.findAll(sortByCountDesc());
@@ -282,8 +288,13 @@ public class AnalyticsController extends Controller {
 		if (datasetAndUsers == null) {
 			System.out.println("User and Dataset: cannot be found!");
 		}
-
-		Map<String, Object> map = jsonFormatUserAndDataset(datasetAndUsers);
+		Map<String, Object> map = null;
+		
+		if(choice.equals("datasetNameW")) {
+			map = jsonFormatUserAndDataset(datasetAndUsers);
+		}else {
+			map = jsonFormatUserAndVariable(datasetAndUsers);
+		}
 		return map;
 	}
 
@@ -510,6 +521,65 @@ public class AnalyticsController extends Controller {
 
 		return HashMapUtil.map("nodes", nodes, "edges", rels);
 	}
+	
+	private Map<String, Object> jsonFormatUserAndVariable(
+			List<DatasetAndUser> userDatasets) {
+		long min = userDatasets.get(userDatasets.size()-1).getCount();
+		long max = userDatasets.get(0).getCount();
+		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+
+		int i = 1;
+		int edgeId = 1;
+		for (DatasetAndUser userDataset : userDatasets) {
+			int source = 0;
+			int target = 0;
+			// Check whether the current user has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("group").equals("user")
+						&& (long) nodes.get(j).get("userId") == userDataset
+								.getUser().getId()) {
+					source = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (source == 0) {
+				String realName = userDataset.getUser().getFirstName() + " "
+						+ userDataset.getUser().getLastName();
+				nodes.add(HashMapUtil.map7("id", i, "title", realName, "label", userDataset
+						.getUser().getUserName(), "cluster", "1", "value", 1,
+						"group", "user", "userId", userDataset.getUser()
+								.getId()));
+
+				source = i;
+				i++;
+			}
+			// Check whether the current dataset has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("group").equals("variable")
+						&& nodes.get(j).get("label").equals(userDataset
+								.getDataset().getPhysicalVariable())) {
+					target = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (target == 0) {
+				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset().getPhysicalVariable(), "label",
+						userDataset.getDataset().getPhysicalVariable(), "cluster", "2",
+						"value", 2, "group", "variable", "variableId", i));
+				target = i;
+				i++;
+			}
+			rels.add(HashMapUtil.map6("from", source, "to", target, "title", "USE",
+					"id", edgeId, "weight", userDataset.getCount(), "length", (max-min)*3/userDataset.getCount()));
+			edgeId++;
+		}
+
+		return HashMapUtil.map("nodes", nodes, "edges", rels);
+	}
+
+	
+	
 
 	private Map<String, Object> jsonFormatServiceAndDataset(
 			List<ServiceAndDataset> serviceDatasets) {
@@ -568,6 +638,64 @@ public class AnalyticsController extends Controller {
 
 		return HashMapUtil.map("nodes", nodes, "edges", rels);
 	}
+	
+	private Map<String, Object> jsonFormatServiceAndVariable(
+			List<ServiceAndDataset> serviceDatasets) {
+		
+		long min = serviceDatasets.get(serviceDatasets.size()-1).getCount();
+		long max = serviceDatasets.get(0).getCount();
+		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+
+		int i = 1;
+		int edgeId = 1;
+		for (ServiceAndDataset serviceDataset : serviceDatasets) {
+			int source = 0;
+			int target = 0;
+			// Check whether the current service has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("group").equals("service")
+						&& (long) nodes.get(j).get("serviceId") == serviceDataset
+								.getClimateService().getId()) {
+					source = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (source == 0) {
+				nodes.add(HashMapUtil.map7("id", i, "title", serviceDataset
+						.getClimateService().getName(), "label", serviceDataset
+						.getClimateService().getName(), "cluster", "3",
+						"value", 1, "group", "service", "serviceId",
+						serviceDataset.getClimateService().getId()));
+				source = i;
+				i++;
+			}
+			// Check whether the current dataset has already existed
+			for (int j = 0; j < nodes.size(); j++) {
+				if (nodes.get(j).get("group").equals("variable")
+						&& nodes.get(j).get("label").equals(serviceDataset
+								.getDataset().getPhysicalVariable())) {
+					target = (int) nodes.get(j).get("id");
+					break;
+				}
+			}
+			if (target == 0) {
+				nodes.add(HashMapUtil.map7("id", i, "title", serviceDataset.getDataset().getPhysicalVariable(), "label",
+						serviceDataset.getDataset().getPhysicalVariable(), "cluster", "2",
+						"value", 2, "group", "variable", "variableId", i));
+				target = i;
+				i++;
+			}
+
+			rels.add(HashMapUtil.map6("from", source, "to", target, "title", "Utilize",
+					"id", edgeId, "weight", serviceDataset.getCount(), "length", (max-min)*3/serviceDataset.getCount()));
+			edgeId++;
+		}
+
+		return HashMapUtil.map("nodes", nodes, "edges", rels);
+	}
+	
+	
 
 	private Map<String, Object> jsonFormatServiceAndUser(
 			List<ServiceAndUser> userServices) {
