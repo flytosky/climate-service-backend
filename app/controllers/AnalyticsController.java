@@ -700,7 +700,7 @@ public class AnalyticsController extends Controller {
 	private Map<String, Object> jsonFormatServiceAndUser(
 			List<ServiceAndUser> userServices) {
 		
-		long min = userServices.get(userServices.size()-1).getCount();
+		long min = userServices.get(userServices.size() - 1).getCount();
 		long max = userServices.get(0).getCount();
 		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
@@ -716,6 +716,7 @@ public class AnalyticsController extends Controller {
 						&& (long) nodes.get(j).get("userId") == userService
 								.getUser().getId()) {
 					source = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
@@ -735,6 +736,7 @@ public class AnalyticsController extends Controller {
 						&& (long) nodes.get(j).get("serviceId") == userService
 								.getClimateService().getId()) {
 					target = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
