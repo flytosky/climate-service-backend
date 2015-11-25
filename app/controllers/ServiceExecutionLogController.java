@@ -22,6 +22,10 @@ import models.DatasetLogRepository;
 import models.DatasetRepository;
 import models.Parameter;
 import models.ParameterRepository;
+import models.ServiceAndDataset;
+import models.ServiceAndDatasetRepository;
+import models.ServiceAndUser;
+import models.ServiceAndUserRepository;
 import models.ServiceConfiguration;
 import models.ServiceConfigurationItem;
 import models.ServiceConfigurationItemRepository;
@@ -57,6 +61,8 @@ public class ServiceExecutionLogController extends Controller {
 	private final DatasetLogRepository datasetLogRepository;
 	private final ServiceConfigurationRepository serviceConfigurationRepository;
 	private final DatasetAndUserRepository datasetAndUserRepository;
+	private final ServiceAndUserRepository serviceAndUserRepository;
+	private final ServiceAndDatasetRepository serviceAndDatasetRepository;
 
 	// We are using constructor injection to receive a repository to support our
 	// desire for immutability.
@@ -72,7 +78,9 @@ public class ServiceExecutionLogController extends Controller {
 			ServiceEntryRepository serviceEntryRepository,
 			DatasetEntryRepository datasetEntryRepository,
 			DatasetRepository datasetRepository,
-			DatasetAndUserRepository datasetAndUserRepository) {
+			DatasetAndUserRepository datasetAndUserRepository,
+			ServiceAndUserRepository serviceAndUserRepository,
+			ServiceAndDatasetRepository serviceAndDatasetRepository) {
 		this.parameterRepository = parameterRepository;
 		this.serviceExecutionLogRepository = serviceExecutionLogRepository;
 		this.userRepository = userRepository;
@@ -84,6 +92,8 @@ public class ServiceExecutionLogController extends Controller {
 		this.datasetEntryRepository = datasetEntryRepository;
 		this.datasetRepository = datasetRepository;
 		this.datasetAndUserRepository = datasetAndUserRepository;
+		this.serviceAndUserRepository = serviceAndUserRepository;
+		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
 	}
 
 	public Result queryServiceExecutionLogs() {
@@ -471,6 +481,17 @@ public class ServiceExecutionLogController extends Controller {
 					.save(serviceEntry);
 			System.out.println("ServiceExecutionLog saved: "
 					+ savedServiceEntry.getId());
+			//ServiceAndUser count plus 1
+			List<ServiceAndUser> serviceAndUsers = serviceAndUserRepository.findByUserAndClimateService(user, climateService);
+			if(serviceAndUsers.size() == 0) {
+				ServiceAndUser serviceAndUser = new ServiceAndUser(user, climateService, 1);
+				serviceAndUserRepository.save(serviceAndUser);
+			}
+			else {
+				ServiceAndUser serviceAndUser = serviceAndUsers.get(0);
+				serviceAndUser.setCount(serviceAndUser.getCount() + 1);
+				serviceAndUserRepository.save(serviceAndUser);
+			}
 			
 			//Save DatasetLog
 			if (datasetArray.isArray()) {
@@ -485,6 +506,7 @@ public class ServiceExecutionLogController extends Controller {
 					DatasetLog savedDatasetLog = datasetLogRepository.save(datasetLog);
 					System.out.print("DatasetLog saved:" + savedDatasetLog.getId());
 					
+					//DatasetAndUser count plus 1
 					List<DatasetAndUser> datasetAndUsers = datasetAndUserRepository.findByUserAndDataset(user, dataset);
 					if(datasetAndUsers.size() == 0) {
 						DatasetAndUser datasetAndUser = new DatasetAndUser(user, dataset, 1);
@@ -494,6 +516,18 @@ public class ServiceExecutionLogController extends Controller {
 						DatasetAndUser datasetAndUser = datasetAndUsers.get(0);
 						datasetAndUser.setCount(datasetAndUser.getCount() + 1);
 						datasetAndUserRepository.save(datasetAndUser);
+					}
+					
+					//ServiceAndDataset count plus 1
+					List<ServiceAndDataset> serviceAndDatasets = serviceAndDatasetRepository.findByClimateServiceAndDataset(climateService, dataset);
+					if(serviceAndDatasets.size() == 0) {
+						ServiceAndDataset serviceAndDataset = new ServiceAndDataset(climateService, dataset, 1);
+						serviceAndDatasetRepository.save(serviceAndDataset);
+					}
+					else {
+						ServiceAndDataset serviceAndDataset = serviceAndDatasets.get(0);
+						serviceAndDataset.setCount(serviceAndDataset.getCount() + 1);
+						serviceAndDatasetRepository.save(serviceAndDataset);
 					}
 				}
 			}

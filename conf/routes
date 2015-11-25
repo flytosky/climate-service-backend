@@ -65,6 +65,7 @@ GET           /datasetLog/getAllDatasetLogs/json                                
 GET           /datasetLog/getDatasetLog/id/:id/json                                                     @controllers.DatasetLogController.getDatasetLog(id: Long, format: String="json")
 POST          /datasetLog/addDatasetLog                                                                 @controllers.DatasetLogController.addDatasetLog
 POST		  /datasetLog/queryDatasets																	@controllers.DatasetLogController.queryDatasets
+POST		  /datasetLog/queryVariables																@controllers.DatasetLogController.queryVariables
 PUT           /datasetLog/updateDatasetLog/id/:id                                                       @controllers.DatasetLogController.updateDatasetLogById(id: Long)
 DELETE        /datasetLog/deleteDatasetLog/id/:id                                                       @controllers.DatasetLogController.deleteDatasetLog(id: Long)
 
