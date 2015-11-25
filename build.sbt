@@ -22,5 +22,10 @@ libraryDependencies ++= Seq(
   "com.google.code.gson" % "gson" % "2.3.1",
   "org.hibernate" % "hibernate-c3p0" % "4.3.7.Final",
   "com.googlecode.efficient-java-matrix-library" % "ejml" % "0.23",
-  "org.jgrapht" % "jgrapht-jdk1.5" % "0.7.3"
+  "org.jgrapht" % "jgrapht-jdk1.5" % "0.7.3",
+  "org.apache.mahout" % "mahout-core" % "0.9",
+  "org.apache.mahout" % "mahout-integration" % "0.11.0"
 )
+
+
+fork in run := true
