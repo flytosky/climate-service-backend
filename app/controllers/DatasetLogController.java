@@ -207,10 +207,54 @@ public class DatasetLogController extends Controller {
     	
     	return ok(result);
     }
+    
+    public Result getServiceExecutionLogsByDatasetAndUser(long userId, long datsetId, String format) {
+    	String result = new String();
+    	try {
+    		List<DatasetLog> datasetLogs =  datasetLogRepository.findByUserIdAndDatasetId(userId, datsetId);
+    		List<ServiceExecutionLog> serviceLogs = new ArrayList<ServiceExecutionLog>();
+    		for(DatasetLog datasetLog : datasetLogs) {
+    			serviceLogs.add(datasetLog.getServiceExecutionLog());
+    		}
+    		result = new Gson().toJson(serviceLogs);
+    	} catch (Exception e) {
+    		return badRequest("ServiceExecutionLog not found");
+    	}
+    	
+    	return ok(result);
+    }
+    
+    public Result getDatasetLogsByServiceAndUser(long userId, long serviceId, String format) {
+    	String result = new String();
+    	try {
+    		List<DatasetLog> datasetLogs =  datasetLogRepository.findByUserIdAndServiceId(userId, serviceId);
+    		result = new Gson().toJson(datasetLogs);
+    	} catch (Exception e) {
+    		return badRequest("DatasetLog not found");
+    	}
+    	
+    	return ok(result);
+    }
+    
+    public Result getUsersByServiceAndDataset(long serviceId, long datasetId, String format) {
+    	String result = new String();
+    	try {
+    		List<DatasetLog> datasetLogs =  datasetLogRepository.findByServiceIdAndDatasetId(serviceId, datasetId);
+    		List<User> users = new ArrayList<User>();
+    		for(DatasetLog datasetLog : datasetLogs) {
+    			users.add(datasetLog.getUser());
+    		}
+    		result = new Gson().toJson(users);
+    	} catch (Exception e) {
+    		return badRequest("User not found");
+    	}
+    	
+    	return ok(result);
+    }
 
     public Result getAllDatasetLogs(String format) {
     	try {
-    		Iterable<DatasetLog>datasetLogs =  datasetLogRepository.findAll();
+    		Iterable<DatasetLog> datasetLogs =  datasetLogRepository.findAll();
     		String result = new String();
     		result = new Gson().toJson(datasetLogs);
     		return ok(result);

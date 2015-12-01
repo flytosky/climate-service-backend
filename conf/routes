@@ -63,6 +63,9 @@ DELETE        /serviceExecutionLog/deleteServiceExecutionLogs/:id               
 # DatasetLog
 GET           /datasetLog/getAllDatasetLogs/json                                                        @controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
 GET           /datasetLog/getDatasetLog/id/:id/json                                                     @controllers.DatasetLogController.getDatasetLog(id: Long, format: String="json")
+GET           /datasetLog/getServiceExecutionLogsByDatasetAndUser/datasetId/:datasetId/userId/:userId/json                  @controllers.DatasetLogController.getServiceExecutionLogsByDatasetAndUser(userId: Long, datasetId:Long, format: String="json")
+GET           /datasetLog/getDatasetLogsByServiceAndUser/serviceId/:serviceId/userId/:userId/json                  			@controllers.DatasetLogController.getDatasetLogsByServiceAndUser(userId: Long, serviceId:Long, format: String="json")
+GET           /datasetLog/UsersByServiceAndDataset/serviceId/:serviceId/datasetId/:datasetId/json                  			@controllers.DatasetLogController.getUsersByServiceAndDataset(serviceId: Long, datasetId:Long, format: String="json")
 POST          /datasetLog/addDatasetLog                                                                 @controllers.DatasetLogController.addDatasetLog
 POST		  /datasetLog/queryDatasets																	@controllers.DatasetLogController.queryDatasets
 POST		  /datasetLog/queryVariables																@controllers.DatasetLogController.queryVariables
