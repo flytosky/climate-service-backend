@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import models.ServiceAndUser;
+import models.ServiceAndUserRepository;
 import models.User;
 import models.UserRepository;
 import play.mvc.*;
@@ -44,10 +46,12 @@ public class UserRecommendationController extends Controller {
 	}
 
 	private final UserRepository userRepository;
+	private final ServiceAndUserRepository serviceAndUserRepository;
 	
 	@Inject
-	public UserRecommendationController(final UserRepository userRepository) {
+	public UserRecommendationController(final UserRepository userRepository, ServiceAndUserRepository serviceAndUserRepository) {
 		this.userRepository = userRepository;
+		this.serviceAndUserRepository = serviceAndUserRepository;
 	}
 	
  	public Result getKSimilarUsers(Long id, int k, String format) {
@@ -55,7 +59,7 @@ public class UserRecommendationController extends Controller {
  			System.out.println("User id is null or empty!");
  			return badRequest("User id is null or empty!");
  		}
-		
+ 		
  		MysqlDataSource dataSource = new MysqlDataSource();
  		dataSource.setServerName("einstein.sv.cmu.edu");
  		dataSource.setUser("root");
@@ -77,11 +81,11 @@ public class UserRecommendationController extends Controller {
  	 				return (int) (uw1.sim - uw2.sim);
  	 			}
  	 		});
- 	 		for (User user : userRepository.findAll()) {
- 	 			if (user.getId() == id) {
+ 	 		for (ServiceAndUser serviceAndUser : serviceAndUserRepository.findDinstinctUsers()) {
+ 	 			if (serviceAndUser.getId() == id) {
  	 				continue;
  	 			}
- 	 			UserWrapper uw = new UserWrapper(user, similarity.userSimilarity(id, user.getId()));
+ 	 			UserWrapper uw = new UserWrapper(serviceAndUser.getUser(), similarity.userSimilarity(id, serviceAndUser.getUser().getId()));
  	 			if (queue.size() < k) {
  	 				queue.add(uw);
  	 			} else {
