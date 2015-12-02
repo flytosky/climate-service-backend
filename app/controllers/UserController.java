@@ -58,7 +58,9 @@ public class UserController extends Controller {
 				System.out.println("UserName has been used: " + userName);
 				return badRequest("UserName has been used");
 			}
-			User user = new User(userName, password, firstName, lastName, middleInitial, affiliation, title, email, mailingAddress, phoneNumber, faxNumber, researchFields, highestDegree);	
+			User user = new User(userName, password, firstName, lastName, 
+					middleInitial, affiliation, title, email, mailingAddress, 
+					phoneNumber, faxNumber, researchFields, highestDegree);	
 			userRepository.save(user);
 			System.out.println("User saved: " + user.getId());
 			return created(new Gson().toJson(user.getId()));
@@ -100,6 +102,7 @@ public class UserController extends Controller {
 	    String faxNumber = json.path("faxNumber").asText();
 	    String researchFields = json.path("researchFields").asText();
 	    String highestDegree = json.path("highestDegree").asText();
+
 		try {
 			User updateUser = userRepository.findOne(id);
 

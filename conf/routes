@@ -35,6 +35,14 @@ POST          /bugReport/addBugReport                                           
 PUT           /bugReport/updateBugReport/id/:id                                                         @controllers.BugReportController.updateBugReportById(id: Long)
 DELETE        /bugReport/deleteBugReport/id/:id                                                         @controllers.BugReportController.deleteBugReport(id: Long)
 
+# Comment
+GET       	  /comment/getComment/:id/:email/json			            								@controllers.CommentController.getComment(id: Long, email: String, format: String="json")
+GET       	  /comment/searchCommentByHashTag/:hashTag	           										@controllers.CommentController.searchCommentByHashTag(hashTag: String)
+GET	  		  /comment/getMentions/:email				    											@controllers.CommentController.getMentions(email: String)
+POST  	  	  /comment/postComment					    												@controllers.CommentController.postComment
+PUT  	  	  /comment/editComment					    												@controllers.CommentController.editComment
+DELETE    	  /comment/deleteComment/:service_id/:comment_id	    									@controllers.CommentController.deleteComment(service_id: Long, comment_id: Long)
+
 # Service Configuration
 GET           /serviceConfiguration/getServiceConfiguration/id/:id/json                                 @controllers.ServiceConfigurationController.getServiceConfiguration(id: Long, format: String="json")
 POST          /serviceConfiguration/addServiceConfiguration                                             @controllers.ServiceConfigurationController.addServiceConfiguration
@@ -58,7 +66,7 @@ POST          /serviceExecutionLog/queryServiceExecutionLogs                    
 PUT           /serviceExecutionLog/updateServiceExecutionLogs/:id                                       @controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
 DELETE        /serviceExecutionLog/deleteServiceExecutionLogs/:id                                       @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
 # Temp: replace service log
-#GET           /serviceExecutionLog/replaceUser                                                          @controllers.ServiceExecutionLogController.replaceUserWithPurpose()
+#GET          /serviceExecutionLog/replaceUser                                                          @controllers.ServiceExecutionLogController.replaceUserWithPurpose()
 
 # DatasetLog
 GET           /datasetLog/getAllDatasetLogs/json                                                        @controllers.DatasetLogController.getAllDatasetLogs(format: String="json")
