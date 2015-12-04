@@ -12,8 +12,8 @@ import javax.inject.Singleton;
 @Singleton
 public interface ServiceAndDatasetRepository extends CrudRepository<ServiceAndDataset, Long> {
 
-	List<ServiceAndDataset> findByClimateService(ClimateService service);
-	List<ServiceAndDataset> findByDataset(Dataset dataset);
+	List<ServiceAndDataset> findByClimateServiceOrderByCountDesc(ClimateService service);
+	List<ServiceAndDataset> findByDatasetOrderByCountDesc(Dataset dataset);
 	List<ServiceAndDataset> findAll(Sort sort);
 	List<ServiceAndDataset> findByClimateServiceAndDataset(ClimateService climateService, Dataset dataset);
 }

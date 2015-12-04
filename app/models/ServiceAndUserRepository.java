@@ -13,8 +13,8 @@ import javax.inject.Singleton;
 @Singleton
 public interface ServiceAndUserRepository extends CrudRepository<ServiceAndUser, Long> {
 
-	List<ServiceAndUser> findByUser(User user);
-	List<ServiceAndUser> findByClimateService(ClimateService service);
+	List<ServiceAndUser> findByUserOrderByCountDesc(User user);
+	List<ServiceAndUser> findByClimateServiceOrderByCountDesc(ClimateService service);
 	List<ServiceAndUser> findAll(Sort sort);
 	List<ServiceAndUser> findByUserAndClimateService(User user, ClimateService climateService);
 	

@@ -316,7 +316,7 @@ public class AnalyticsController extends Controller {
 		try {
 			User user = userRepository.findOne(userId);
 			List<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
-					.findByUser(user);
+					.findByUserOrderByCountDesc(user);
 
 			if (datasetAndUsers == null) {
 				System.out.println("User and Dataset: cannot be found!");
@@ -342,7 +342,7 @@ public class AnalyticsController extends Controller {
 		try {
 			Dataset dataset = datasetRepository.findOne(datasetId);
 			List<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
-					.findByDataset(dataset);
+					.findByDatasetOrderByCountDesc(dataset);
 
 			if (datasetAndUsers == null) {
 				System.out.println("User and Dataset: cannot be found!");
@@ -367,7 +367,7 @@ public class AnalyticsController extends Controller {
 		try {
 			User user = userRepository.findOne(userId);
 			List<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
-					.findByUser(user);
+					.findByUserOrderByCountDesc(user);
 
 			if (serviceAndUsers == null) {
 				System.out.println("User and Service: cannot be found!");
@@ -392,7 +392,7 @@ public class AnalyticsController extends Controller {
 		try {
 			ClimateService service = serviceRepository.findOne(serviceId);
 			List<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
-					.findByClimateService(service);
+					.findByClimateServiceOrderByCountDesc(service);
 
 			if (serviceAndUsers == null) {
 				System.out.println("User and Service: cannot be found!");
@@ -418,7 +418,7 @@ public class AnalyticsController extends Controller {
 		try {
 			ClimateService service = serviceRepository.findOne(serviceId);
 			List<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
-					.findByClimateService(service);
+					.findByClimateServiceOrderByCountDesc(service);
 
 			if (datasetAndServices == null) {
 				System.out.println("Dataset and Service: cannot be found!");
@@ -444,7 +444,7 @@ public class AnalyticsController extends Controller {
 		try {
 			Dataset dataset = datasetRepository.findOne(datasetId);
 			List<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
-					.findByDataset(dataset);
+					.findByDatasetOrderByCountDesc(dataset);
 
 			if (datasetAndServices == null) {
 				System.out.println("Dataset and Service: cannot be found!");
