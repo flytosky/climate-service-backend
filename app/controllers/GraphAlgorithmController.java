@@ -174,6 +174,7 @@ public Result getKShortestPath(int source, int target, int k, String format) {
 						&& (long) nodes.get(j).get("userId") == userDataset
 								.getUser().getId()) {
 					source = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
@@ -195,6 +196,7 @@ public Result getKShortestPath(int source, int target, int k, String format) {
 						&& (long) nodes.get(j).get("datasetId") == userDataset
 								.getDataset().getId()) {
 					target = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
@@ -202,7 +204,7 @@ public Result getKShortestPath(int source, int target, int k, String format) {
 				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset()
 						.getName(), "label",
 						userDataset.getDataset().getName(), "cluster", "2",
-						"value", 2, "group", "dataset", "datasetId",
+						"value", 25, "group", "dataset", "datasetId",
 						userDataset.getDataset().getId()));
 				target = i;
 				g.addVertex(target);

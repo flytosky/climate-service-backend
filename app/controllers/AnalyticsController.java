@@ -481,6 +481,7 @@ public class AnalyticsController extends Controller {
 				if (nodes.get(j).get("group").equals("user")
 						&& (long) nodes.get(j).get("userId") == userDataset
 								.getUser().getId()) {
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -490,8 +491,7 @@ public class AnalyticsController extends Controller {
 						+ userDataset.getUser().getLastName();
 				nodes.add(HashMapUtil.map7("id", i, "title", realName, "label", userDataset
 						.getUser().getUserName(), "cluster", "1", "value", 1,
-						"group", "user", "userId", userDataset.getUser()
-								.getId()));
+						"group", "user", "userId", userDataset.getUser().getId()));
 
 				source = i;
 				i++;
@@ -501,6 +501,7 @@ public class AnalyticsController extends Controller {
 				if (nodes.get(j).get("group").equals("dataset")
 						&& (long) nodes.get(j).get("datasetId") == userDataset
 								.getDataset().getId()) {
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -509,7 +510,7 @@ public class AnalyticsController extends Controller {
 				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset()
 						.getName(), "label",
 						userDataset.getDataset().getName(), "cluster", "2",
-						"value", 2, "group", "dataset", "datasetId",
+						"value", 25, "group", "dataset", "datasetId",
 						userDataset.getDataset().getId()));
 				target = i;
 				i++;
@@ -540,6 +541,7 @@ public class AnalyticsController extends Controller {
 						&& (long) nodes.get(j).get("userId") == userDataset
 								.getUser().getId()) {
 					source = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
@@ -560,13 +562,14 @@ public class AnalyticsController extends Controller {
 						&& nodes.get(j).get("label").equals(userDataset
 								.getDataset().getPhysicalVariable())) {
 					target = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
 			if (target == 0) {
 				nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset().getPhysicalVariable(), "label",
 						userDataset.getDataset().getPhysicalVariable(), "cluster", "2",
-						"value", 2, "group", "variable", "variableId", i));
+						"value", 25, "group", "variable", "variableId", i));
 				target = i;
 				i++;
 			}
@@ -599,6 +602,7 @@ public class AnalyticsController extends Controller {
 				if (nodes.get(j).get("group").equals("service")
 						&& (long) nodes.get(j).get("serviceId") == serviceDataset
 								.getClimateService().getId()) {
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					source = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -617,6 +621,7 @@ public class AnalyticsController extends Controller {
 				if (nodes.get(j).get("group").equals("dataset")
 						&& (long) nodes.get(j).get("datasetId") == serviceDataset
 								.getDataset().getId()) {
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					target = (int) nodes.get(j).get("id");
 					break;
 				}
@@ -624,7 +629,7 @@ public class AnalyticsController extends Controller {
 			if (target == 0) {
 				nodes.add(HashMapUtil.map7("id", i, "title", serviceDataset.getDataset()
 						.getName(), "label", serviceDataset.getDataset()
-						.getName(), "cluster", "2", "value", 2, "group",
+						.getName(), "cluster", "2", "value", 25, "group",
 						"dataset", "datasetId", serviceDataset.getDataset()
 								.getId()));
 				target = i;
@@ -658,6 +663,7 @@ public class AnalyticsController extends Controller {
 						&& (long) nodes.get(j).get("serviceId") == serviceDataset
 								.getClimateService().getId()) {
 					source = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
@@ -676,13 +682,14 @@ public class AnalyticsController extends Controller {
 						&& nodes.get(j).get("label").equals(serviceDataset
 								.getDataset().getPhysicalVariable())) {
 					target = (int) nodes.get(j).get("id");
+					nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 					break;
 				}
 			}
 			if (target == 0) {
 				nodes.add(HashMapUtil.map7("id", i, "title", serviceDataset.getDataset().getPhysicalVariable(), "label",
 						serviceDataset.getDataset().getPhysicalVariable(), "cluster", "2",
-						"value", 2, "group", "variable", "variableId", i));
+						"value", 25, "group", "variable", "variableId", i));
 				target = i;
 				i++;
 			}
@@ -744,7 +751,7 @@ public class AnalyticsController extends Controller {
 				nodes.add(HashMapUtil.map7("id", i, "title", userService
 						.getClimateService().getName(), "label", userService
 						.getClimateService().getName(), "cluster", "3",
-						"value", 2, "group", "service", "serviceId",
+						"value", 25, "group", "service", "serviceId",
 						userService.getClimateService().getId()));
 				target = i;
 				i++;
@@ -793,6 +800,7 @@ public class AnalyticsController extends Controller {
 						if (nodes.get(j).get("group").equals(param)
 								&& (long) nodes.get(j).get(param + "Id") == (long)m + 1) {
 							source = (int) nodes.get(j).get("id");
+							nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 							break;
 						}
 					}
@@ -808,6 +816,7 @@ public class AnalyticsController extends Controller {
 						if (nodes.get(j).get("group").equals(param)
 								&& (long) nodes.get(j).get(param + "Id") == (long)n + 1) {
 							target = (int) nodes.get(j).get("id");
+							nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
 							break;
 						}
 					}
