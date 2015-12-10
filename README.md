@@ -565,4 +565,3 @@ Note: all TimeStamps are in Unix epoch time format to millisecond. Conversion fr
 
 [1]: http://einstein.sv.cmu.edu:9007/climate "The Application Server running in the Smart Spaces Lab, CMUSV"
 
-

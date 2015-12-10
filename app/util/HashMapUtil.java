@@ -52,4 +52,5 @@ public class HashMapUtil {
 		result.put(key7, value7);
 		return result;
 	}
+
 }
