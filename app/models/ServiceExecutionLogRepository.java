@@ -36,4 +36,7 @@ public interface ServiceExecutionLogRepository extends CrudRepository<ServiceExe
     List<ServiceExecutionLog> findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndPurposeLike(Date start, Date end, String purpose);
 
     List<ServiceExecutionLog> findAllByOrderByExecutionStartTimeDesc();
+
+	List<ServiceExecutionLog> findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndUserAndClimateService(
+			Date start, Date end, User user, ClimateService climateService);
 }

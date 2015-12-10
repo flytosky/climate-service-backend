@@ -658,6 +658,46 @@ public class ServiceExecutionLogController extends Controller {
 
 		return ok(result);
 	}
+	
+	public Result queryExecutionLogsByUser() {
+		JsonNode json = request().body().asJson();
+		List<ServiceExecutionLog> logs = null;
+		if (json == null) {
+			System.out
+					.println("ServiceExecutionLog cannot be queried, expecting Json data");
+		}
+		String result = new String();
+		try {
+			// Parse JSON file
+			String userName = json.findPath("userName").asText();
+			String serviceName = json.findPath("serviceName").asText();
+			Date start = new Date(0);
+			Date end = new Date();
+			long executionStartTimeNumber = json.findPath("startTime")
+					.asLong();
+			long executionEndTimeNumber = json.findPath("endTime")
+					.asLong();
+
+			if (executionStartTimeNumber > 0) {
+				start = new Date(executionStartTimeNumber);
+			}
+			if (executionEndTimeNumber > 0) {
+				end = new Date(executionEndTimeNumber);
+			}
+			User user = userRepository.findByUsername(userName);
+			ClimateService climateService = climateServiceRepository.findFirstByName(serviceName);
+			logs = serviceExecutionLogRepository.findByExecutionStartTimeGreaterThanEqualAndExecutionEndTimeLessThanEqualAndUserAndClimateService(
+					start, end, user, climateService);
+			result = new Gson().toJson(logs);
+
+		} catch (Exception e) {
+			System.out
+					.println("ServiceExecutionLog cannot be queried, query is corrupt");
+			return badRequest("ServiceExecutionLog not find");
+		}
+
+		return ok(result);
+	}
 
 //	public Result replaceUserWithPurpose() {
 //

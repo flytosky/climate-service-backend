@@ -62,7 +62,8 @@ DELETE        /serviceConfigurationItem/deleteServiceConfigurationItemById/:id  
 GET           /serviceExecutionLog/getAllServiceExecutionLog                                            @controllers.ServiceExecutionLogController.getAllServiceExecutionLogs(format: String="json")
 GET           /serviceExecutionLog/getServiceExecutionLog/:id                                           @controllers.ServiceExecutionLogController.getServiceExecutionLog(id: Long, format: String="json")
 POST          /serviceExecutionLog/addServiceExecutionLog                                               @controllers.ServiceExecutionLogController.addServiceExecutionLog()
-POST          /serviceExecutionLog/queryServiceExecutionLogs                                            @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
+POST		  /serviceExecutionLog/queryExecutionLogsByUser												@controllers.ServiceExecutionLogController.queryExecutionLogsByUser()
+POST          /serviceExecutionLog/queryServiceExecutionLogs                                          @controllers.ServiceExecutionLogController.queryServiceExecutionLogs()
 PUT           /serviceExecutionLog/updateServiceExecutionLogs/:id                                       @controllers.ServiceExecutionLogController.updateServiceExecutionLog(id: Long)
 DELETE        /serviceExecutionLog/deleteServiceExecutionLogs/:id                                       @controllers.ServiceExecutionLogController.deleteServiceExecutionLog(id: Long)
 # Temp: replace service log
