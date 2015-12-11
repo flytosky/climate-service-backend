@@ -1,136 +1,105 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package models;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+/**
+ * Created by baishi on 12/3/15.
+ */
 @Entity
 public class Comment {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long commentId;
-	private long parentId;
-	private String inReplyTo;
-	private long elementId;
-	private long createdBy;
-	private String fullname;
-	private String picture;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date postedDate;
-	private String text;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private boolean status;
 
-	public Comment() {
-	}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "creatorId", referencedColumnName = "id")
+    private User user;
+    private long timestamp;
+    private String content;
 
-	public Comment(long parentId, String inReplyTo, long elementId,
-			long createdBy, String fullname, String picture, Date postedDate,
-			String text) {
-		super();
-		this.parentId = parentId;
-		this.inReplyTo = inReplyTo;
-		this.elementId = elementId;
-		this.createdBy = createdBy;
-		this.fullname = fullname;
-		this.picture = picture;
-		this.postedDate = postedDate;
-		this.text = text;
-	}
+    private int thumb;
 
-	public long getCommentId() {
-		return commentId;
-	}
+    private String commentImage;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ReplyId", referencedColumnName = "id")
+    private List<Reply> replies;
 
-	public void setCommentId(long commentId) {
-		this.commentId = commentId;
-	}
+    public Comment(){
 
-	public long getParentId() {
-		return parentId;
-	}
+    }
 
-	public void setParentId(long parentId) {
-		this.parentId = parentId;
-	}
+    public Comment(User user, long timestamp, String content, String commentImage){
+        this.status = true;
+        this.user = user;
+        this.timestamp = timestamp;
+        this.content = content;
+        this.commentImage = commentImage;
+        this.replies = new ArrayList<>();
+        this.thumb = 0;
+    }
 
-	public String getInReplyTo() {
-		return inReplyTo;
-	}
+    public void setThumb(int thumb) {
+        this.thumb = thumb;
+    }
 
-	public void setInReplyTo(String inReplyTo) {
-		this.inReplyTo = inReplyTo;
-	}
+    public int getThumb() {
+        return thumb;
+    }
 
-	public long getElementId() {
-		return elementId;
-	}
+    public List<Reply> getReplies(){ return this.replies; }
 
-	public void setElementId(long elementId) {
-		this.elementId = elementId;
-	}
+    public void setReplies(List<Reply> replies){ this.replies = replies; }
 
-	public long getCreatedBy() {
-		return createdBy;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setCreatedBy(long createdBy) {
-		this.createdBy = createdBy;
-	}
+    public boolean isStatus() {
+        return status;
+    }
 
-	public String getFullname() {
-		return fullname;
-	}
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public String getPicture() {
-		return picture;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-	public Date getPostedDate() {
-		return postedDate;
-	}
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
-	public void setPostedDate(Date postedDate) {
-		this.postedDate = postedDate;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public String getCommentImage() {
+        return commentImage;
+    }
 
-	@Override
-	public String toString() {
-		return "Comment from " + fullname + " @ " + postedDate + ": " + text;
-	}
+    public void setCommentImage(String commentImage) {
+        this.commentImage = commentImage;
+    }
+
+    @Override
+    public String toString() {
+        return "Comments [id="+id+", user="+user.getId()+", timestamp="+timestamp+", content="+content
+        +", thumb=" + thumb + "]";
+    }
 }
