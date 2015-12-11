@@ -35,6 +35,7 @@ public class Workflow {
 	private String userName;
 	private String wfTitle;
 	private String wfCategory;
+	@Column( length = 100000 )
 	private String wfCode;
 	@Column( length = 100000 )
 	private String wfDesc;
