@@ -254,7 +254,7 @@ public class DatasetLogController extends Controller {
 
     public Result getAllDatasetLogs(String format) {
     	try {
-    		Iterable<DatasetLog> datasetLogs =  datasetLogRepository.findAll();
+    		List<DatasetLog> datasetLogs =  datasetLogRepository.findByOrderByServiceExecutionStartTimeDesc();
     		String result = new String();
     		result = new Gson().toJson(datasetLogs);
     		return ok(result);

@@ -3,6 +3,7 @@ package models;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,6 +13,8 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public interface DatasetLogRepository extends CrudRepository<DatasetLog, Long> {
+	
+	List<DatasetLog> findByOrderByServiceExecutionStartTimeDesc();
 	
     List<DatasetLog> findByServiceExecutionStartTimeGreaterThanEqualAndServiceExecutionEndTimeLessThanEqualAndUser_Id(Date serviceExecutionStartTime, Date serviceExecutionEndTime, long userId);
     
