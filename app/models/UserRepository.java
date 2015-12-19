@@ -1,6 +1,7 @@
 package models;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -30,4 +31,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	List<String> getAllUserName();
     @Query(value = "select u.unreadMention from User u where u.email = ?1", nativeQuery = true)
 	boolean getHasUnreadMentionByEmail(String email);
+
+	//merged from team 15&16
+	@Query(value = "select u.* from User u where id IN (select f.userId from Followers f where followerId = ?1)", nativeQuery = true)
+	Set<User> findByFollowerId(long followerId);
+
+	@Query(value = "select u.* from User u where (u.userName like %?1%)", nativeQuery = true)
+	List<User> getUserByDisplayName(String displayName);
+
 }

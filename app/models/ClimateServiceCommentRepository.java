@@ -16,30 +16,21 @@
  */
 package models;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.List;
 
 @Named
 @Singleton
-public interface WorkflowRepository extends CrudRepository<Workflow, Long> {
-    List<Workflow> findByUserID(Long id);
-    Workflow findById(Long id);
-
-    @Query(value = "select w.* from Workflow w where (w.groupId = 0)", nativeQuery = true)
-    List<Workflow> findPubicWorkflow();
-
-    @Query(value = "select * from Workflow where id in (select workflowId from WorkflowAndTags where (tagId = ?1))", nativeQuery = true)
-    List<Workflow> findByTagId(Long tag);
-    
-    @Query(value = "select * from Workflow where wfTitle like ?1", nativeQuery = true)
-    List<Workflow> findByTitle(String title);
-
-    List<Workflow> findByGroupId(Long id);
-
-    @Query(value = "select w.* from Workflow w order by w.viewCount desc LIMIT 3", nativeQuery = true)
-    List<Workflow> findTop3Workflow();
+public interface ClimateServiceCommentRepository extends CrudRepository<ClimateServiceComment, Long>{
+    @Query(value = "select c.* from Comment c where c.elementId = ?1 and c.parentId = ?2 order by postedDate desc", nativeQuery = true)
+	List<ClimateServiceComment> findAllByClimateServiceIdAndParentId(Long elementId, Long parentId);
+    @Query(value = "select count(*) from Comment where elementId = ?1", nativeQuery = true)
+	Long countComments(Long elementId);
+    @Query(value = "select c.* from Comment c where c.commentId = ?1", nativeQuery = true)
+    ClimateServiceComment findCommentById(Long commentId);
 }

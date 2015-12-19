@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Named
 @Singleton
-public interface CommentRepository extends CrudRepository<Comment, Long> {
-    @Query(value = "select * from Comment where (CommentId = ?)", nativeQuery = true)
-    List<Comment> findByWorkflowId(Long workflow);
+public interface ReplyRepository extends CrudRepository<Reply, Long> {
+    @Query(value = "select * from Reply where (ReplyId=?)", nativeQuery = true)
+    List<Reply> findByCommentId(Long comment);
 }

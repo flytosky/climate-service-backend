@@ -25,21 +25,12 @@ import java.util.List;
 
 @Named
 @Singleton
-public interface WorkflowRepository extends CrudRepository<Workflow, Long> {
-    List<Workflow> findByUserID(Long id);
-    Workflow findById(Long id);
+public interface MailRepository extends CrudRepository<Mail, Long> {
+    Mail findById(Long id);
 
-    @Query(value = "select w.* from Workflow w where (w.groupId = 0)", nativeQuery = true)
-    List<Workflow> findPubicWorkflow();
+    @Query(value = "select m.* from Mail m where m.toUserMail = ?1 ORDER BY m.mailDate desc ", nativeQuery = true)
+    List<Mail> findByToUserMail(String toUserMail);
 
-    @Query(value = "select * from Workflow where id in (select workflowId from WorkflowAndTags where (tagId = ?1))", nativeQuery = true)
-    List<Workflow> findByTagId(Long tag);
-    
-    @Query(value = "select * from Workflow where wfTitle like ?1", nativeQuery = true)
-    List<Workflow> findByTitle(String title);
-
-    List<Workflow> findByGroupId(Long id);
-
-    @Query(value = "select w.* from Workflow w order by w.viewCount desc LIMIT 3", nativeQuery = true)
-    List<Workflow> findTop3Workflow();
+    @Query(value = "select m.* from Mail m where m.fromUserMail = ?1 ORDER BY m.mailDate desc ", nativeQuery = true)
+    List<Mail> findByFromUserMail(String fromUserMail);
 }

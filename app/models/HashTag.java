@@ -11,7 +11,7 @@ public class HashTag {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "commentId", referencedColumnName = "commentId")
-    private Comment comment;
+    private ClimateServiceComment climateServiceComment;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "serviceId", referencedColumnName = "id")
@@ -22,19 +22,19 @@ public class HashTag {
     public HashTag() {
     }
 
-    public HashTag(Comment comment, ClimateService climateService, String content) {
+    public HashTag(ClimateServiceComment climateServiceComment, ClimateService climateService, String content) {
         super();
-        this.comment = comment;
+        this.climateServiceComment = climateServiceComment;
         this.climateService = climateService;
         this.content = content;
     }
 
-    public Comment getComment() {
-        return comment;
+    public ClimateServiceComment getClimateServiceComment() {
+        return climateServiceComment;
     }
     
-    public void setComment(Comment comment) {
-        this.comment = comment;
+    public void setClimateServiceComment(ClimateServiceComment climateServiceComment) {
+        this.climateServiceComment = climateServiceComment;
     }
 
     public ClimateService getClimateService() {

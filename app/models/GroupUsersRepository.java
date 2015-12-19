@@ -25,21 +25,11 @@ import java.util.List;
 
 @Named
 @Singleton
-public interface WorkflowRepository extends CrudRepository<Workflow, Long> {
-    List<Workflow> findByUserID(Long id);
-    Workflow findById(Long id);
+public interface GroupUsersRepository extends CrudRepository<GroupUsers, Long> {
+    GroupUsers findById(Long id);
+    List<GroupUsers> findByCreatorUser(Long id);
+    List<GroupUsers> findByGroupUrl(String url);
 
-    @Query(value = "select w.* from Workflow w where (w.groupId = 0)", nativeQuery = true)
-    List<Workflow> findPubicWorkflow();
-
-    @Query(value = "select * from Workflow where id in (select workflowId from WorkflowAndTags where (tagId = ?1))", nativeQuery = true)
-    List<Workflow> findByTagId(Long tag);
-    
-    @Query(value = "select * from Workflow where wfTitle like ?1", nativeQuery = true)
-    List<Workflow> findByTitle(String title);
-
-    List<Workflow> findByGroupId(Long id);
-
-    @Query(value = "select w.* from Workflow w order by w.viewCount desc LIMIT 3", nativeQuery = true)
-    List<Workflow> findTop3Workflow();
+    @Query(value = "select g.* from GroupUsers g where id IN (select m.groupId from GoupAndGroupmembers m where member = ?1)", nativeQuery = true)
+    List<GroupUsers> findByUserId(long userId);
 }
