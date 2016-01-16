@@ -165,6 +165,9 @@ GET			  /analytics/getOneServiceWithAllDatasetAndCountByServiceId/:id/json						
 GET			  /analytics/getOneDatasetWithAllServiceAndCountByDatasetId/:id/json						@controllers.AnalyticsController.getOneDatasetWithAllServiceAndCount(id: Long, format: String="json")
 POST		  /analytics/getRelationalKnowledgeGraph/json												@controllers.AnalyticsController.getRelationalKnowledgeGraph(format: String="json")
 
+# Util
+POST		  /util/uploadPicture																		@controllers.UtilController.updatePicture()
+
 # Graph Algorithm
 GET			  /graphAlgorithm/getShortestPath/source/:source/target/:target/json						@controllers.GraphAlgorithmController.getShortestPath(source: Integer, target: Integer, format: String="json")
 GET			  /graphAlgorithm/getKthShortestPath/source/:source/target/:target/k/:k/json				@controllers.GraphAlgorithmController.getKShortestPath(source: Integer, target: Integer, k:Integer, format: String="json")
@@ -248,6 +251,7 @@ GET            /group/getGroupMember/:groupId/json                              
 #GET            /workflow/getTimeline/:id/offset/:offset/json                                              @controllers.UserController.userSearch(id: Long, offset: Long, format: String="json")
 POST            /workflow/addComment                                                                       @controllers.WorkflowController.addComment
 GET             /workflow/getComments/:workflowId                                                         @controllers.WorkflowController.getComments(workflowId: Long)
+
 #Comment
 POST           /Comment/addReply                                                                         @controllers.CommentController.addReply
 GET            /Comment/getReply/:commentId                                                              @controllers.CommentController.getReply(commentId: Long)
