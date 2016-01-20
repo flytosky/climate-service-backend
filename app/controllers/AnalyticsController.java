@@ -75,7 +75,7 @@ public class AnalyticsController extends Controller {
 		return count;
 	}
 	
-	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3, String choice) {
+	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3, String choice, String fChoice, String fId) {
 		String option = param1 + param2 + param3;
 		Map<String, Object> map = new HashMap<>();
 		int[][] relations = null;
@@ -221,13 +221,15 @@ public class AnalyticsController extends Controller {
 			break;
 		}
 		case "UserDatasetService":
-			map = getAllDatasetAndUserWithCount(choice);
+			System.out.println("------------------------------------------------------");
+			System.out.println("fChoice = " + fChoice + ", fID = " + fId);			
+			map = getAllDatasetAndUserWithCount(choice,fChoice,fId);
 			break;
 		case "UserServiceDataset":
-			map = getAllServiceAndUserWithCount();
+			map = getAllServiceAndUserWithCount(fChoice,fId);
 			break;
 		case "DatasetServiceUser":
-			map = getAllServiceAndDatasetWithCount(choice);
+			map = getAllServiceAndDatasetWithCount(choice,fChoice,fId);
 			break;
 		default:
 			break;
@@ -246,9 +248,11 @@ public class AnalyticsController extends Controller {
 		String param2 = json.findPath("param2").asText();
 		String param3 = json.findPath("param3").asText();
 		String choice = json.findPath("choice").asText();
+		String filteredChoice = json.findPath("fChoice").asText();
+		String filteredId = json.findPath("fId").asText();
 		
 		try {
-			Map<String, Object> map = generateRelationalMap(param1, param2, param3, choice);
+			Map<String, Object> map = generateRelationalMap(param1, param2, param3, choice,filteredChoice,filteredId);
 			
 			String result = new String();
 			if (format.equals("json")) {
@@ -261,11 +265,26 @@ public class AnalyticsController extends Controller {
 
 	}
 
-	public Map<String, Object> getAllServiceAndDatasetWithCount(String choice) {
-
-		List<ServiceAndDataset> datasetAndServices = serviceAndDatasetRepository
+	public Map<String, Object> getAllServiceAndDatasetWithCount(String choice, String fChoice, String fId) {
+		List<ServiceAndDataset> datasetAndServices = null;
+		
+		if (fChoice != "" && fId != "") {
+			if (fChoice.equals("service")) {
+				datasetAndServices = serviceAndDatasetRepository
+						.findByClimateServiceOrderByCountDesc(serviceRepository.findOne(Long.parseLong(fId)));
+			} else if (fChoice.equals("dataset")) {
+				datasetAndServices = serviceAndDatasetRepository
+						.findByDatasetOrderByCountDesc(datasetRepository.findOne(Long.parseLong(fId)));
+			} else {		
+				datasetAndServices = serviceAndDatasetRepository
+						.findAll(sortByCountDesc());
+			}
+						
+		} else {		
+			datasetAndServices = serviceAndDatasetRepository
 				.findAll(sortByCountDesc());
-
+		}
+		
 		if (datasetAndServices == null) {
 			System.out.println("Dataset and Service: cannot be found!");
 		}
@@ -280,11 +299,24 @@ public class AnalyticsController extends Controller {
 
 	}
 
-	public Map<String, Object> getAllDatasetAndUserWithCount(String choice) {
-
-		List<DatasetAndUser> datasetAndUsers = datasetAndUserRepository
+	public Map<String, Object> getAllDatasetAndUserWithCount(String choice, String fChoice, String fId) {
+		List<DatasetAndUser> datasetAndUsers = null;
+		if (fChoice != "" && fId != "") {
+			if (fChoice.equals("user")) {
+				datasetAndUsers = datasetAndUserRepository
+						.findByUserOrderByCountDesc(userRepository.findOne(Long.parseLong(fId)));
+			} else if (fChoice.equals("dataset")) {
+				datasetAndUsers = datasetAndUserRepository
+						.findByDatasetOrderByCountDesc(datasetRepository.findOne(Long.parseLong(fId)));
+			} else {
+				datasetAndUsers = datasetAndUserRepository
+						.findAll(sortByCountDesc());
+			}
+									
+		} else {
+			datasetAndUsers = datasetAndUserRepository
 				.findAll(sortByCountDesc());
-
+		}
 		if (datasetAndUsers == null) {
 			System.out.println("User and Dataset: cannot be found!");
 		}
@@ -298,10 +330,24 @@ public class AnalyticsController extends Controller {
 		return map;
 	}
 
-	public Map<String, Object> getAllServiceAndUserWithCount() {
-
-		List<ServiceAndUser> serviceAndUsers = serviceAndUserRepository
+	public Map<String, Object> getAllServiceAndUserWithCount(String fChoice, String fId) {
+		List<ServiceAndUser> serviceAndUsers = null;
+		if (fChoice != "" && fId != "") {
+			if (fChoice.equals("user")) {
+				serviceAndUsers = serviceAndUserRepository
+						.findByUserOrderByCountDesc(userRepository.findOne(Long.parseLong(fId)));
+			} else if (fChoice.equals("service")) {
+				serviceAndUsers = serviceAndUserRepository
+						.findByClimateServiceOrderByCountDesc(serviceRepository.findOne(Long.parseLong(fId)));
+			} else {		
+				serviceAndUsers = serviceAndUserRepository
+						.findAll(sortByCountDesc());
+			}
+						
+		} else {		
+			serviceAndUsers = serviceAndUserRepository
 				.findAll(sortByCountDesc());
+		}
 
 		if (serviceAndUsers == null) {
 			System.out.println("User and Service: cannot be found!");
