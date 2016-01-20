@@ -81,6 +81,9 @@ POST		  /datasetLog/queryVariables																@controllers.DatasetLogControl
 PUT           /datasetLog/updateDatasetLog/id/:id                                                       @controllers.DatasetLogController.updateDatasetLogById(id: Long)
 DELETE        /datasetLog/deleteDatasetLog/id/:id                                                       @controllers.DatasetLogController.deleteDatasetLog(id: Long)
 
+# Dataset/User/Service 
+GET			  /datasetAndUser/getDatasetsByUserAndUser/userId1/:id1/userId2/:id2/json 					@controllers.DatasetAndServiceAndUserController.getAllDatasets(id1: Long, id2: Long, format: String="json")
+
 # Workflow
 #GET           /workflow/getAllWorkflows/json                                                          	@controllers.WorkflowController.getAllWorkflows(format: String="json")
 #GET           /workflow/getWorkflowById/id/:id/json                                                     @controllers.WorkflowController.getWorkflowById(id: Long, format: String="json")

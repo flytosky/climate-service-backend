@@ -3,6 +3,7 @@ package models;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.inject.Named;
@@ -16,4 +17,7 @@ public interface DatasetAndUserRepository extends CrudRepository<DatasetAndUser,
 	List<DatasetAndUser> findByUserOrderByCountDesc(User user);
 	List<DatasetAndUser> findByDatasetOrderByCountDesc(Dataset dataset);
 	List<DatasetAndUser> findAll(Sort sort);
+	
+	@Query(value = "select * from DatasetAndUser where userId = ?1", nativeQuery = true)
+    List<Dataset> findByUserId(long userId);
 }
