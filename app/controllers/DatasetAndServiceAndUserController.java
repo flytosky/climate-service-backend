@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,12 +47,12 @@ public class DatasetAndServiceAndUserController extends Controller {
 	}
 	
 	public Result getAllDatasets(long userId1, long userId2, String format) {
-		List<Long> datasets1 = datasetAndUserRepository.findByUserId(userId1);
-		List<Long> datasets2 = datasetAndUserRepository.findByUserId(userId2);
-		List<Long> datasetIds = new ArrayList<Long>();
+		List<BigInteger> datasets1 = datasetAndUserRepository.findByUserId(userId1);
+		List<BigInteger> datasets2 = datasetAndUserRepository.findByUserId(userId2);
+		List<BigInteger> datasetIds = new ArrayList<BigInteger>();
 		
-		for (Long datasetId1 : datasets1) {
-			for (Long datasetId2 : datasets2) {
+		for (BigInteger datasetId1 : datasets1) {
+			for (BigInteger datasetId2 : datasets2) {
 				if (datasetId1 == datasetId2) {
 					datasetIds.add(datasetId1);
 				}
@@ -63,8 +64,8 @@ public class DatasetAndServiceAndUserController extends Controller {
 		}
 		
 		List<Dataset> datasets = new ArrayList<Dataset>();
-		for (Long id : datasetIds) {
-			datasets.add(datasetRepository.findOne(id));
+		for (BigInteger id : datasetIds) {
+			datasets.add(datasetRepository.findOne(id.longValue()));
 		}
 
 		String result = new String();

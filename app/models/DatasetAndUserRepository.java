@@ -1,5 +1,6 @@
 package models;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -19,5 +20,5 @@ public interface DatasetAndUserRepository extends CrudRepository<DatasetAndUser,
 	List<DatasetAndUser> findAll(Sort sort);
 	
 	@Query(value = "select datasetId from DatasetAndUser where userId = ?1", nativeQuery = true)
-    List<Long> findByUserId(long userId);
+    List<BigInteger> findByUserId(long userId);
 }
