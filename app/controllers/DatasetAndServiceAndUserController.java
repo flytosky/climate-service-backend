@@ -35,28 +35,36 @@ import com.google.gson.Gson;
 public class DatasetAndServiceAndUserController extends Controller {
 	
 	private final DatasetAndUserRepository datasetAndUserRepository;
+	private final DatasetRepository datasetRepository;
 	
 	@Inject
 	public DatasetAndServiceAndUserController(
-			final DatasetAndUserRepository datasetAndUserRepository) {
+			final DatasetAndUserRepository datasetAndUserRepository,
+			final DatasetRepository datasetRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
+		this.datasetRepository = datasetRepository;
 	}
 	
 	public Result getAllDatasets(long userId1, long userId2, String format) {
-		List<Dataset> datasets1 = datasetAndUserRepository.findByUserId(userId1);
-		List<Dataset> datasets2 = datasetAndUserRepository.findByUserId(userId2);
-		List<Dataset> datasets = new ArrayList<Dataset>();
+		List<Long> datasets1 = datasetAndUserRepository.findByUserId(userId1);
+		List<Long> datasets2 = datasetAndUserRepository.findByUserId(userId2);
+		List<Long> datasetIds = new ArrayList<Long>();
 		
-		for (Dataset dataset1 : datasets1) {
-			for (Dataset dataset2 : datasets2) {
-				if (dataset1.equals(dataset2)) {
-					datasets.add(dataset1);
+		for (Long datasetId1 : datasets1) {
+			for (Long datasetId2 : datasets2) {
+				if (datasetId1 == datasetId2) {
+					datasetIds.add(datasetId1);
 				}
 			}
 		}
 		
-		if (datasets.size() == 0) {
+		if (datasetIds.size() == 0) {
 			System.out.println("No datasets found");
+		}
+		
+		List<Dataset> datasets = new ArrayList<Dataset>();
+		for (Long id : datasetIds) {
+			datasets.add(datasetRepository.findOne(id));
 		}
 
 		String result = new String();

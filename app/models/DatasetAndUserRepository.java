@@ -18,6 +18,6 @@ public interface DatasetAndUserRepository extends CrudRepository<DatasetAndUser,
 	List<DatasetAndUser> findByDatasetOrderByCountDesc(Dataset dataset);
 	List<DatasetAndUser> findAll(Sort sort);
 	
-	@Query(value = "select * from DatasetAndUser where userId = ?1", nativeQuery = true)
-    List<Dataset> findByUserId(long userId);
+	@Query(value = "select datasetId from DatasetAndUser where userId = ?1", nativeQuery = true)
+    List<Long> findByUserId(long userId);
 }
