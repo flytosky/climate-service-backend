@@ -169,7 +169,7 @@ GET			  /analytics/getOneDatasetWithAllServiceAndCountByDatasetId/:id/json						
 POST		  /analytics/getRelationalKnowledgeGraph/json												@controllers.AnalyticsController.getRelationalKnowledgeGraph(format: String="json")
 
 # Util
-POST		  /util/uploadPicture																		@controllers.UtilController.updatePicture()
+POST		  /util/uploadPicture																		@controllers.UtilController.uploadPicture()
 
 # Graph Algorithm
 GET			  /graphAlgorithm/getShortestPath/source/:source/target/:target/json						@controllers.GraphAlgorithmController.getShortestPath(source: Integer, target: Integer, format: String="json")
