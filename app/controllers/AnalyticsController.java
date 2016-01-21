@@ -268,7 +268,7 @@ public class AnalyticsController extends Controller {
 	public Map<String, Object> getAllServiceAndDatasetWithCount(String choice, String fChoice, String fId) {
 		List<ServiceAndDataset> datasetAndServices = null;
 		
-		if (fChoice != "" && fId != "") {
+		if (!fId.equals("")) {
 			if (fChoice.equals("service")) {
 				datasetAndServices = serviceAndDatasetRepository
 						.findByClimateServiceOrderByCountDesc(serviceRepository.findOne(Long.parseLong(fId)));
@@ -301,22 +301,22 @@ public class AnalyticsController extends Controller {
 
 	public Map<String, Object> getAllDatasetAndUserWithCount(String choice, String fChoice, String fId) {
 		List<DatasetAndUser> datasetAndUsers = null;
-		if (fChoice != "" && fId != "") {
-			if (fChoice.equals("user")) {
-				datasetAndUsers = datasetAndUserRepository
-						.findByUserOrderByCountDesc(userRepository.findOne(Long.parseLong(fId)));
-			} else if (fChoice.equals("dataset")) {
-				datasetAndUsers = datasetAndUserRepository
-						.findByDatasetOrderByCountDesc(datasetRepository.findOne(Long.parseLong(fId)));
-			} else {
-				datasetAndUsers = datasetAndUserRepository
-						.findAll(sortByCountDesc());
-			}
-									
+		if (!fId.equals("")) {
+        		if (fChoice.equals("user")) {
+        			datasetAndUsers = datasetAndUserRepository
+        					.findByUserOrderByCountDesc(userRepository.findOne(Long.parseLong(fId)));
+        		} else if (fChoice.equals("dataset")) {
+        			datasetAndUsers = datasetAndUserRepository
+        					.findByDatasetOrderByCountDesc(datasetRepository.findOne(Long.parseLong(fId)));
+        		} else {
+        			datasetAndUsers = datasetAndUserRepository
+        					.findAll(sortByCountDesc());
+        		}
 		} else {
-			datasetAndUsers = datasetAndUserRepository
-				.findAll(sortByCountDesc());
+                    datasetAndUsers = datasetAndUserRepository
+                            .findAll(sortByCountDesc());		    
 		}
+
 		if (datasetAndUsers == null) {
 			System.out.println("User and Dataset: cannot be found!");
 		}
@@ -332,7 +332,7 @@ public class AnalyticsController extends Controller {
 
 	public Map<String, Object> getAllServiceAndUserWithCount(String fChoice, String fId) {
 		List<ServiceAndUser> serviceAndUsers = null;
-		if (fChoice != "" && fId != "") {
+		if (!fId.equals("")) {
 			if (fChoice.equals("user")) {
 				serviceAndUsers = serviceAndUserRepository
 						.findByUserOrderByCountDesc(userRepository.findOne(Long.parseLong(fId)));
