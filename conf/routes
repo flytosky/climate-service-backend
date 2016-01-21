@@ -85,6 +85,9 @@ DELETE        /datasetLog/deleteDatasetLog/id/:id                               
 GET			  /datasetAndUser/getDatasetsByUserAndUser/userId1/:id1/userId2/:id2/json 					@controllers.DatasetAndServiceAndUserController.getAllDatasetsByUsers(id1: Long, id2: Long, format: String="json")
 GET           /userAndDataset/getUserByDatasetAndDataset/datasetId1/:id1/datasetId2/:id2/json           @controllers.DatasetAndServiceAndUserController.getAllUsersByDatasets(id1: Long, id2: Long, format: String="json")
 GET			  /serviceAndUser/getServicesByUserAndUser/userId1/:id1/userId2/:id2/json 					@controllers.DatasetAndServiceAndUserController.getAllServicesByUsers(id1: Long, id2: Long, format: String="json")
+GET			/datasetAndService/getServicesByDatasetAndDataset/datasetId1/:id1/datasetId2/:id2/json   @controllers.DatasetAndServiceAndUserController.getAllServicesByDatasets(id1: Long, id2: Long, format: String="json")
+GET 			/serviceAndUser/getUserByServiceAndService/serviceId1/:id1/serviceId2/:id2/json				@controllers.DatasetAndServiceAndUserController.getAllUsersByServices(id1: Long, id2: Long, format: String="json")
+GET 			/datasetAndService/getDatasetByServiceAndService/serviceId1/:id1/serviceId2/:id2/json	    @controllers.DatasetAndServiceAndUserController.getAllDatasetsByServices(id1: Long, id2: Long, format: String="json")
 
 # Workflow
 #GET           /workflow/getAllWorkflows/json                                                          	@controllers.WorkflowController.getAllWorkflows(format: String="json")
