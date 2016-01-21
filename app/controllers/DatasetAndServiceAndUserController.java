@@ -14,6 +14,7 @@ import models.DatasetRepository;
 import models.ServiceAndUserRepository;
 import models.ServiceExecutionLog;
 import models.ServiceExecutionLogRepository;
+import models.ServiceAndDatasetRepository;
 import models.User;
 import models.UserRepository;
 import play.mvc.Controller;
@@ -33,14 +34,17 @@ public class DatasetAndServiceAndUserController extends Controller {
 	private final DatasetRepository datasetRepository;
 	private final UserRepository userRepository;
 	private final ServiceExecutionLogRepository serviceExecutionLogRepository;
+	private final ServiceAndDatasetRepository serviceAndDatasetRepository;
 	
 	@Inject
 	public DatasetAndServiceAndUserController(
 			final DatasetAndUserRepository datasetAndUserRepository,
 			final UserRepository userRepository,
 			final ServiceAndUserRepository serviceAndUserRepository,
+			final ServiceAndDatasetRepository serviceAndDatasetRepository,
 			final DatasetRepository datasetRepository,
 			final ServiceExecutionLogRepository serviceExecutionLogRepository) {
+		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
 		this.datasetAndUserRepository = datasetAndUserRepository;
 		this.serviceAndUserRepository = serviceAndUserRepository;
 		this.datasetRepository = datasetRepository;
@@ -137,4 +141,99 @@ public class DatasetAndServiceAndUserController extends Controller {
 
 		return ok(result);
 	}
+	
+	public Result getAllServicesByDatasets(long datasetId1, long datasetId2, String format) {
+		
+		List<BigInteger> services1 = serviceAndDatasetRepository.findByDatasetId(datasetId1);
+		List<BigInteger> services2 = serviceAndDatasetRepository.findByDatasetId(datasetId2);
+		List<BigInteger> serviceIds = new ArrayList<BigInteger>();
+		
+		for (BigInteger serviceId1 : services1) {
+			for (BigInteger serviceId2 : services2) {
+				if (serviceId1 == serviceId2) {
+					serviceIds.add(serviceId1);
+				}
+			}
+		}
+		
+		if (serviceIds.size() == 0) {
+			System.out.println("No datasets found");
+		}
+		
+		List<ServiceExecutionLog> services = new ArrayList<ServiceExecutionLog>();
+		for (BigInteger id : serviceIds) {
+			services.add(serviceExecutionLogRepository.findOne(id.longValue()));
+		}
+
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(services);
+		}
+
+		return ok(result);
+	}
+	
+	public Result getAllUsersByServices(long serviceId1, long serviceId2, String format) {
+		List<BigInteger> users1 = serviceAndUserRepository.findByServiceId(serviceId1);
+		List<BigInteger> users2 = serviceAndUserRepository.findByServiceId(serviceId2);
+		List<BigInteger> userIds = new ArrayList<BigInteger>();
+
+		for (BigInteger userId1 : users1) {
+			for (BigInteger userId2 : users2) {
+				if (userId1 == userId2) {
+					userIds.add(userId1);
+				}
+			}
+		}
+
+		if (userIds.size() == 0) {
+			System.out.println("No datasets found");
+		}
+
+		List<User> users = new ArrayList<User>();
+		for (BigInteger id : userIds) {
+			users.add(userRepository.findOne(id.longValue()));
+		}
+
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(users);
+		}
+
+		return ok(result);
+	}
+	
+	public Result getAllDatasetsByServices(long serviceId1, long serviceId2, String format) {
+		List<BigInteger> datasets1 = serviceAndDatasetRepository.findByServiceId(serviceId1);
+		List<BigInteger> datasets2 = serviceAndDatasetRepository.findByServiceId(serviceId2);
+		List<BigInteger> datasetIds = new ArrayList<BigInteger>();
+		
+		for (BigInteger datasetId1 : datasets1) {
+			for (BigInteger datasetId2 : datasets2) {
+				if (datasetId1 == datasetId2) {
+					datasetIds.add(datasetId1);
+				}
+			}
+		}
+		
+		if (datasetIds.size() == 0) {
+			System.out.println("No datasets found");
+		}
+		
+		List<Dataset> datasets = new ArrayList<Dataset>();
+		for (BigInteger id : datasetIds) {
+			datasets.add(datasetRepository.findOne(id.longValue()));
+		}
+
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(datasets);
+		}
+
+		return ok(result);
+	}
+	
+	
+	
+	
 }

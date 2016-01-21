@@ -24,5 +24,8 @@ public interface ServiceAndUserRepository extends CrudRepository<ServiceAndUser,
 	
 	@Query(value = "select serviceId from ServiceAndUser where userId = ?1", nativeQuery = true)
     List<BigInteger> findByUserId(long userId);
+	
+	@Query(value = "select userID from ServiceAndUser where serviceId = ?1", nativeQuery = true)
+	List<BigInteger> findByServiceId(long serviceId);
 }
 
