@@ -1,31 +1,24 @@
 package controllers;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import models.*;
-import util.Common;
-import util.Constants;
-import workflow.VisTrailJson;
-import play.mvc.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.persistence.PersistenceException;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import models.Dataset;
+import models.DatasetAndUserRepository;
+import models.DatasetRepository;
+import models.ServiceAndUserRepository;
+import models.ServiceExecutionLog;
+import models.ServiceExecutionLogRepository;
+import models.User;
+import models.UserRepository;
+import play.mvc.Controller;
+import play.mvc.Result;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 
 /**
@@ -36,17 +29,23 @@ import com.google.gson.Gson;
 public class DatasetAndServiceAndUserController extends Controller {
 	
 	private final DatasetAndUserRepository datasetAndUserRepository;
+	private final ServiceAndUserRepository serviceAndUserRepository;
 	private final DatasetRepository datasetRepository;
 	private final UserRepository userRepository;
+	private final ServiceExecutionLogRepository serviceExecutionLogRepository;
 	
 	@Inject
 	public DatasetAndServiceAndUserController(
 			final DatasetAndUserRepository datasetAndUserRepository,
+			final UserRepository userRepository,
+			final ServiceAndUserRepository serviceAndUserRepository,
 			final DatasetRepository datasetRepository,
-			final UserRepository userRepository) {
+			final ServiceExecutionLogRepository serviceExecutionLogRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
+		this.serviceAndUserRepository = serviceAndUserRepository;
 		this.datasetRepository = datasetRepository;
 		this.userRepository = userRepository;
+		this.serviceExecutionLogRepository = serviceExecutionLogRepository;
 	}
 	
 	public Result getAllDatasetsByUsers(long userId1, long userId2, String format) {
@@ -109,4 +108,33 @@ public class DatasetAndServiceAndUserController extends Controller {
 		return ok(result);
 	}
 	
+	public Result getAllServicesByUsers(long userId1, long userId2, String format) {
+		List<BigInteger> services1 = serviceAndUserRepository.findByUserId(userId1);
+		List<BigInteger> services2 = serviceAndUserRepository.findByUserId(userId2);
+		List<BigInteger> serviceIds = new ArrayList<BigInteger>();
+		
+		for (BigInteger serviceId1 : services1) {
+			for (BigInteger serviceId2 : services2) {
+				if (serviceId1 == serviceId2) {
+					serviceIds.add(serviceId1);
+				}
+			}
+		}
+		
+		if (serviceIds.size() == 0) {
+			System.out.println("No datasets found");
+		}
+		
+		List<ServiceExecutionLog> services = new ArrayList<ServiceExecutionLog>();
+		for (BigInteger id : serviceIds) {
+			services.add(serviceExecutionLogRepository.findOne(id.longValue()));
+		}
+
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(services);
+		}
+
+		return ok(result);
+	}
 }

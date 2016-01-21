@@ -1,5 +1,6 @@
 package models;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -20,5 +21,8 @@ public interface ServiceAndUserRepository extends CrudRepository<ServiceAndUser,
 	
 	@Query(value = "select * from ServiceAndUser group by userId", nativeQuery = true)
 	List<ServiceAndUser> findDinstinctUsers();
+	
+	@Query(value = "select serviceId from ServiceAndUser where userId = ?1", nativeQuery = true)
+    List<BigInteger> findByUserId(long userId);
 }
 
