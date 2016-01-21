@@ -37,16 +37,19 @@ public class DatasetAndServiceAndUserController extends Controller {
 	
 	private final DatasetAndUserRepository datasetAndUserRepository;
 	private final DatasetRepository datasetRepository;
+	private final UserRepository userRepository;
 	
 	@Inject
 	public DatasetAndServiceAndUserController(
 			final DatasetAndUserRepository datasetAndUserRepository,
-			final DatasetRepository datasetRepository) {
+			final DatasetRepository datasetRepository,
+			final UserRepository userRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
 		this.datasetRepository = datasetRepository;
+		this.userRepository = userRepository;
 	}
 	
-	public Result getAllDatasets(long userId1, long userId2, String format) {
+	public Result getAllDatasetsByUsers(long userId1, long userId2, String format) {
 		List<BigInteger> datasets1 = datasetAndUserRepository.findByUserId(userId1);
 		List<BigInteger> datasets2 = datasetAndUserRepository.findByUserId(userId2);
 		List<BigInteger> datasetIds = new ArrayList<BigInteger>();
@@ -71,6 +74,36 @@ public class DatasetAndServiceAndUserController extends Controller {
 		String result = new String();
 		if (format.equals("json")) {
 			result = new Gson().toJson(datasets);
+		}
+
+		return ok(result);
+	}
+
+	public Result getAllUsersByDatasets(long datasetId1, long datasetId2, String format) {
+		List<BigInteger> users1 = datasetAndUserRepository.findByDatasetId(datasetId1);
+		List<BigInteger> users2 = datasetAndUserRepository.findByDatasetId(datasetId2);
+		List<BigInteger> userIds = new ArrayList<BigInteger>();
+
+		for (BigInteger userId1 : users1) {
+			for (BigInteger userId2 : users2) {
+				if (userId1 == userId2) {
+					userIds.add(userId1);
+				}
+			}
+		}
+
+		if (userIds.size() == 0) {
+			System.out.println("No datasets found");
+		}
+
+		List<User> users = new ArrayList<User>();
+		for (BigInteger id : userIds) {
+			users.add(userRepository.findOne(id.longValue()));
+		}
+
+		String result = new String();
+		if (format.equals("json")) {
+			result = new Gson().toJson(users);
 		}
 
 		return ok(result);
