@@ -17,11 +17,5 @@ dist
 /.settings
 /bin/
 workflowRepository
-
 conf/META-INF/persistence.xml
-
-conf/META-INF/persistence.xml
-
-conf/META-INF/persistence.xml
-
 projectFilesBackup
