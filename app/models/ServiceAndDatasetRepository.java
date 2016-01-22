@@ -19,10 +19,10 @@ public interface ServiceAndDatasetRepository extends CrudRepository<ServiceAndDa
 	List<ServiceAndDataset> findAll(Sort sort);
 	List<ServiceAndDataset> findByClimateServiceAndDataset(ClimateService climateService, Dataset dataset);
 	
-	@Query(value = "select climateServiceId from datasetAndService where datasetId = ?1", nativeQuery = true)
+	@Query(value = "select climateServiceId from DatasetAndService where datasetId = ?1", nativeQuery = true)
     List<BigInteger> findByDatasetId(long datasetId1);
 	
-	@Query(value = "select datasetId from datasetAndService where climateServiceId = ?1", nativeQuery = true)
+	@Query(value = "select datasetId from DatasetAndService where climateServiceId = ?1", nativeQuery = true)
     List<BigInteger> findByServiceId(long serviceId);
 }
 
