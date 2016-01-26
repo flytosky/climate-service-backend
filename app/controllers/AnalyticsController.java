@@ -221,8 +221,6 @@ public class AnalyticsController extends Controller {
 			break;
 		}
 		case "UserDatasetService":
-			System.out.println("------------------------------------------------------");
-			System.out.println("fChoice = " + fChoice + ", fID = " + fId);			
 			map = getAllDatasetAndUserWithCount(choice,fChoice,fId);
 			break;
 		case "UserServiceDataset":
