@@ -59,7 +59,7 @@ public class DatasetAndServiceAndUserController extends Controller {
 		
 		for (BigInteger datasetId1 : datasets1) {
 			for (BigInteger datasetId2 : datasets2) {
-				if (datasetId1 == datasetId2) {
+				if (datasetId1.equals(datasetId2)) {
 					datasetIds.add(datasetId1);
 				}
 			}
@@ -89,7 +89,7 @@ public class DatasetAndServiceAndUserController extends Controller {
 
 		for (BigInteger userId1 : users1) {
 			for (BigInteger userId2 : users2) {
-				if (userId1 == userId2) {
+				if (userId1.equals(userId2)) {
 					userIds.add(userId1);
 				}
 			}
@@ -119,7 +119,7 @@ public class DatasetAndServiceAndUserController extends Controller {
 		
 		for (BigInteger serviceId1 : services1) {
 			for (BigInteger serviceId2 : services2) {
-				if (serviceId1 == serviceId2) {
+				if (serviceId1.equals(serviceId2)) {
 					serviceIds.add(serviceId1);
 				}
 			}
@@ -150,7 +150,7 @@ public class DatasetAndServiceAndUserController extends Controller {
 		
 		for (BigInteger serviceId1 : services1) {
 			for (BigInteger serviceId2 : services2) {
-				if (serviceId1 == serviceId2) {
+				if (serviceId1.equals(serviceId2)) {
 					serviceIds.add(serviceId1);
 				}
 			}
@@ -180,7 +180,7 @@ public class DatasetAndServiceAndUserController extends Controller {
 
 		for (BigInteger userId1 : users1) {
 			for (BigInteger userId2 : users2) {
-				if (userId1 == userId2) {
+				if (userId1.equals(userId2)) {
 					userIds.add(userId1);
 				}
 			}
@@ -210,12 +210,12 @@ public class DatasetAndServiceAndUserController extends Controller {
 		
 		for (BigInteger datasetId1 : datasets1) {
 			for (BigInteger datasetId2 : datasets2) {
-				if (datasetId1 == datasetId2) {
+				if (datasetId1.equals(datasetId2)) {
 					datasetIds.add(datasetId1);
 				}
 			}
 		}
-		
+
 		if (datasetIds.size() == 0) {
 			System.out.println("No datasets found");
 		}
