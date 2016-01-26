@@ -257,13 +257,3 @@ GET            /group/getGroupMember/:groupId/json                              
 
 #Workflow
 #GET            /workflow/getTimeline/:id/offset/:offset/json                                              @controllers.UserController.userSearch(id: Long, offset: Long, format: String="json")
-POST            /workflow/addComment                                                                       @controllers.WorkflowController.addComment
-GET             /workflow/getComments/:workflowId                                                         @controllers.WorkflowController.getComments(workflowId: Long)
-
-#Comment
-POST           /Comment/addReply                                                                         @controllers.CommentController.addReply
-GET            /Comment/getReply/:commentId                                                              @controllers.CommentController.getReply(commentId: Long)
-GET            /Comment/getReply/:commentId                                                              @controllers.CommentController.getReply(commentId: Long)
-GET            /Comment/thumbUp/:commentId                                                              @controllers.CommentController.thumbUp(commentId: Long)
-GET            /Comment/thumbDown/:commentId                                                              @controllers.CommentController.thumbDown(commentId: Long)
-

@@ -50,10 +50,6 @@ public class Workflow {
 	private String wfOutput;
 	private Date wfDate;
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "CommentId", referencedColumnName = "id")
-	private List<Comment> comments;
-
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "creatorId", referencedColumnName = "id")
 	private User user;
@@ -92,7 +88,6 @@ public class Workflow {
 		this.viewCount = 0;
         this.groupId = groupId;
         this.edit = false;
-		this.comments = new ArrayList<>();
 		this.userName = userName;
         this.wfUrl = wfUrl;
 		this.wfInput = wfInput;
@@ -119,10 +114,6 @@ public class Workflow {
 	public Set<Tag> getTags() {return this.tags;}
 
 	public void setTags(Set<Tag> tags) {this.tags = tags;}
-
-	public List<Comment> getComments(){ return this.comments; }
-
-	public void setComments(List<Comment> comments){ this.comments = comments; }
 
 	public String getWfCategory() {
 		return wfCategory;
