@@ -1,6 +1,10 @@
 package controllers;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +20,14 @@ import models.ClimateServiceRepository;
 import models.Dataset;
 import models.DatasetAndUser;
 import models.DatasetAndUserRepository;
+import models.DatasetLog;
+import models.DatasetLogRepository;
 import models.DatasetRepository;
 import models.ServiceAndDataset;
 import models.ServiceAndDatasetRepository;
 import models.ServiceAndUser;
 import models.ServiceAndUserRepository;
+import models.ServiceExecutionLog;
 import models.User;
 import models.UserRepository;
 import play.mvc.Controller;
@@ -40,7 +47,8 @@ public class AnalyticsController extends Controller {
 	private final ServiceAndDatasetRepository serviceAndDatasetRepository;
 	private final UserRepository userRepository;
 	private final DatasetRepository datasetRepository;
-	private final ClimateServiceRepository serviceRepository;
+        private final ClimateServiceRepository serviceRepository;
+        private final DatasetLogRepository datasetLogRepository;
 
 	@Inject
 	public AnalyticsController(
@@ -48,13 +56,15 @@ public class AnalyticsController extends Controller {
 			ServiceAndUserRepository serviceAndUserRepository,
 			ServiceAndDatasetRepository serviceAndDatasetRepository,
 			UserRepository userRepository, DatasetRepository datasetRepository,
-			ClimateServiceRepository serviceRepository) {
+			ClimateServiceRepository serviceRepository,
+			DatasetLogRepository datasetLogRepository) {
 		this.datasetAndUserRepository = datasetAndUserRepository;
 		this.serviceAndUserRepository = serviceAndUserRepository;
 		this.serviceAndDatasetRepository = serviceAndDatasetRepository;
 		this.userRepository = userRepository;
 		this.datasetRepository = datasetRepository;
 		this.serviceRepository = serviceRepository;
+		this.datasetLogRepository = datasetLogRepository;
 	}
 
 	public long getResultCount(String param) {
@@ -75,7 +85,7 @@ public class AnalyticsController extends Controller {
 		return count;
 	}
 	
-	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3, String choice, String fChoice, String fId) {
+	public Map<String, Object> generateRelationalMap(String param1, String param2, String param3, String choice, String fChoice, String fId, Date startTime, Date endTime) {
 		String option = param1 + param2 + param3;
 		Map<String, Object> map = new HashMap<>();
 		int[][] relations = null;
@@ -221,12 +231,10 @@ public class AnalyticsController extends Controller {
 			break;
 		}
 		case "UserDatasetService":
-			System.out.println("------------------------------------------------------");
-			System.out.println("fChoice = " + fChoice + ", fID = " + fId);			
-			map = getAllDatasetAndUserWithCount(choice,fChoice,fId);
+			map = getAllDatasetAndUserWithCount(choice,fChoice,fId,startTime,endTime);
 			break;
 		case "UserServiceDataset":
-			map = getAllServiceAndUserWithCount(fChoice,fId);
+			map = getAllServiceAndUserWithCount(fChoice,fId,startTime,endTime);
 			break;
 		case "DatasetServiceUser":
 			map = getAllServiceAndDatasetWithCount(choice,fChoice,fId);
@@ -248,11 +256,27 @@ public class AnalyticsController extends Controller {
 		String param2 = json.findPath("param2").asText();
 		String param3 = json.findPath("param3").asText();
 		String choice = json.findPath("choice").asText();
-		String filteredChoice = json.findPath("fChoice").asText();
-		String filteredId = json.findPath("fId").asText();
-		
+                String filteredChoice = json.findPath("fChoice").asText();
+                String filteredId = json.findPath("fId").asText();
+                String startTimeString = json.findPath("startTime").asText();
+                String endTimeString = json.findPath("endTime").asText();
+                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
+                Date startTime = null;
+                Date endTime = null;
+                try {
+                    if (!startTimeString.equals("")) {
+                        startTime = dateFormat.parse(startTimeString);
+                    }
+                    if (!endTimeString.equals("")) {
+                        endTime = dateFormat.parse(endTimeString);
+                    }
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+
 		try {
-			Map<String, Object> map = generateRelationalMap(param1, param2, param3, choice,filteredChoice,filteredId);
+			Map<String, Object> map = generateRelationalMap(param1, param2, param3, choice,filteredChoice,filteredId,startTime,endTime);
 			
 			String result = new String();
 			if (format.equals("json")) {
@@ -299,7 +323,7 @@ public class AnalyticsController extends Controller {
 
 	}
 
-	public Map<String, Object> getAllDatasetAndUserWithCount(String choice, String fChoice, String fId) {
+	public Map<String, Object> getAllDatasetAndUserWithCount(String choice, String fChoice, String fId, Date startTime, Date endTime) {
 		List<DatasetAndUser> datasetAndUsers = null;
 		if (!fId.equals("")) {
         		if (fChoice.equals("user")) {
@@ -323,14 +347,18 @@ public class AnalyticsController extends Controller {
 		Map<String, Object> map = null;
 		
 		if(choice.equals("datasetNameW")) {
-			map = jsonFormatUserAndDataset(datasetAndUsers);
+		    if (startTime == null || endTime == null) {
+                        map = jsonFormatUserAndDataset(datasetAndUsers);
+		    } else {
+                        map = jsonFormatUserAndDatasetFilterTime(datasetAndUsers,startTime,endTime);		  
+		    }
 		}else {
 			map = jsonFormatUserAndVariable(datasetAndUsers);
 		}
 		return map;
 	}
 
-	public Map<String, Object> getAllServiceAndUserWithCount(String fChoice, String fId) {
+	public Map<String, Object> getAllServiceAndUserWithCount(String fChoice, String fId, Date startTime, Date endTime) {
 		List<ServiceAndUser> serviceAndUsers = null;
 		if (!fId.equals("")) {
 			if (fChoice.equals("user")) {
@@ -352,8 +380,13 @@ public class AnalyticsController extends Controller {
 		if (serviceAndUsers == null) {
 			System.out.println("User and Service: cannot be found!");
 		}
-
-		Map<String, Object> map = jsonFormatServiceAndUser(serviceAndUsers);
+                Map<String, Object> map = null;
+                if (startTime == null || endTime == null) {
+                    map = jsonFormatServiceAndUserFilterTime(serviceAndUsers,startTime,endTime);
+                } else {
+                    map = jsonFormatServiceAndUser(serviceAndUsers);
+                    
+                }
 		return map;
 	}
 
@@ -509,18 +542,87 @@ public class AnalyticsController extends Controller {
 			return badRequest("Dataset and Service not found");
 		}
 	}
+        private Map<String, Object> jsonFormatUserAndDataset(
+                List<DatasetAndUser> userDatasets) {
+        long min = userDatasets.get(userDatasets.size()-1).getCount();
+        long max = userDatasets.get(0).getCount();
+        List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+        int i = 1;
+        int edgeId = 1;
+        for (DatasetAndUser userDataset : userDatasets) {
+                int source = 0;
+                int target = 0;
+                // Check whether the current user has already existed
+                for (int j = 0; j < nodes.size(); j++) {
+                        if (nodes.get(j).get("group").equals("user")
+                                        && (long) nodes.get(j).get("userId") == userDataset
+                                                        .getUser().getId()) {
+                                nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
+                                source = (int) nodes.get(j).get("id");
+                                break;
+                        }
+                }
+                if (source == 0) {
+                        String realName = userDataset.getUser().getFirstName() + " "
+                                        + userDataset.getUser().getLastName();
+                        nodes.add(HashMapUtil.map7("id", i, "title", realName, "label", userDataset
+                                        .getUser().getUserName(), "cluster", "1", "value", 1,
+                                        "group", "user", "userId", userDataset.getUser().getId()));
 
-	private Map<String, Object> jsonFormatUserAndDataset(
-			List<DatasetAndUser> userDatasets) {
+                        source = i;
+                        i++;
+                }
+                // Check whether the current dataset has already existed
+                for (int j = 0; j < nodes.size(); j++) {
+                        if (nodes.get(j).get("group").equals("dataset")
+                                        && (long) nodes.get(j).get("datasetId") == userDataset
+                                                        .getDataset().getId()) {
+                                nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
+                                target = (int) nodes.get(j).get("id");
+                                break;
+                        }
+                }
+                if (target == 0) {
+                        nodes.add(HashMapUtil.map7("id", i, "title", userDataset.getDataset()
+                                        .getName(), "label",
+                                        userDataset.getDataset().getName(), "cluster", "2",
+                                        "value", 25, "group", "dataset", "datasetId",
+                                        userDataset.getDataset().getId()));
+                        target = i;
+                        i++;
+                }
+                rels.add(HashMapUtil.map6("from", source, "to", target, "title", "USE",
+                                "id", edgeId, "weight", userDataset.getCount(), "length", (max-min)*3/userDataset.getCount()));
+                edgeId++;
+        }
+
+        return HashMapUtil.map("nodes", nodes, "edges", rels);
+}
+	private Map<String, Object> jsonFormatUserAndDatasetFilterTime(
+			List<DatasetAndUser> userDatasets, Date startTime, Date endTime) {
 		long min = userDatasets.get(userDatasets.size()-1).getCount();
 		long max = userDatasets.get(0).getCount();
 		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
-
 		int i = 1;
 		int edgeId = 1;
+		
 		for (DatasetAndUser userDataset : userDatasets) {
-			int source = 0;
+	            List<DatasetLog> datasetLogs =  datasetLogRepository.findByUserIdAndDatasetId(userDataset
+                            .getUser().getId(), userDataset.getDataset().getId());
+	            int count = 0;
+	            for(DatasetLog datasetLog : datasetLogs) {
+	                // count how many times its within bounds
+
+	                if (datasetLog.getServiceExecutionStartTime().after(startTime) &&
+	                    datasetLog.getServiceExecutionEndTime().before(endTime)) {
+	                    count++;
+	                }
+	            }
+	            // only add to graph if there > 0 uses within the time constraints
+	            if (count > 0) {
+	                int source = 0;
 			int target = 0;
 			// Check whether the current user has already existed
 			for (int j = 0; j < nodes.size(); j++) {
@@ -561,9 +663,11 @@ public class AnalyticsController extends Controller {
 				target = i;
 				i++;
 			}
+			// NOTE: verify max-min thing
 			rels.add(HashMapUtil.map6("from", source, "to", target, "title", "USE",
-					"id", edgeId, "weight", userDataset.getCount(), "length", (max-min)*3/userDataset.getCount()));
+					"id", edgeId, "weight", count, "length", (max-min)*3/userDataset.getCount()));
 			edgeId++;
+	            }
 		}
 
 		return HashMapUtil.map("nodes", nodes, "edges", rels);
@@ -811,6 +915,79 @@ public class AnalyticsController extends Controller {
 		return HashMapUtil.map("nodes", nodes, "edges", rels);
 	}
 	
+        private Map<String, Object> jsonFormatServiceAndUserFilterTime(
+                List<ServiceAndUser> userServices, Date startTime, Date endTime) {
+        
+        long min = userServices.get(userServices.size() - 1).getCount();
+        long max = userServices.get(0).getCount();
+        List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
+
+        int i = 1;
+        int edgeId = 1;
+        for (ServiceAndUser userService : userServices) {
+            List<DatasetLog> datasetLogs =  datasetLogRepository.findByUserIdAndServiceId(userService
+                    .getUser().getId(), userService.getClimateService().getId());
+            int count = 0;
+            for(DatasetLog datasetLog : datasetLogs) {
+                // count how many times its within bounds
+                if (datasetLog.getServiceExecutionStartTime().after(startTime) &&
+                    datasetLog.getServiceExecutionEndTime().before(endTime)) {
+                    count++;
+                }
+            }
+            if (count > 0) {
+                int source = 0;
+                int target = 0;
+                // Check whether the current user has already existed
+                for (int j = 0; j < nodes.size(); j++) {
+                        if (nodes.get(j).get("group").equals("user")
+                                        && (long) nodes.get(j).get("userId") == userService
+                                                        .getUser().getId()) {
+                                source = (int) nodes.get(j).get("id");
+                                nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
+                                break;
+                        }
+                }
+                if (source == 0) {
+                        String realName = userService.getUser().getFirstName() + " "
+                                        + userService.getUser().getLastName();
+                        nodes.add(HashMapUtil.map7("id", i, "title", realName, "label", userService
+                                        .getUser().getUserName(), "cluster", "1", "value", 1,
+                                        "group", "user", "userId", userService.getUser()
+                                                        .getId()));
+                        source = i;
+                        i++;
+                }
+                // Check whether the current service has already existed
+                for (int j = 0; j < nodes.size(); j++) {
+                        if (nodes.get(j).get("group").equals("service")
+                                        && (long) nodes.get(j).get("serviceId") == userService
+                                                        .getClimateService().getId()) {
+                                target = (int) nodes.get(j).get("id");
+                                nodes.get(j).put("value", (int)nodes.get(j).get("value") + 1);
+                                break;
+                        }
+                }
+                if (target == 0) {
+                        nodes.add(HashMapUtil.map7("id", i, "title", userService
+                                        .getClimateService().getName(), "label", userService
+                                        .getClimateService().getName(), "cluster", "3",
+                                        "value", 25, "group", "service", "serviceId",
+                                        userService.getClimateService().getId()));
+                        target = i;
+                        i++;
+                }
+                // Verify max-min thing
+                rels.add(HashMapUtil.map6("from", source, "to", target, "title", "USE",
+                                "id", edgeId, "weight", count, "length", (max-min)*4/userService.getCount()));
+                edgeId ++;
+            }
+        }
+
+        return HashMapUtil.map("nodes", nodes, "edges", rels);
+}
+        
 	public String findTitleName(String param, long id) {
 		String title = "";
 		switch (param) {
