@@ -642,7 +642,6 @@ public class UserController extends Controller {
 	}
 
 	public Result getUserByEmail(){
-		System.out.println("XIE LAO SHI");
 		JsonNode json = request().body().asJson();
 		if (json == null) {		
  			System.out.println("Cannot check email, expecting Json data");		
