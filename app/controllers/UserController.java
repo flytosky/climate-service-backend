@@ -641,4 +641,22 @@ public class UserController extends Controller {
 		return ok(result);
 	}
 
+	public Result getUserByEmail(){
+		System.out.println("XIE LAO SHI");
+		JsonNode json = request().body().asJson();
+		if (json == null) {		
+ 			System.out.println("Cannot check email, expecting Json data");		
+ 			return badRequest("Cannot check email, expecting Json data");
+ 		}
+ 		String email = json.path("email").asText();		
+  		String result = new String();
+  		try {
+  			User user = userRepository.findByEmail(email);
+  			System.out.println(user);
+  			result = new Gson().toJson(user);
+		} catch (Exception e) {
+			return badRequest("User not found");
+		}
+		return ok(result);
+  	}
 }
