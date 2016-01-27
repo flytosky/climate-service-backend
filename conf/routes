@@ -85,9 +85,9 @@ DELETE        /datasetLog/deleteDatasetLog/id/:id                               
 GET			  /datasetAndUser/getDatasetsByUserAndUser/userId1/:id1/userId2/:id2/json 					@controllers.DatasetAndServiceAndUserController.getAllDatasetsByUsers(id1: Long, id2: Long, format: String="json")
 GET           /userAndDataset/getUserByDatasetAndDataset/datasetId1/:id1/datasetId2/:id2/json           @controllers.DatasetAndServiceAndUserController.getAllUsersByDatasets(id1: Long, id2: Long, format: String="json")
 GET			  /serviceAndUser/getServicesByUserAndUser/userId1/:id1/userId2/:id2/json 					@controllers.DatasetAndServiceAndUserController.getAllServicesByUsers(id1: Long, id2: Long, format: String="json")
-GET			/datasetAndService/getServicesByDatasetAndDataset/datasetId1/:id1/datasetId2/:id2/json   @controllers.DatasetAndServiceAndUserController.getAllServicesByDatasets(id1: Long, id2: Long, format: String="json")
-GET 			/serviceAndUser/getUserByServiceAndService/serviceId1/:id1/serviceId2/:id2/json				@controllers.DatasetAndServiceAndUserController.getAllUsersByServices(id1: Long, id2: Long, format: String="json")
-GET 			/datasetAndService/getDatasetByServiceAndService/serviceId1/:id1/serviceId2/:id2/json	    @controllers.DatasetAndServiceAndUserController.getAllDatasetsByServices(id1: Long, id2: Long, format: String="json")
+GET			  /datasetAndService/getServicesByDatasetAndDataset/datasetId1/:id1/datasetId2/:id2/json   @controllers.DatasetAndServiceAndUserController.getAllServicesByDatasets(id1: Long, id2: Long, format: String="json")
+GET 		  /serviceAndUser/getUserByServiceAndService/serviceId1/:id1/serviceId2/:id2/json				@controllers.DatasetAndServiceAndUserController.getAllUsersByServices(id1: Long, id2: Long, format: String="json")
+GET 		  /datasetAndService/getDatasetByServiceAndService/serviceId1/:id1/serviceId2/:id2/json	    @controllers.DatasetAndServiceAndUserController.getAllDatasetsByServices(id1: Long, id2: Long, format: String="json")
 
 # Workflow
 #GET           /workflow/getAllWorkflows/json                                                          	@controllers.WorkflowController.getAllWorkflows(format: String="json")
@@ -155,10 +155,10 @@ DELETE        /ConferencePublication/deleteBookPublication/id/:id               
 #POST          /users/add                                                                                @controllers.UserController.addUser
 #PUT           /users/update/:id                                                                         @controllers.UserController.updateUser(id: Long)
 #DELETE        /users/delete/:id                                                                         @controllers.UserController.deleteUser(id: Long)
-#GET			  /users/getAllUsers/json																	@controllers.UserController.getAllUsers(format: String="json")
+#GET		  /users/getAllUsers/json																	@controllers.UserController.getAllUsers(format: String="json")
 #POST		  /users/isUserValid																		@controllers.UserController.isUserValid
 #POST		  /users/isEmailExisted																		@controllers.UserController.isEmailExisted
-#POST		  /users/getUserByEmail																		@controllers.UserController.getUserByEmail
+POST		  /users/getUserByEmail																		@controllers.UserController.getUserByEmail
 #DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
 
 # Analytics
@@ -257,13 +257,3 @@ GET            /group/getGroupMember/:groupId/json                              
 
 #Workflow
 #GET            /workflow/getTimeline/:id/offset/:offset/json                                              @controllers.UserController.userSearch(id: Long, offset: Long, format: String="json")
-POST            /workflow/addComment                                                                       @controllers.WorkflowController.addComment
-GET             /workflow/getComments/:workflowId                                                         @controllers.WorkflowController.getComments(workflowId: Long)
-
-#Comment
-POST           /Comment/addReply                                                                         @controllers.CommentController.addReply
-GET            /Comment/getReply/:commentId                                                              @controllers.CommentController.getReply(commentId: Long)
-GET            /Comment/getReply/:commentId                                                              @controllers.CommentController.getReply(commentId: Long)
-GET            /Comment/thumbUp/:commentId                                                              @controllers.CommentController.thumbUp(commentId: Long)
-GET            /Comment/thumbDown/:commentId                                                              @controllers.CommentController.thumbDown(commentId: Long)
-

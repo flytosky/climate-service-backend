@@ -17,8 +17,9 @@ import javax.inject.Singleton;
 @Singleton
 public interface UserRepository extends CrudRepository<User, Long> {
 	List<User> findByUserName(String userName);
-	User findByEmail(String email);
 	
+    @Query(value = "select u.* from User u where u.email = ?1", nativeQuery = true)
+    User findByEmail(String email);
 	@Query(value = "select u.* from User u where u.username = ?1", nativeQuery = true)
 	User findByUsername(String username);
     @Query(value = "select u.userName from User u where u.email = ?1", nativeQuery = true)

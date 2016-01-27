@@ -45,17 +45,15 @@ public class WorkflowController extends Controller {
     private final WorkflowRepository workflowRepository;
     private final UserRepository userRepository;
     private final GroupUsersRepository groupUsersRepository;
-    private final CommentRepository commentRepository;
     private final TagRepository tagRepository;
 
     @Inject
     public WorkflowController(final WorkflowRepository workflowRepository,
                               UserRepository userRepository, GroupUsersRepository groupUsersRepository,
-                              CommentRepository commentRepository, TagRepository tagRepository) {
+                              TagRepository tagRepository) {
         this.workflowRepository = workflowRepository;
         this.userRepository = userRepository;
         this.groupUsersRepository = groupUsersRepository;
-        this.commentRepository = commentRepository;
         this.tagRepository = tagRepository;
     }
 
@@ -431,45 +429,6 @@ public class WorkflowController extends Controller {
 
         return ok(result);
     }
-
-
-    public Result addComment(){
-        try{
-            JsonNode json = request().body().asJson();
-            if(json==null){
-                System.out.println("Comment not created, expecting Json data");
-                return Common.badRequestWrapper("Comment not created, expecting Json data");
-            }
-
-            long userId = json.path("userID").asLong();
-            long timestamp = json.path("timestamp").asLong();
-            long workflowId = json.path("workflowID").asLong();
-            String content = json.path("Content").asText();
-            String commentImage = json.path("commentImg").asText();
-
-            User user = userRepository.findOne(userId);
-            if(user==null){
-                System.out.println("Cannot find user with given user id");
-                return Common.badRequestWrapper("Cannot find user with given user id");
-            }
-            Workflow workflow = workflowRepository.findOne(workflowId);
-            if(workflow==null){
-                System.out.println("Cannot find workflow with given workflow id");
-                return Common.badRequestWrapper("Cannot find workflow with given workflow id");
-            }
-            Comment comment = new Comment(user, timestamp, content, commentImage);
-
-            Comment savedComment = commentRepository.save(comment);
-            List<Comment> list = workflow.getComments();
-            list.add(comment);
-            workflow.setComments(list);
-            workflowRepository.save(workflow);
-            return ok(new Gson().toJson(savedComment.getId()));
-        } catch (Exception e){
-            e.printStackTrace();
-            return Common.badRequestWrapper("Failed to add comment!");
-        }
-    }
     
     public Result setTag() {
         try{
@@ -635,57 +594,4 @@ public class WorkflowController extends Controller {
         String result = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).create().toJson(topWorkflow);
         return  ok(result);
     }
-
-    public Result getComments(Long workflowId) {
-        try{
-            if(workflowId==null){
-                System.out.println("Expecting workflow id");
-                return Common.badRequestWrapper("Expecting workflow id");
-            }
-
-            List<Comment> comments = commentRepository.findByWorkflowId(workflowId);
-            for (Comment comment: comments) {
-                Set<User> empty = new HashSet<>();
-                comment.getUser().setFollowers(empty);
-                comment.getUser().setFriends(empty);
-            }
-
-
-            return ok(new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED).create().toJson(comments));
-        } catch (Exception e){
-            e.printStackTrace();
-            return Common.badRequestWrapper("Failed to fetch comments");
-        }
-    }
-
-//    public Result uploadCommentImage(Long id) {
-//        Http.MultipartFormData body = request().body().asMultipartFormData();
-//        Http.MultipartFormData.FilePart image = body.getFile("image");
-//
-//        Comment comment = commentRepository.findOne(id);
-//
-//
-//        if (image != null) {
-//            File imgFile = image.getFile();
-//            String imgPathToSave = "public/images/" + "commentImage_" + id + ".jpg";
-//
-//            //save on disk
-//            boolean success = new File("images").mkdirs();
-//            try {
-//                byte[] bytes = IOUtils.toByteArray(new FileInputStream(imgFile));
-//                FileUtils.writeByteArrayToFile(new File(imgPathToSave), bytes);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            comment.setCommentImage(imgPathToSave);
-//            commentRepository.save(comment);
-//            return ok("File uploaded");
-//        }
-//        else {
-//            flash("error", "Missing file");
-//            return Common.badRequestWrapper("Wrong!!!!!!!!");
-//            // return redirect(routes.Application.index());
-//        }
-//
-//    }
 }
