@@ -382,10 +382,9 @@ public class AnalyticsController extends Controller {
 		}
                 Map<String, Object> map = null;
                 if (startTime == null || endTime == null) {
-                    map = jsonFormatServiceAndUserFilterTime(serviceAndUsers,startTime,endTime);
+                	map = jsonFormatServiceAndUser(serviceAndUsers);
                 } else {
-                    map = jsonFormatServiceAndUser(serviceAndUsers);
-                    
+                    map = jsonFormatServiceAndUserFilterTime(serviceAndUsers,startTime,endTime);  
                 }
 		return map;
 	}
