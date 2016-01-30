@@ -13,9 +13,15 @@ public class Picture {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	private String url;
 	private Blob image;
 	
 	public Picture() {	
+	}
+	
+	public Picture (String url) {
+		super();
+		this.url = url;
 	}
 	
 	public Picture (Blob image) {
@@ -33,6 +39,14 @@ public class Picture {
 	
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@Override

@@ -175,6 +175,8 @@ POST		  /analytics/getRelationalKnowledgeGraph/json												@controllers.Anal
 
 # Util
 POST		  /util/uploadPicture																		@controllers.UtilController.uploadPicture()
+POST		  /util/addPicture																			@controllers.UtilController.addPicture()
+GET			  /util/downloadPicture																		@controllers.UtilController.downloadPicture()
 
 # Graph Algorithm
 GET			  /graphAlgorithm/getShortestPath/source/:source/target/:target/json						@controllers.GraphAlgorithmController.getShortestPath(source: Integer, target: Integer, format: String="json")
