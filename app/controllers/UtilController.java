@@ -77,7 +77,7 @@ public class UtilController extends Controller {
 			 url = new URL(picture.getUrl());
 			 DataInputStream dataInputStream = new
 			 DataInputStream(url.openStream());
-			 String imageName = imageNumber + ".jpg";
+			 String imageName = "/picture/" + imageNumber + ".jpeg";
 			 FileOutputStream fileOutputStream = new FileOutputStream(new
 			 File(imageName));
 			 picture.setUrl(imageName);
