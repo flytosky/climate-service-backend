@@ -13,6 +13,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import models.OutputText;
+import models.OutputTextRepository;
 import models.Picture;
 import models.PictureRepository;
 import play.mvc.Controller;
@@ -25,10 +27,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class UtilController extends Controller {
 
 	private final PictureRepository pictureRepository;
+	private final OutputTextRepository outputTextRepository;
 
 	@Inject
-	public UtilController(PictureRepository pictureRepository) {
+	public UtilController(PictureRepository pictureRepository, OutputTextRepository outputTextRepository) {
 		this.pictureRepository = pictureRepository;
+		this.outputTextRepository = outputTextRepository;
 	}
 
 	public Result uploadPicture() {
@@ -44,6 +48,10 @@ public class UtilController extends Controller {
 		}
 
 		return ok("Image is stored");
+	}
+
+	public Picture getPicture(long id) {
+		return pictureRepository.findOne(id);
 	}
 
 	public Result addPicture() {
@@ -101,11 +109,68 @@ public class UtilController extends Controller {
 			 return badRequest("Picture download failed");
 			 }
 		}
-		return ok("Images are downloaded successful");
+		return ok("Images are downloaded successfully");
+	}
+	
+	public Result addOutputText() {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			System.out.println("OutputText not saved, expecting Json data");
+			return badRequest("OutputText not saved, expecting Json data");
+		}
+
+		// Parse JSON file
+		String url = json.findPath("url").asText();
+		try {
+			OutputText outputText = new OutputText(url);
+			outputTextRepository.save(outputText);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("OutputText not saved");
+			return badRequest("OutputText not saved");
+		}
+
+		return ok("OutputText is stored");
 	}
 
-	public Picture getPicture(long id) {
-		return pictureRepository.findOne(id);
+	public Result downloadOutputText() {
+		List<OutputText> textList = outputTextRepository.findAll();
+		URL url = null;
+		int textNumber = 0;
+
+		for (OutputText outputText : textList) {
+			 try {
+			 url = new URL(outputText.getUrl());
+			 DataInputStream dataInputStream = new
+			 DataInputStream(url.openStream());
+			 String textName = "text/" + textNumber + ".nc";
+			 FileOutputStream fileOutputStream = new FileOutputStream(new
+			 File(textName));
+			 outputText.setUrl(textName);
+			 outputTextRepository.save(outputText);
+			
+			 byte[] buffer = new byte[1024];
+			 int length;
+			
+			 while ((length = dataInputStream.read(buffer)) != -1) {
+			 fileOutputStream.write(buffer, 0, length);
+			 }
+			
+			 dataInputStream.close();
+			 fileOutputStream.close();
+			 textNumber++;
+			 } catch (MalformedURLException e) {
+			 e.printStackTrace();
+			 return badRequest("OutputText download failed");
+			 } catch (IOException e) {
+			 e.printStackTrace();
+			 return badRequest("OutputText download failed");
+			 }
+		}
+		return ok("OutputText are downloaded successfully");
 	}
 
+	public OutputText getOutputText(long id) {
+		return outputTextRepository.findOne(id);
+	}
 }

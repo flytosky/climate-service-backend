@@ -5,36 +5,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import java.sql.*;
-
 @Entity
-public class Picture {
+public class OutputText {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String url;
-	private Blob image;
+	private String content;
 	
-	public Picture() {	
+	public OutputText() {	
 	}
 	
-	public Picture (String url) {
+	public OutputText (String url) {
 		super();
 		this.url = url;
 	}
 	
-	public Picture (Blob image) {
-		super();
-		this.image = image;
+	public String getContent() {
+		return this.content;
 	}
 	
-	public Blob getImage() {
-		return image;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
-	public void setImage(Blob image) {
-		this.image = image;
+	public long getId() {
+		return this.id;
 	}
 	
 	public void setId(long id) {
@@ -51,7 +48,7 @@ public class Picture {
 
 	@Override
 	public String toString() {
-		return "Picture [id=" + id + ", url=" + url + ", image=" + image + "]";
+		return "OutputText [id=" + id + ", url=" + url + ", content=" + content + "]";
 	}
 	
 }
