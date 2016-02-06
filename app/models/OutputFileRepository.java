@@ -9,6 +9,6 @@ import javax.inject.Singleton;
 
 @Named
 @Singleton
-public interface OutputTextRepository extends CrudRepository<OutputText, Long> {
-	List<OutputText> findAll();
+public interface OutputFileRepository extends CrudRepository<OutputFile, Long> {
+	List<OutputFile> findAll();
 }

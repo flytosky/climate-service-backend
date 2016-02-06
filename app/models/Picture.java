@@ -15,6 +15,7 @@ public class Picture {
 	private long id;
 	private String url;
 	private Blob image;
+	private boolean download;
 	
 	public Picture() {	
 	}
@@ -48,10 +49,17 @@ public class Picture {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public boolean isDownload() {
+		return download;
+	}
+
+	public void setDownload(boolean download) {
+		this.download = download;
+	}
 
 	@Override
 	public String toString() {
 		return "Picture [id=" + id + ", url=" + url + ", image=" + image + "]";
 	}
-	
 }

@@ -6,18 +6,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class OutputText {
+public class OutputFile {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String url;
 	private String content;
+	private boolean download;
 	
-	public OutputText() {	
+	public OutputFile() {	
 	}
 	
-	public OutputText (String url) {
+	public OutputFile (String url) {
 		super();
 		this.url = url;
 	}
@@ -45,10 +46,17 @@ public class OutputText {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public boolean isDownload() {
+		return download;
+	}
+
+	public void setDownload(boolean download) {
+		this.download = download;
+	}
 
 	@Override
 	public String toString() {
 		return "OutputText [id=" + id + ", url=" + url + ", content=" + content + "]";
 	}
-	
 }
